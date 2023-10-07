@@ -8,15 +8,15 @@ namespace DefaultNamespace
     {
         [Range(0,100)]
         [Tooltip("Mass in kg")]
-        public int Mass;
+        public float Mass;
 
         [Range(50,1000)]
         [Tooltip("Calories per kg")]
         public int Calories;
 
-        public int Eaten(int eatingSpeed)
+        public float Eaten(float eatingSpeed)
         {
-            int eatenMass;
+            float eatenMass;
 
             if (Mass >= eatingSpeed)
             {

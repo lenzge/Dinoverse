@@ -9,9 +9,9 @@ namespace Animals
         [SerializeField] 
         private float maxCalories;
         [SerializeField]
-        [Range(1,10)]
-        [Tooltip("kg per hour")]
-        private int eatingSpeed;
+        [Range(0.1f,1f)]
+        [Tooltip("kg per deci-hour")]
+        private float eatingSpeed;
 
         private float currentCalories;
 
@@ -21,11 +21,11 @@ namespace Animals
             currentCalories = maxCalories / 2;
         }
 
-        // Call once per ingame hour
-        public void BurnCalories(int weight)
+        // Call once per deci-hour
+        public void BurnCalories(float weight)
         {
             float PAL = 1; //PAL of current action
-            currentCalories -= weight * PAL;
+            currentCalories -= weight/10 * PAL;
             Debug.Log($"{currentCalories} after burn");
         }
 
@@ -36,7 +36,7 @@ namespace Animals
                 return;
             }
             
-            int eatenCalories = food.Eaten(eatingSpeed);
+            float eatenCalories = food.Eaten(eatingSpeed);
             currentCalories = AddCalories(eatenCalories);
             Debug.Log($"{currentCalories} after eating {eatenCalories} calories");
         }
@@ -67,6 +67,7 @@ namespace Animals
             return maxCalories;
         }
 
+        // Never the case because calories are always burned
         private bool isFull()
         {
             if (currentCalories >= maxCalories)

@@ -225,6 +225,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2830572847685276631, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
+      propertyPath: eatingSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
       propertyPath: m_Name
       value: Animal
@@ -233,6 +237,10 @@ PrefabInstance:
       propertyPath: PLFood
       value: 
       objectReference: {fileID: 1083773384}
+    - target: {fileID: 7300952516653624235, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
+      propertyPath: timeInterval
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8443286493046005390, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
       propertyPath: m_LocalPosition.x
       value: 334
