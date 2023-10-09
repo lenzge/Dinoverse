@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using System.Linq;
 
 namespace Animals
 {
@@ -8,7 +10,7 @@ namespace Animals
     {
         public MovementController MovementController;
         public FoodManager FoodManager;
-        public Nurture PLFood;
+        public Eyes Eyes;
 
         [SerializeField] private float weight;
 
@@ -26,8 +28,9 @@ namespace Animals
 
         protected override void TimedUpdate()
         {
+            Eyes.LookAround(characterTransform);
             FoodManager.BurnCalories(weight);
-            FoodManager.Eat(PLFood);
+            //FoodManager.Eat(PLFood);
             KillIfDead();
         }
 

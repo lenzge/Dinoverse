@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 7300952516653624235}
   - component: {fileID: 7449578703545013821}
   - component: {fileID: 2830572847685276631}
+  - component: {fileID: 7978424919749795081}
   m_Layer: 0
   m_Name: Animal
   m_TagString: Untagged
@@ -128,9 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be18f9adb6724a7aa00609d392900900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeInterval: 1
   MovementController: {fileID: 7449578703545013821}
   FoodManager: {fileID: 2830572847685276631}
-  PLFood: {fileID: 0}
+  Eyes: {fileID: 7978424919749795081}
   weight: 50
 --- !u!114 &7449578703545013821
 MonoBehaviour:
@@ -146,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 4408169497568838984}
   movementSpeed: 2
-  movementDirection: {x: 1, y: 0, z: 0}
+  movementDirection: {x: 0, y: 0, z: 1}
 --- !u!114 &2830572847685276631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +162,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxCalories: 1000
-  eatingSpeed: 1
+  eatingSpeed: 0.1
+--- !u!114 &7978424919749795081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005528575296122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e1f71e6945f4ac0a22a113c12ace0b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Radius: 30
+  FoodPositions: []
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0
