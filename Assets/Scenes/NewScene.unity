@@ -225,33 +225,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2830572847685276631, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: eatingSpeed
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
       propertyPath: m_Name
       value: Animal
-      objectReference: {fileID: 0}
-    - target: {fileID: 7300952516653624235, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: Eyes
-      value: 
-      objectReference: {fileID: 1068772193}
-    - target: {fileID: 7300952516653624235, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: PLFood
-      value: 
-      objectReference: {fileID: 1083773384}
-    - target: {fileID: 7300952516653624235, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: timeInterval
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7449578703545013821, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: movementDirection.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7449578703545013821, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      propertyPath: movementDirection.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8443286493046005390, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
       propertyPath: m_LocalPosition.x
@@ -296,41 +272,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1068772193}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
---- !u!1 &1068772192 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-  m_PrefabInstance: {fileID: 984665300}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1068772193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068772192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1f71e6945f4ac0a22a113c12ace0b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Radius: 30
-  FoodPositions: []
---- !u!114 &1083773384 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5543032355223128348, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-  m_PrefabInstance: {fileID: 5955102389082293378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 846cdfc285b9408f9af99d4aadccf5b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1120272216
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,10 +509,6 @@ PrefabInstance:
     - target: {fileID: 1550528368172495859, guid: 0870d2d720887794c85f2b010115f480, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5333984604632564154, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

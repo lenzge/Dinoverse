@@ -13,6 +13,9 @@ namespace Animals
         public Eyes Eyes;
 
         [SerializeField] private float weight;
+        [SerializeField] private LAYER species;
+        [SerializeField] private LAYER enemySpecies;
+        [SerializeField] private LAYER food;
 
         private Transform characterTransform;
 
@@ -28,7 +31,7 @@ namespace Animals
 
         protected override void TimedUpdate()
         {
-            Eyes.LookAround(characterTransform);
+            Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
             FoodManager.BurnCalories(weight);
             //FoodManager.Eat(PLFood);
             KillIfDead();
