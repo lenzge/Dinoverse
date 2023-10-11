@@ -6,7 +6,9 @@ namespace DefaultNamespace
 {
     public class TimeBasedBehaviour : MonoBehaviour
     {
-        [SerializeField] protected float timeInterval;
+        public EnvironmentData EnvironmentData;
+        private float timeInterval;
+
         private void Start()
         {
             StartCoroutine(TimedUpdateRoutine());
@@ -21,6 +23,7 @@ namespace DefaultNamespace
         {
             while (true)
             {
+                timeInterval = 1f / EnvironmentData.timeSpeed;
                 yield return new WaitForSeconds(timeInterval);
                 TimedUpdate();
             }

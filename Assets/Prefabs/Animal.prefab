@@ -129,11 +129,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be18f9adb6724a7aa00609d392900900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeInterval: 1
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   MovementController: {fileID: 7449578703545013821}
   FoodManager: {fileID: 2830572847685276631}
   Eyes: {fileID: 7978424919749795081}
   weight: 50
+  species: 0
+  enemySpecies: 0
+  food: 0
 --- !u!114 &7449578703545013821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +180,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Radius: 30
   FoodPositions: []
+  FriendCount: 0
+  EnemyCount: 0
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0

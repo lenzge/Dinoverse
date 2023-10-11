@@ -26,13 +26,13 @@ namespace Animals
 
         private void Update()
         {
-            MovementController.Move(characterTransform);
+            MovementController.Move(this, characterTransform);
         }
 
         protected override void TimedUpdate()
         {
-            Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
-            FoodManager.BurnCalories(weight);
+            //Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
+            //FoodManager.BurnCalories(weight);
             //FoodManager.Eat(PLFood);
             KillIfDead();
         }
