@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using UnityEngine;
-using System.Linq;
 
 namespace Animals
 {
@@ -13,6 +10,7 @@ namespace Animals
         public Eyes Eyes;
 
         [SerializeField] private float weight;
+        [SerializeField] private GENDER gender;
         [SerializeField] private LAYER species;
         [SerializeField] private LAYER enemySpecies;
         [SerializeField] private LAYER food;
@@ -39,7 +37,7 @@ namespace Animals
 
         private void KillIfDead()
         {
-            if (FoodManager.isStarving())
+            if (FoodManager.IsStarving())
             {
                 Destroy(gameObject);
             }

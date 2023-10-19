@@ -11,9 +11,8 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            StartCoroutine(TimedUpdateRoutine());
             TimedStart();
-            
+            StartCoroutine(TimedUpdateRoutine());
         }
 
         protected virtual void TimedUpdate() {}

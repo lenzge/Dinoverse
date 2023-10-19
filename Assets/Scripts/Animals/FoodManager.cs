@@ -41,7 +41,7 @@ namespace Animals
             Debug.Log($"{currentCalories} after eating {eatenCalories} calories");
         }
 
-        public bool isStarving()
+        public bool IsStarving()
         {
             if (currentCalories <= 0)
             {
