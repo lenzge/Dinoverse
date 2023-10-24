@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 using Python.Runtime;
 
-    public class NewTest : MonoBehaviour
+    public class PythonTest : MonoBehaviour
     {
         private void Awake()
         {
@@ -13,41 +13,35 @@ using Python.Runtime;
         // Start is called before the first frame update
         void Start()
         {
-            PythonEngine.Shutdown();
             PythonEngine.Initialize();
-            //PythonRunner.RunFile("/Python/HelloWorld");
+            
             using (Py.GIL())
             {
-                
-                
-                string scriptPath = @"C:\Users\Lena Sophie\Desktop\Game Dev\Dinoverse\Assets\Scripts\Python";
 
-                // Füge den Pfad zum Systempfad hinzu
+                // Add directory with python scripts to sys
+                string scriptPath = @"C:\Users\Lena Sophie\Desktop\Game Dev\Dinoverse\Assets\Scripts\Python";
                 dynamic sys = Py.Import("sys");
                 sys.path.append(scriptPath);
-                
-                dynamic myModule = Py.Import("numtest");
 
-                // Instanziiere die Klasse
+                // Use the reload class to delete all cached modules
+                dynamic reload = Py.Import("reload");
+                reload.delete_module("my_script");
+
+                // Use a Python class
+                dynamic myModule = Py.Import("my_script");
                 dynamic myClass = myModule.MyClass();
-
-                // Rufe die Funktion auf
                 var result = myClass.my_function(5);
-
                 Debug.Log(result);
                 
+                // No need anymore?
                 //string site_pkg =
                     //@"C:\Users\Lena Sophie\Desktop\Game Dev\Dinoverse\Packages\python_net\Lib\site-packages";
                 //sys.path.insert(0, Path.Combine(Application.streamingAssetsPath, site_pkg));
                 
+                // Use a imported module 
                 dynamic neat = PyModule.Import("neat");
                 Debug.Log(neat.StatisticsReporter());
                 
             }
-        }
-
-        private void OnDestroy()
-        {
-            PythonEngine.Shutdown();
         }
     }
