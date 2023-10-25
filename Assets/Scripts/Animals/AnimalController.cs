@@ -1,4 +1,8 @@
-﻿using DefaultNamespace;
+﻿using System.Collections.Generic;
+using System.Xml;
+using DefaultNamespace;
+using Python.Runtime;
+using UnityEditor.UI;
 using UnityEngine;
 
 namespace Animals
@@ -15,11 +19,14 @@ namespace Animals
         [SerializeField] private LAYER enemySpecies;
         [SerializeField] private LAYER food;
 
+        public dynamic Brain;
+        
         private Transform characterTransform;
 
         protected override void TimedStart()
         {
             characterTransform = transform;
+            Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
         }
 
         private void Update()
@@ -29,7 +36,10 @@ namespace Animals
 
         protected override void TimedUpdate()
         {
-            //Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
+            Eyes.LookAround(characterTransform.position, food, species, enemySpecies);
+            dynamic output = Brain.survive(characterTransform.position.x, characterTransform.position.z,
+                Eyes.FoodPositions[0].x, Eyes.FoodPositions[0].z); 
+            MovementController.SetMoveDirection(new Vector2((float) output[0], (float) output[1]));
             //FoodManager.BurnCalories(weight);
             //FoodManager.Eat(PLFood);
             KillIfDead();

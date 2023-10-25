@@ -6,7 +6,8 @@ namespace Animals
     {
         [SerializeField] private CharacterController characterController;
         [SerializeField] private float movementSpeed;
-        [SerializeField] private Vector3 movementDirection;
+        
+        private Vector3 movementDirection;
 
         public void Move(AnimalController animalController,Transform characterTransform)
         {
@@ -16,6 +17,12 @@ namespace Animals
             
             // Move 
             characterController.SimpleMove(movementDirection.normalized * (movementSpeed * animalController.EnvironmentData.timeSpeed));
+        }
+
+        public void SetMoveDirection(Vector2 moveDirection)
+        {
+            movementDirection = new Vector3(moveDirection.normalized.x, 0, moveDirection.normalized.y);
+            Debug.Log($"new direction {movementDirection}");
         }
     }
 }
