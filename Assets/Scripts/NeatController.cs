@@ -6,11 +6,13 @@ namespace DefaultNamespace
 {
     public class NeatController : MonoBehaviour
     {
-        public GameObject AnimalPrefab;
+        [SerializeField] private GameObject animalPrefab;
+        [SerializeField] private int mapSize;
+        
         
         private void Awake()
         {
-            Runtime.PythonDLL = @"C:\Users\Lena Sophie\AppData\Local\Programs\Python\Python39\python39.dll";
+            Runtime.PythonDLL = @"C:\Users\Lena Sophie\AppData\Local\Programs\Python\Python312\python312.dll";
         }
 
         // Start is called before the first frame update
@@ -21,6 +23,9 @@ namespace DefaultNamespace
             using (Py.GIL())
             {
 
+                //dynamic np = Py.Import("numpy");
+                //Debug.Log(np.cos(np.pi * 2));
+                
                 // Add directory with python scripts to sys
                 string scriptPath = @"C:\Users\Lena Sophie\Desktop\Game Dev\Dinoverse\Assets\Scripts\Python";
                 dynamic sys = Py.Import("sys");
@@ -28,18 +33,27 @@ namespace DefaultNamespace
 
                 // Use the reload class to delete all cached modules
                 dynamic reload = Py.Import("reload");
-                reload.delete_module("brain");
+                reload.delete_module("ai");
 
                 // Use a Python class
-                dynamic config = Py.Import("brain");
-                dynamic neatController = config.NeatController();
+                dynamic ai = Py.Import("ai");
+                dynamic neatController = ai.NeatController();
                 neatController.run();
-                dynamic neuralAnimal = neatController.animals[0];
-                GameObject newAnimal = Instantiate(AnimalPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                newAnimal.GetComponent<AnimalController>().Brain = neuralAnimal;
-                //Debug.Log(neuralAnimal.survive(1, 1, 2, 2));
-
+                
+                dynamic animalBrains = neatController.animals;
+                foreach (dynamic animalBrain in animalBrains)
+                {
+                    SpawnAnimal(animalBrain);
+                }
             }
+        }
+        
+        private void SpawnAnimal(dynamic animalBrain)
+        {
+            Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
+                Random.Range(-5 * mapSize, 5 * mapSize));
+            GameObject newAnimal = Instantiate(animalPrefab, randomPosition, Quaternion.identity);
+            newAnimal.GetComponent<AnimalController>().Brain = animalBrain;
         }
     }
 }

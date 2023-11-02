@@ -6,11 +6,11 @@ namespace DefaultNamespace
     public class EnvironmentData : ScriptableObject
     {
         [SerializeField] public int MaxTimeSpeed = 10;
-        public int timeSpeed { get; private set;}
+        public int TimeSpeed;
 
         public void SetTimeSpeed(int timeSpeed)
         {
-            this.timeSpeed = timeSpeed;
+            TimeSpeed = timeSpeed;
         }
     }
 }

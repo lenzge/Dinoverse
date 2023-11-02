@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace DefaultNamespace
 {
@@ -13,6 +12,9 @@ namespace DefaultNamespace
         [Range(50,1000)]
         [Tooltip("Calories per kg")]
         public int Calories;
+
+        public UnityEvent<Nurture,GameObject> NurtureEatenEvent;
+        public GameObject Prefab;
 
         public float Eaten(float eatingSpeed)
         {
@@ -30,8 +32,9 @@ namespace DefaultNamespace
                 Mass = 0;
             }
 
-            if (Mass <= 0)
+            if (Mass == 0)
             {
+                NurtureEatenEvent.Invoke(this, Prefab);
                 Destroy(gameObject);
             }
             

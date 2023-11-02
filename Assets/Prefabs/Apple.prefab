@@ -46,8 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846cdfc285b9408f9af99d4aadccf5b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mass: 10
+  Mass: 1
   Calories: 500
+  NurtureEatenEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  Prefab: {fileID: 1141243578218203949}
 --- !u!135 &5333984604632564154
 SphereCollider:
   m_ObjectHideFlags: 0

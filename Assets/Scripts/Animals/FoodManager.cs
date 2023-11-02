@@ -13,7 +13,8 @@ namespace Animals
         [Tooltip("kg per deci-hour")]
         private float eatingSpeed;
 
-        private float currentCalories;
+        public float currentCalories;
+        private Collider[] colliderBuffer = new Collider[1];
 
 
         private void Start()
@@ -26,32 +27,39 @@ namespace Animals
         {
             float PAL = 1; //PAL of current action
             currentCalories -= weight/10 * PAL;
-            Debug.Log($"{currentCalories} after burn");
         }
 
-        public void Eat(Nurture food)
+        public bool TryToEat(Transform animalTransform, float radius, LAYER foodType)
         {
             if (isFull())
             {
-                return;
+                return false;
             }
-            
-            float eatenCalories = food.Eaten(eatingSpeed);
-            currentCalories = AddCalories(eatenCalories);
-            Debug.Log($"{currentCalories} after eating {eatenCalories} calories");
-        }
 
-        public bool IsStarving()
-        {
-            if (currentCalories <= 0)
+            if (Physics.OverlapSphereNonAlloc(animalTransform.position, radius, colliderBuffer,
+                1 << (int) foodType) >= 1)
             {
-                Debug.Log($"<color=red>Starved</color>");
+                Nurture food = colliderBuffer[0].GetComponent<Nurture>();
+                float eatenCalories = food.Eaten(eatingSpeed);
+                currentCalories = AddCalories(eatenCalories);
+                //Debug.Log($"{currentCalories} after eating {eatenCalories} calories");
                 return true;
             }
 
             return false;
         }
 
+        public bool IsStarving()
+        {
+            if (currentCalories <= 0)
+            {
+                //Debug.Log($"<color=red>Starved</color>");
+                return true;
+            }
+
+            return false;
+        }
+        
         /// <summary>
         /// Add calories in limit of the maxCalories
         /// </summary>
@@ -72,7 +80,7 @@ namespace Animals
         {
             if (currentCalories >= maxCalories)
             {
-                Debug.Log($"<color=yellow>Ich bin so satt ich mag kein Blatt. Mäh!</color>");
+                //Debug.Log($"<color=yellow>Ich bin so satt ich mag kein Blatt. Mäh!</color>");
                 return true;
             }
             return false;

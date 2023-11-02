@@ -1,0 +1,7 @@
+.graph-background {
+    background-color: rgb(0, 0, 0);
+}
+
+.container-background {
+    background-color: rgb(51, 51, 51);
+}
