@@ -16,14 +16,6 @@ class AnimalBrain:
         output = self.brain.activate([position_x, position_z, food_position_x, food_position_y])
         return output
 
-    def survive2(self, food_distance, food_angle, wall_in_front):
-        output = self.brain.activate([food_distance, food_angle, wall_in_front])
-        return output
-
-    def update_fitness(self, fitness):
-        if not fitness == 0:
-            self.genome.fitness += fitness
-
     def reproduce(self, partner):
         gid = next(self.genome_indexer)
         child = self.config.genome_type(gid)
@@ -32,8 +24,7 @@ class AnimalBrain:
         child.fitness = 0
         new_brain = AnimalBrain(child, self.config)
         return new_brain
-        #return neat.DefaultGenome.configure_crossover(genome1=self.genome, genome2=self.genome, config=self.config.genome_config)
-    
+
     def return_genome(self):
         return self.genome
 
@@ -66,5 +57,5 @@ class NeatController:
         population.add_reporter(stats)
         population.add_reporter(neat.Checkpointer(10))
     
-        # Run for up to 50 generations, TODO: for any reason all generations are created on start?
+        # Run 
         winner = population.run(self.eval_genomes, 1)

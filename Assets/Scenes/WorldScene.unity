@@ -381,7 +381,7 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
   mapSize: 190
-  initialAmount: 550
+  initialAmount: 100
   offspringAmount: 3
 --- !u!1 &352368945
 GameObject:

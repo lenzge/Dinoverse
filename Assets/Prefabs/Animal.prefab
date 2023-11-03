@@ -67,6 +67,7 @@ GameObject:
   - component: {fileID: 7449578703545013821}
   - component: {fileID: 2830572847685276631}
   - component: {fileID: 7978424919749795081}
+  - component: {fileID: 7322130286193827268}
   m_Layer: 7
   m_Name: Animal
   m_TagString: Untagged
@@ -133,15 +134,15 @@ MonoBehaviour:
   MovementController: {fileID: 7449578703545013821}
   CharacterController: {fileID: 4408169497568838984}
   FoodManager: {fileID: 2830572847685276631}
+  ReproductionManager: {fileID: 7322130286193827268}
   Eyes: {fileID: 7978424919749795081}
   Plot: {fileID: 11400000, guid: 31f510e3cc241da4fa98dae182405cc2, type: 2}
-  animalPrefab: {fileID: 3005528575296122092}
   weight: 50
   gender: 0
   species: 7
   enemySpecies: 9
   food: 6
-  ChildCount: 0
+  age: 0
 --- !u!114 &7449578703545013821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 4408169497568838984}
+  animator: {fileID: 8911642007023974860}
   movementSpeed: 8
 --- !u!114 &2830572847685276631
 MonoBehaviour:
@@ -186,14 +188,20 @@ MonoBehaviour:
   Radius: 200
   NumRaycasts: 10
   AngleBetweenRaycasts: 20
-  FoodPositions: []
-  NearestFoodPosition: {x: 0, y: 0, z: 0}
-  BestPartner: {fileID: 0}
-  FriendCount: 0
-  EnemyCount: 0
-  FoodDistance: 0
-  FoodAngle: 0
-  isWall: 0
+--- !u!114 &7322130286193827268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005528575296122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33d8757d97345d79301a01667eb8e85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimalPrefab: {fileID: 3005528575296122092}
+  MaxChildCount: 5
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0
@@ -3850,5 +3858,10 @@ PrefabInstance:
 --- !u!4 &3675119331676557459 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4782104867855052292, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
+  m_PrefabInstance: {fileID: 8168921166256946839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8911642007023974860 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 788505648243853147, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
   m_PrefabInstance: {fileID: 8168921166256946839}
   m_PrefabAsset: {fileID: 0}

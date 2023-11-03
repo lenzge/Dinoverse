@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Enums;
 using DefaultNamespace;
 using UnityEngine;
 
@@ -12,8 +12,9 @@ namespace Animals
         [Range(0.1f,1f)]
         [Tooltip("kg per deci-hour")]
         private float eatingSpeed;
-
-        public float currentCalories;
+        [SerializeField]
+        private float currentCalories;
+        
         private Collider[] colliderBuffer = new Collider[1];
 
 
@@ -29,9 +30,9 @@ namespace Animals
             currentCalories -= weight/10 * PAL;
         }
 
-        public bool TryToEat(Transform animalTransform, float radius, LAYER foodType)
+        public bool TryToEat(Transform animalTransform, float radius, Layer foodType)
         {
-            if (isFull())
+            if (IsFull())
             {
                 return false;
             }
@@ -76,7 +77,7 @@ namespace Animals
         }
 
         // Never the case because calories are always burned
-        private bool isFull()
+        private bool IsFull()
         {
             if (currentCalories >= maxCalories)
             {

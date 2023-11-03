@@ -5,6 +5,7 @@ namespace Animals
     public class MovementController : MonoBehaviour
     {
         [SerializeField] private CharacterController characterController;
+        [SerializeField] private Animator animator;
         [SerializeField] private float movementSpeed;
         
         private Vector3 movementDirection = new Vector3(1,0,0);
@@ -17,6 +18,8 @@ namespace Animals
             
             // Move 
             characterController.SimpleMove(movementDirection.normalized * (movementSpeed * animalController.EnvironmentData.TimeSpeed));
+            // TODO only check after a change
+            animator.speed = animalController.EnvironmentData.TimeSpeed;
         }
 
         public void SetMoveDirection(Vector2 moveDirection)

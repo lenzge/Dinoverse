@@ -1,6 +1,6 @@
-﻿namespace DefaultNamespace
+﻿namespace Enums
 {
-    public enum LAYER
+    public enum Layer
     {
         Water = 4,
         Tree = 6,
