@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Environment Data
   m_EditorClassIdentifier: 
   MaxTimeSpeed: 10
-  TimeSpeed: 4
+  TimeSpeed: 10

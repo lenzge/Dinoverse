@@ -143,6 +143,10 @@ MonoBehaviour:
   enemySpecies: 9
   food: 6
   age: 0
+  Generation: 0
+  Dead:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7449578703545013821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b469285140b94840a3f20c7eeabc23f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCalories: 500
+  maxCalories: 250
   eatingSpeed: 1
   currentCalories: 0
 --- !u!114 &7978424919749795081
@@ -185,9 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1f71e6945f4ac0a22a113c12ace0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 200
-  NumRaycasts: 10
-  AngleBetweenRaycasts: 20
+  Radius: 120
+  NumRaycasts: 36
+  AngleBetweenRaycasts: 10
 --- !u!114 &7322130286193827268
 MonoBehaviour:
   m_ObjectHideFlags: 0

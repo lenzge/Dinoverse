@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace DefaultNamespace
@@ -16,23 +17,30 @@ namespace DefaultNamespace
         public UnityEvent<Nurture,GameObject> NurtureEatenEvent;
         public GameObject Prefab;
 
+        private float currentMass;
+
+        private void Start()
+        {
+            currentMass = Mass;
+        }
+
         public float Eaten(float eatingSpeed)
         {
             float eatenMass;
 
-            if (Mass >= eatingSpeed)
+            if (currentMass >= eatingSpeed)
             {
                 eatenMass = eatingSpeed;
-                Mass -= eatingSpeed;
+                currentMass -= eatingSpeed;
 
             }
             else
             {
-                eatenMass = Mass;
-                Mass = 0;
+                eatenMass = currentMass;
+                currentMass = 0;
             }
 
-            if (Mass == 0)
+            if (currentMass == 0)
             {
                 NurtureEatenEvent.Invoke(this, Prefab);
                 Destroy(gameObject);

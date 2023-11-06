@@ -8,13 +8,16 @@ namespace Animals
         [SerializeField] private Animator animator;
         [SerializeField] private float movementSpeed;
         
-        private Vector3 movementDirection = new Vector3(1,0,0);
+        private Vector3 movementDirection = new Vector3(0,0,0);
 
         public void Move(AnimalController animalController,Transform characterTransform)
         {
             // Rotate in the right direction
-            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation, toRotation, 700 * Time.deltaTime);
+            if (movementDirection != Vector3.zero)
+            {
+                Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+                characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation, toRotation, 700 * Time.deltaTime);
+            }
             
             // Move 
             characterController.SimpleMove(movementDirection.normalized * (movementSpeed * animalController.EnvironmentData.TimeSpeed));

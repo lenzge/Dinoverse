@@ -25,13 +25,13 @@ namespace DefaultNamespace
             int timeOfDeath = 0;
             List<int> buffer = new List<int>();
             List<float> lifeSpanList = new List<float>();
-            Debug.Log(statistics.Count);
+            //Debug.Log(statistics.Count);
 
             for (int i = 0; i < statistics.Count; i++)
             {
                 if (statistics[i].TimeOfDeath == timeOfDeath)
                 {
-                    Debug.Log("survivedTime: " + statistics[i].SurvivedTime);
+                    //Debug.Log("survivedTime: " + statistics[i].SurvivedTime);
                     buffer.Add(statistics[i].SurvivedTime);
                     
                 }
@@ -41,13 +41,13 @@ namespace DefaultNamespace
                     if (buffer.Count != 0)
                     {
                         float sum = buffer.Sum();
-                        Debug.Log("sum: " + sum);
-                        Debug.Log("count: " + buffer.Count);
+                        //Debug.Log("sum: " + sum);
+                        //Debug.Log("count: " + buffer.Count);
                         average = sum / buffer.Count;
                     }
 
                     lifeSpanList.Add(average);
-                    Debug.Log("Average: " + average);
+                    Debug.LogWarning($"Average Fitness in Generation {timeOfDeath}: " + average );
                     buffer.Clear();
                     timeOfDeath++;
                 }

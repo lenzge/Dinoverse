@@ -13,7 +13,7 @@ namespace DefaultNamespace
 
         protected override void TimedStart()
         {
-            for (int i = 0; i <= initialAmount; i++)
+            for (int i = 0; i < initialAmount; i++)
             {
                 SpawnNurture(treePrefab);
             }
@@ -31,7 +31,8 @@ namespace DefaultNamespace
         {
             Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 4,
                 Random.Range(-5 * mapSize, 5 * mapSize));
-            GameObject nurture = Instantiate(prefab, randomPosition, Quaternion.identity);
+            Vector3 newPosition = transform.position + randomPosition;
+            GameObject nurture = Instantiate(prefab, newPosition, Quaternion.identity);
             nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
         }
         

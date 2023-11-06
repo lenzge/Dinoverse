@@ -7,13 +7,14 @@ namespace Animals
     public class Eyes : MonoBehaviour
     {
         public int Radius;
-        public int NumRaycasts = 10;
-        public float AngleBetweenRaycasts = 20;
+        public int NumRaycasts = 15;
+        public float AngleBetweenRaycasts = 24;
 
 
         public Vector3 FindFood(Transform characterTransform, Layer food)
         {
             Vector3 nearestFoodPosition = Vector3.zero;
+            Transform nearestFoodObject = null;
             RaycastHit hit;
             for (int i = 0; i < NumRaycasts; i++)
             {
@@ -34,12 +35,18 @@ namespace Animals
                         hit.distance)
                     {
                         nearestFoodPosition = hit.point;
+                        nearestFoodObject = hit.collider.transform;
                     }
                 }
                 else
                 {
                     //Debug.DrawRay(rayStart, rayDirection * Radius, Color.yellow, 1);
                 }
+            }
+
+            if (nearestFoodObject != null)
+            {
+                return nearestFoodObject.position;
             }
 
             return nearestFoodPosition;

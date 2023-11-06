@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Animals
 {
@@ -9,6 +11,12 @@ namespace Animals
         
         private int childCount = 0;
         private int reproductionEnergy = 0;
+
+        private void Start()
+        {
+            childCount = 0;
+            reproductionEnergy = 0;
+        }
 
         public bool TryToReproduce(Transform characterTransform, dynamic brain)
         {
