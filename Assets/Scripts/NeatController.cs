@@ -174,19 +174,19 @@ namespace DefaultNamespace
             {
                 if (bestGenomes.Count > i)
                 {
-                    SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i].Brain));
+                    //SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i].Brain));
                 }
                 
             }
             
             for (int i = 0; i < bestGenomes.Count - 1; i++)
             {
-                AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i+1].Brain));
+                //AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i+1].Brain));
             }
             
             for (int i = 1; i < bestGenomes.Count - 1; i++)
             {
-                AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i-1].Brain));
+                //AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i-1].Brain));
             }
         }
         

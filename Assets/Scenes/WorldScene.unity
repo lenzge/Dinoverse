@@ -256,7 +256,6 @@ GameObject:
   - component: {fileID: 245163111}
   - component: {fileID: 245163110}
   - component: {fileID: 245163109}
-  - component: {fileID: 245163113}
   - component: {fileID: 245163114}
   m_Layer: 0
   m_Name: NeatController
@@ -352,23 +351,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &245163113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 245163108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d52919713d184614bc1d8cf56604ea3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-  mapSize: 170
-  Islands:
-  - {fileID: 245163112}
-  animalControllers: []
 --- !u!114 &245163114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,8 +365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-  mapSize: 190
-  initialAmount: 50
+  mapSize: 189
+  initialAmount: 70
   offspringAmount: 3
 --- !u!1 &352368945
 GameObject:
@@ -641,6 +623,54 @@ Transform:
   - {fileID: 1889627920}
   - {fileID: 11711266}
   - {fileID: 1289838968}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &979460212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 979460214}
+  - component: {fileID: 979460213}
+  m_Layer: 0
+  m_Name: AnimalCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &979460213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979460212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6b2c93fb1d4c969c7d8853bb765f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
+  mapSize: 170
+  initialAmount: 100
+  animalControllers: []
+--- !u!4 &979460214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979460212}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1018827659
@@ -1449,3 +1479,4 @@ SceneRoots:
   - {fileID: 883635211}
   - {fileID: 1544529320}
   - {fileID: 199910799}
+  - {fileID: 979460214}

@@ -68,6 +68,7 @@ GameObject:
   - component: {fileID: 2830572847685276631}
   - component: {fileID: 7978424919749795081}
   - component: {fileID: 7322130286193827268}
+  - component: {fileID: -5797262476799351126}
   m_Layer: 7
   m_Name: Animal
   m_TagString: Untagged
@@ -136,6 +137,7 @@ MonoBehaviour:
   FoodManager: {fileID: 2830572847685276631}
   ReproductionManager: {fileID: 7322130286193827268}
   NeatController: {fileID: 0}
+  Brain: {fileID: -5797262476799351126}
   Eyes: {fileID: 7978424919749795081}
   Plot: {fileID: 11400000, guid: 31f510e3cc241da4fa98dae182405cc2, type: 2}
   weight: 50
@@ -144,6 +146,8 @@ MonoBehaviour:
   enemySpecies: 9
   food: 6
   age: 0
+  mutationAmount: 0.8
+  mutationChance: 0.2
   Generation: 0
   Fitness: 0
   Dead:
@@ -195,8 +199,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radius: 300
-  NumRaycasts: 36
-  AngleBetweenRaycasts: 10
+  NumRaycasts: 5
+  AngleBetweenRaycasts: 30
+  distances:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &7322130286193827268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +222,18 @@ MonoBehaviour:
   AnimalPrefab: {fileID: 3005528575296122092}
   MaxChildCount: 5
   mapSize: 0
+--- !u!114 &-5797262476799351126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005528575296122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37f35498a154fa397cc4b6739c8ece7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0
