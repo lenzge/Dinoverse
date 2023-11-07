@@ -135,6 +135,7 @@ MonoBehaviour:
   CharacterController: {fileID: 4408169497568838984}
   FoodManager: {fileID: 2830572847685276631}
   ReproductionManager: {fileID: 7322130286193827268}
+  NeatController: {fileID: 0}
   Eyes: {fileID: 7978424919749795081}
   Plot: {fileID: 11400000, guid: 31f510e3cc241da4fa98dae182405cc2, type: 2}
   weight: 50
@@ -144,7 +145,11 @@ MonoBehaviour:
   food: 6
   age: 0
   Generation: 0
+  Fitness: 0
   Dead:
+    m_PersistentCalls:
+      m_Calls: []
+  AlsoDead:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7449578703545013821
@@ -174,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b469285140b94840a3f20c7eeabc23f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCalories: 250
+  maxCalories: 1000
   eatingSpeed: 1
   currentCalories: 0
 --- !u!114 &7978424919749795081
@@ -189,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1f71e6945f4ac0a22a113c12ace0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 120
+  Radius: 300
   NumRaycasts: 36
   AngleBetweenRaycasts: 10
 --- !u!114 &7322130286193827268
@@ -206,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimalPrefab: {fileID: 3005528575296122092}
   MaxChildCount: 5
+  mapSize: 0
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0

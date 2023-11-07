@@ -11,7 +11,9 @@ namespace DefaultNamespace
         [SerializeField] private GameObject animalPrefab;
         [SerializeField] private int mapSize;
         [SerializeField] private Transform[] Islands;
+        [SerializeField] private List<AnimalController> animalControllers = new List<AnimalController>();
 
+        private List<AnimalController> bestGenomes = new List<AnimalController>();
         private dynamic neatController;
         
         int emptyIslands = 0;
@@ -50,7 +52,8 @@ namespace DefaultNamespace
                 //dynamic animalBrains = neatController.animals;
                 // Spawn animals after each other
                 //StartCoroutine(Run(animalBrains));
-                StartCoroutine(RunIslands(Islands));
+                //StartCoroutine(RunIslands(Islands));
+                RunAll();
             }
         }
 
@@ -115,13 +118,88 @@ namespace DefaultNamespace
             Debug.Log("Overall Winner: " + neatController.return_winner());
             
         }
+        private void RunAll()
+        {
+            animalControllers.Clear();
+            bestGenomes.Clear();
+            
+            neatController.create_generation();
+            dynamic animalBrains = neatController.animals;
+            foreach (dynamic animalBrain in animalBrains)
+            {
+                AnimalController animalController = SpawnAnimalRandom(animalBrain);
+            }
+            Debug.LogError($"There are {animalControllers.Count} animal safed");
+        }
+
+        private void OnDead(AnimalController animalController)
+        {
+            //Debug.LogError($"I'm dead");
+            animalController.AlsoDead.RemoveListener(OnDead);
+            animalControllers.Sort((c1, c2) => c2.Fitness.CompareTo(c1.Fitness));
+            int index = animalControllers.IndexOf(animalController);
+            if (index >= 0 && index < 10 && animalControllers[index].Fitness >= 100)
+            {
+                Debug.LogWarning($"One of the best Brains with fitness {animalController.Fitness} !");
+                bestGenomes.Add(animalController);
+            }
+            animalControllers.Remove(animalController);
+            //Debug.LogError($"There are {animalControllers.Count} animal left");
+            Debug.LogWarning(animalControllers.Count);
+            if (animalControllers.Count == 0)
+            {
+                CreateNewGeneration();
+            }
+            
+        }
+
+        public AnimalController GetBestGenome()
+        {
+            animalControllers.Sort((c1, c2) => c2.Fitness.CompareTo(c1.Fitness));
+            Debug.LogWarning($"Best Partner has the Fitness of {animalControllers[0].Fitness}");
+            return animalControllers[0];
+        }
+
+        private void CreateNewGeneration()
+        {
+            Debug.LogWarning($"Create new Generation. There are {bestGenomes.Count} Genomes saved.");
+            
+            bestGenomes.Sort((c1, c2) => c2.Fitness.CompareTo(c1.Fitness));
+            if (bestGenomes.Count > 50)
+            {
+                bestGenomes = bestGenomes.GetRange(0, 50);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (bestGenomes.Count > i)
+                {
+                    SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i].Brain));
+                }
+                
+            }
+            
+            for (int i = 0; i < bestGenomes.Count - 1; i++)
+            {
+                AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i+1].Brain));
+            }
+            
+            for (int i = 1; i < bestGenomes.Count - 1; i++)
+            {
+                AnimalController animalController = SpawnAnimalRandom(bestGenomes[i].Brain.reproduce(bestGenomes[i-1].Brain));
+            }
+        }
         
-        private void SpawnAnimalRandom(dynamic animalBrain)
+        public AnimalController SpawnAnimalRandom(dynamic animalBrain)
         {
             Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
                 Random.Range(-5 * mapSize, 5 * mapSize));
             GameObject newAnimal = Instantiate(animalPrefab, randomPosition, Quaternion.identity);
             newAnimal.GetComponent<AnimalController>().Brain = animalBrain;
+            animalControllers.Add(newAnimal.GetComponent<AnimalController>());
+            newAnimal.GetComponent<AnimalController>().AlsoDead.AddListener(OnDead);
+            //Debug.LogError("Spawn animal");
+            return newAnimal.GetComponent<AnimalController>();
         }
         
         private AnimalController SpawnAnimal(dynamic animalBrain, int generation, Transform island)

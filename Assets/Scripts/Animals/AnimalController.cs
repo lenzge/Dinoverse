@@ -12,6 +12,7 @@ namespace Animals
         public CharacterController CharacterController;
         public FoodManager FoodManager;
         public ReproductionManager ReproductionManager;
+        public NeatController NeatController;
         public Eyes Eyes;
         public Plot Plot;
         
@@ -24,10 +25,12 @@ namespace Animals
         
         public dynamic Brain;
         public int Generation;
+        public int Fitness;
         
         private Transform characterTransform;
 
         public UnityEvent Dead;
+        public UnityEvent<AnimalController> AlsoDead;
 
         // Parameters for Fitness
         private int treeCount;
@@ -38,10 +41,12 @@ namespace Animals
         protected override void TimedStart()
         {
             characterTransform = transform;
-            
+            NeatController = GameObject.Find("NeatController").GetComponent<NeatController>();
+
             age = 0;
             treeCount = 0;
             searchTime = 0;
+            Fitness = 0;
         }
 
         private void Update()
@@ -67,12 +72,14 @@ namespace Animals
             
                 if ((float) output[0] == 0 && (float) output[1] == 0)
                 {
+                    Fitness -= 3;
                     Brain.update_fitness(-3);
                 }
 
                 if (Physics.Raycast(transform.position, transform.forward, CharacterController.radius + 0.5f,
                     1 << (int) Layer.Water))
                 {
+                    Fitness -= 1;
                     Brain.update_fitness(-1);
                 }
 
@@ -91,7 +98,7 @@ namespace Animals
                 treeCount += 1;
                 UpdateFitness();
                 searchTime = 0;
-                //ReproductionManager.TryToReproduce(characterTransform, Brain);
+                ReproductionManager.TryToReproduce(this, characterTransform, Brain, NeatController.GetBestGenome().Brain);
             }
 
             KillIfDead();
@@ -106,21 +113,23 @@ namespace Animals
 
             Debug.LogWarning($"{treeCount} Tree found after {searchTime} timeSteps. This will increase the fitness by {fitness}");
             Brain.update_fitness(fitness);
+            Fitness += fitness;
         }
 
         private void KillIfDead()
         {
-            if (FoodManager.IsStarving() || ReproductionManager.IsInMenopause())
+            if (FoodManager.IsStarving())
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
-                Debug.LogWarning($"Generation {Generation} R.I.P: Died the age of {age} Timesteps, " +
-                                 //$"Reproduced {ReproductionManager.GetChildCount()} " +
+                Debug.LogWarning($"{timeOfDeath} R.I.P: Died the age of {age} Timesteps, " +
+                                 $"Reproduced {ReproductionManager.GetChildCount()} times, " +
                                  $"Found {treeCount} Trees " +
                                  $"Complex: {Brain.complexity}");
                 Debug.LogWarning(Brain.return_genome());
-                //Plot.SaveData(age, ReproductionManager.GetChildCount(), timeOfDeath);
-                Plot.SaveData((int) Brain.return_fitness(), treeCount, Generation);
+                Plot.SaveData(age, ReproductionManager.GetChildCount(), timeOfDeath);
+                //Plot.SaveData((int) Brain.return_fitness(), treeCount, Generation);
                 Dead.Invoke();
+                AlsoDead.Invoke(this);
                 Destroy(gameObject);
             }
             

@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 245163113}
   - component: {fileID: 245163114}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: NeatController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,6 +366,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
   mapSize: 170
+  Islands:
+  - {fileID: 245163112}
+  animalControllers: []
 --- !u!114 &245163114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,7 +384,7 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
   mapSize: 190
-  initialAmount: 100
+  initialAmount: 50
   offspringAmount: 3
 --- !u!1 &352368945
 GameObject:
