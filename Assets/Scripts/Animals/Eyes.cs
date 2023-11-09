@@ -9,13 +9,15 @@ namespace Animals
     {
         public int Radius;
         public int NumRaycasts = 5;
-        public float AngleBetweenRaycasts = 30;
+        public int AngleBetweenRaycasts = 30;
         public float[] distances;
 
-
-        private void Start()
+        public void SetEyeParams(int numRaycasts, int angleBetweenRaycasts, int radius)
         {
-            distances = new float[6];
+            Radius = radius;
+            NumRaycasts = numRaycasts;
+            AngleBetweenRaycasts = angleBetweenRaycasts;
+            distances = new float[numRaycasts];
         }
 
         public Vector3 FindFood(Transform characterTransform, Layer food)
@@ -25,7 +27,7 @@ namespace Animals
             RaycastHit hit;
             for (int i = 0; i < NumRaycasts; i++)
             {
-                float angle = ((2 * i + 1 - NumRaycasts) * AngleBetweenRaycasts / 2);
+                float angle = ((2 * i + 1 - NumRaycasts) * (float) AngleBetweenRaycasts / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Vector3 rayDirection = rotation * characterTransform.forward;
@@ -64,7 +66,7 @@ namespace Animals
             RaycastHit hit;
             for (int i = 0; i < NumRaycasts; i++)
             {
-                float angle = ((2 * i + 1 - NumRaycasts) * AngleBetweenRaycasts / 2);
+                float angle = ((2 * i + 1 - NumRaycasts) * (float) AngleBetweenRaycasts / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Vector3 rayDirection = rotation * characterTransform.forward;
@@ -84,7 +86,7 @@ namespace Animals
                     distances[i] = 1;
                 }
             }
-            Vector3 thisRayStart = characterTransform.position + Vector3.up * 0.1f;
+            /*Vector3 thisRayStart = characterTransform.position + Vector3.up * 0.1f;
             if (Physics.Raycast(thisRayStart, characterTransform.forward, out hit, Radius, 1 << (int) Layer.Water))
             {
                 Debug.DrawRay(thisRayStart, characterTransform.forward * hit.distance, Color.blue);
@@ -96,7 +98,8 @@ namespace Animals
                 Debug.DrawRay(thisRayStart, characterTransform.forward * Radius, Color.yellow);
                 // If no food object is detected, set the distance to the maximum length of the raycast
                 distances[5] = 1;
-            }
+            }*/
+            
             
             return distances;
         }

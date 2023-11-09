@@ -17,7 +17,6 @@ namespace Animals
         
         private Collider[] colliderBuffer = new Collider[1];
 
-
         private void Start()
         {
             currentCalories = maxCalories / 2;
@@ -28,6 +27,11 @@ namespace Animals
         {
             float PAL = 1; //PAL of current action
             currentCalories -= weight/10 * PAL;
+        }
+
+        public void GetDamage(float damage)
+        {
+            currentCalories -= damage;
         }
 
         public bool TryToEat(Transform animalTransform, float radius, Layer foodType)

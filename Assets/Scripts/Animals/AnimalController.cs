@@ -19,16 +19,20 @@ namespace Animals
         public Eyes Eyes;
         public Plot Plot;
 
+        // Mutatable Params
+        public float MutationAmount;
+        public float MutationChance;
+        
         [SerializeField] private float weight;
         [SerializeField] private Gender gender;
         [SerializeField] private Layer species;
         [SerializeField] private Layer enemySpecies;
         [SerializeField] private Layer food;
         [SerializeField] private int age;
-        [SerializeField] private float mutationAmount = 0.8f;
-        [SerializeField] private float mutationChance = 0.2f;
-        
+
+        public int Key;
         public int Generation;
+        public int GrandChild;
         public int Fitness;
         
         private Transform characterTransform;
@@ -45,13 +49,19 @@ namespace Animals
         protected override void TimedStart()
         {
             characterTransform = transform;
-            NeatController = GameObject.Find("NeatController").GetComponent<NeatController>();
+            //NeatController = GameObject.Find("NeatController").GetComponent<NeatController>();
+            Plot = GameObject.Find("AnimalCreator").GetComponent<Plot>();
             MutateCreature();
 
             age = 0;
             treeCount = 0;
             searchTime = 0;
             Fitness = 0;
+        }
+
+        public void UpdateName()
+        {
+            gameObject.name = $"{Key}.{Generation}.{GrandChild}";
         }
 
         private void Update()
@@ -76,18 +86,18 @@ namespace Animals
                 //Debug.Log($"{name} [{characterPosition.x} , {characterPosition.z}] " +
                           //$" [{nearestFoodPosition.x} , {nearestFoodPosition.z}]" +
                           //$" [{(float) output[0]} , {(float) output[1]}]");
-            
-                if ((float) output[0] == 0 && (float) output[1] == 0)
+
+                          if ((float) output[0] == 0 && (float) output[1] == 0)
                 {
-                    Fitness -= 3;
+                    Fitness -= 1;
                     //Brain.update_fitness(-3);
                 }
 
                 if (Physics.Raycast(transform.position, transform.forward, CharacterController.radius + 0.5f,
                     1 << (int) Layer.Water))
                 {
-                    Fitness -= 1;
-                    //Brain.update_fitness(-1);
+                    Fitness -= 3;
+                    FoodManager.GetDamage(30);
                 }
 
                 MovementController.SetMoveDirection(new Vector2((float) output[0], (float) output[1]));
@@ -118,21 +128,21 @@ namespace Animals
             fitness += treeCount * 100;
             fitness += 100 / searchTime;
 
-            Debug.LogWarning($"{treeCount} Tree found after {searchTime} timeSteps. This will increase the fitness by {fitness}");
+            Debug.LogWarning($"[{gameObject.name}] {treeCount} Tree found after {searchTime} timeSteps. This will increase the fitness by {fitness}");
             //Brain.update_fitness(fitness);
             Fitness += fitness;
         }
 
         private void KillIfDead()
         {
-            if (FoodManager.IsStarving())
+            if (FoodManager.IsStarving() || ReproductionManager.IsInMenopause())
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
-                Debug.LogWarning($"{timeOfDeath} R.I.P: Died the age of {age} Timesteps, " +
+                Debug.LogWarning($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {age} Timesteps, " +
                                  $"Reproduced {ReproductionManager.GetChildCount()} times, " +
                                  $"Found {treeCount} Trees ");
                 // Debug.LogWarning(Brain.return_genome());
-                Plot.SaveData(age, ReproductionManager.GetChildCount(), timeOfDeath);
+                Plot.SaveData(Key, Generation, GrandChild,age, treeCount, ReproductionManager.GetChildCount(), timeOfDeath);
                 //Plot.SaveData((int) Brain.return_fitness(), treeCount, Generation);
                 Dead.Invoke();
                 AlsoDead.Invoke(this);
@@ -140,16 +150,25 @@ namespace Animals
             }
             
         }
-        private void MutateCreature()
+        public void MutateCreature()
         {
-            mutationAmount += Random.Range(-1.0f, 1.0f)/100;
-            mutationChance += Random.Range(-1.0f, 1.0f)/100;
+            if (Random.value < MutationChance)
+            {
+                int angleBetweenRaycasts = Eyes.AngleBetweenRaycasts + Random.Range(-1, 1)*(int)(MutationAmount*2);
+                int radius = Eyes.Radius + Random.Range(-1, 1)*(int)(MutationAmount*2);
+                Eyes.SetEyeParams(Eyes.NumRaycasts, angleBetweenRaycasts, radius);
+                
+                MutationAmount += Random.Range(-1.0f, 1.0f)/100;
+                MutationChance += Random.Range(-1.0f, 1.0f)/100;
 
-            //make sure mutation amount and chance are positive using max function
-            mutationAmount = Mathf.Max(mutationAmount, 0);
-            mutationChance = Mathf.Max(mutationChance, 0);
-
-            Brain.MutateNetwork(mutationAmount, mutationChance);
+                //make sure mutation amount and chance are positive using max function
+                MutationAmount = Mathf.Max(MutationAmount, 0);
+                MutationChance = Mathf.Max(MutationChance, 0);
+                Brain.MutateNetwork(MutationAmount, MutationChance);
+                
+            }
+            Eyes.SetEyeParams(Eyes.NumRaycasts, Eyes.AngleBetweenRaycasts, Eyes.Radius);
+            Debug.Log($"[{gameObject.name}] Mutationamount: {Math.Round(MutationAmount, 3)}, chance: {Math.Round(MutationChance, 3)}");
         }
 
 

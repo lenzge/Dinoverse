@@ -10,7 +10,6 @@ namespace Animals
     {
         [SerializeField] public GameObject AnimalPrefab;
         [SerializeField] private int MaxChildCount;
-        [SerializeField] private int mapSize;
 
         private int childCount = 0;
         private int reproductionEnergy = 0;
@@ -23,20 +22,25 @@ namespace Animals
             animalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
         }
 
-        public bool TryToReproduce(AnimalController animalController)
+        public bool TryToReproduce(AnimalController parent)
         {
             reproductionEnergy += 1;
 
-            if (reproductionEnergy == 2)
+            if (reproductionEnergy == animalCreator.GetReproductionEnergy())
             {
-                childCount += 2;
-                for (int i = 0; i < childCount; i++)
+                childCount += 1;
+                for (int i = 0; i < childCount*2; i++)
                 {
                     //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                    AnimalController child = animalCreator.SpawnAnimal();
-            
+                    AnimalController child = animalCreator.SpawnAnimal(parent.Key, parent.GrandChild + 1);
+                    child.MutationAmount = parent.MutationAmount;
+                    child.MutationChance = parent.MutationChance;
+                    child.Eyes.NumRaycasts = parent.Eyes.NumRaycasts;
+                    child.Eyes.Radius = parent.Eyes.Radius;
+                    child.Eyes.AngleBetweenRaycasts = parent.Eyes.AngleBetweenRaycasts;
                     //copy the parent's neural network to the child
-                    child.Brain.layers = animalController.Brain.copyLayers();
+                    child.Brain.layers = parent.Brain.copyLayers();
+                    child.Brain.NetworkShape = parent.Brain.NetworkShape;
                     Debug.LogWarning($"Reproduced!");
                 }
                 reproductionEnergy = 0;
@@ -61,14 +65,5 @@ namespace Animals
             return childCount;
         }
         
-        private void BearAnimal(dynamic animalBrain, Vector3 position)
-        {
-            //Vector3 spawnPosition = new Vector3(position.x + Random.Range(2,10), 0,
-                //position.z + Random.Range(2,10));
-            Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
-                Random.Range(-5 * mapSize, 5 * mapSize));
-            GameObject newAnimal = Instantiate(AnimalPrefab, spawnPosition, Quaternion.identity);
-            newAnimal.GetComponent<AnimalController>().Brain = animalBrain;
-        }
     }
 }

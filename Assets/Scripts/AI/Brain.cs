@@ -4,14 +4,15 @@ namespace AI
 {
     public class Brain : MonoBehaviour
     {
-        int [] networkShape = {6,32,2};
+        public int [] NetworkShape;
         public Layer [] layers;
 
         // Awake is called when the script instance is being loaded.
         // Start is called before the first frame update.
         // Awake gets called before Start which is why we use Awake here
-        public void Awake()
+        public void CreateBrain(int[] networkShape)
         {
+            NetworkShape = networkShape;
             layers = new Layer[networkShape.Length - 1];
 
             for(int i = 0; i < layers.Length; i++)
@@ -50,10 +51,10 @@ namespace AI
         //This function is used to copy the weights and biases from one neural network to another.
         public Layer[] copyLayers()
         {
-            Layer[] tmpLayers = new Layer[networkShape.Length - 1];
+            Layer[] tmpLayers = new Layer[NetworkShape.Length - 1];
             for(int i = 0; i < layers.Length; i++)
             {
-                tmpLayers[i] = new Layer(networkShape[i], networkShape[i+1]);
+                tmpLayers[i] = new Layer(NetworkShape[i], NetworkShape[i+1]);
                 System.Array.Copy (layers[i].weightsArray, tmpLayers[i].weightsArray, layers[i].weightsArray.GetLength(0)*layers[i].weightsArray.GetLength(1));
                 System.Array.Copy (layers[i].biasesArray, tmpLayers[i].biasesArray, layers[i].biasesArray.GetLength(0));
             }

@@ -346,9 +346,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.8, z: 0}
-  m_LocalScale: {x: 200, y: 2, z: 200}
+  m_LocalScale: {x: 400, y: 4, z: 400}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 883635211}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &245163114
@@ -365,8 +366,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-  mapSize: 189
-  initialAmount: 70
+  mapSize: 390
+  initialAmount: 200
   offspringAmount: 3
 --- !u!1 &352368945
 GameObject:
@@ -614,16 +615,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883635210}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 306, y: 120.33, z: -127}
-  m_LocalScale: {x: 5, y: 2, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.51, y: 77.07, z: -0.66}
+  m_LocalScale: {x: 0.024999999, y: 1.6, z: 0.024999999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 499584630}
   - {fileID: 1889627920}
   - {fileID: 11711266}
   - {fileID: 1289838968}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 245163112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &979460212
 GameObject:
@@ -635,6 +636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 979460214}
   - component: {fileID: 979460213}
+  - component: {fileID: 979460215}
   m_Layer: 0
   m_Name: AnimalCreator
   m_TagString: Untagged
@@ -655,8 +657,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-  mapSize: 170
-  initialAmount: 100
+  mapSize: 370
+  initialAmount: 300
   animalControllers: []
 --- !u!4 &979460214
 Transform:
@@ -673,6 +675,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &979460215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979460212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be295deefba047ee9af3ac12a06a5d80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FileName: 5-32-2.csv
 --- !u!1 &1018827659
 GameObject:
   m_ObjectHideFlags: 0
@@ -1268,7 +1283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8605f787690140e386f69dcf1d08b2c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plotData: {fileID: 11400000, guid: 31f510e3cc241da4fa98dae182405cc2, type: 2}
+  plotData: {fileID: 979460215}
   circleSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &2103537317
 GameObject:
@@ -1476,7 +1491,6 @@ SceneRoots:
   - {fileID: 533719177}
   - {fileID: 2135916316}
   - {fileID: 245163112}
-  - {fileID: 883635211}
   - {fileID: 1544529320}
   - {fileID: 199910799}
   - {fileID: 979460214}

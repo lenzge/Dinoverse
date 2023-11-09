@@ -146,9 +146,11 @@ MonoBehaviour:
   enemySpecies: 9
   food: 6
   age: 0
-  mutationAmount: 0.8
-  mutationChance: 0.2
+  MutationAmount: 0
+  MutationChance: 0
+  Key: 0
   Generation: 0
+  GrandChild: 0
   Fitness: 0
   Dead:
     m_PersistentCalls:
@@ -221,7 +223,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimalPrefab: {fileID: 3005528575296122092}
   MaxChildCount: 5
-  mapSize: 0
 --- !u!114 &-5797262476799351126
 MonoBehaviour:
   m_ObjectHideFlags: 0

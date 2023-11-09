@@ -14,7 +14,6 @@ namespace DefaultNamespace.UI
         private void Awake()
         {
             graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-            plotData.ResetData();
         }
 
         private GameObject CreateCircle(Vector2 anchoredPosition)
@@ -38,7 +37,7 @@ namespace DefaultNamespace.UI
 
             float graphHeight = graphContainer.sizeDelta.y;
             float graphWidth = graphContainer.sizeDelta.x;
-            float yMaximum = 200f;
+            float yMaximum = 300f;
             float xSize = graphWidth / (valueList.Count -1);
             GameObject lastCircle = null;
             
