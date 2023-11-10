@@ -19,10 +19,10 @@ namespace DefaultNamespace
         private bool isWriting = false;
 
         public void SaveData(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-            int reproduced, int timeOfDeath)
+            int reproduced, int timeOfDeath, int causeOfDeath)
         {
             Statistic statistic = new Statistic(key, generation, grandChild, survivedTime, eatenTrees, reproduced,
-                timeOfDeath);
+                timeOfDeath, causeOfDeath);
             statistics.Add(statistic);
             WriteToCSV(statistic);
 
@@ -37,7 +37,7 @@ namespace DefaultNamespace
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,timeOfDeath");
+                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,timeOfDeath,causeOfDeath");
                 }
 
             }
@@ -123,7 +123,7 @@ namespace DefaultNamespace
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
                         writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.SurvivedTime}, " +
-                                         $"{data.EatenTrees}, {data.Reproduced}, {data.TimeOfDeath}");
+                                         $"{data.EatenTrees}, {data.Reproduced}, {data.TimeOfDeath}, {data.CauseOfDeath}");
                     }
                 }
                 catch (Exception e)
@@ -142,9 +142,10 @@ namespace DefaultNamespace
             public int EatenTrees;
             public int Reproduced;
             public int TimeOfDeath;
+            public int CauseOfDeath;
 
             public Statistic(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-                int reproduced, int timeOfDeath)
+                int reproduced, int timeOfDeath, int causeOfDeath)
             {
                 Key = key;
                 Generation = generation;
@@ -153,6 +154,8 @@ namespace DefaultNamespace
                 EatenTrees = eatenTrees;
                 Reproduced = reproduced;
                 TimeOfDeath = timeOfDeath;
+                CauseOfDeath = causeOfDeath;
+                
             }
 
         }

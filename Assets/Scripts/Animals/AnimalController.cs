@@ -44,6 +44,7 @@ namespace Animals
         private int treeCount;
         private int searchTime;
         private bool isHittingWall;
+        private bool isDrown;
 
 
         protected override void TimedStart()
@@ -57,6 +58,17 @@ namespace Animals
             treeCount = 0;
             searchTime = 0;
             Fitness = 0;
+            isDrown = false;
+        }
+
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.layer == (int) Layer.Water)
+            {
+                isDrown = true;
+            }
+            
         }
 
         public void UpdateName()
@@ -135,14 +147,14 @@ namespace Animals
 
         private void KillIfDead()
         {
-            if (FoodManager.IsStarving() || ReproductionManager.IsInMenopause())
+            if (FoodManager.IsStarving() || ReproductionManager.IsInMenopause() || isDrown)
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
                 Debug.LogWarning($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {age} Timesteps, " +
                                  $"Reproduced {ReproductionManager.GetChildCount()} times, " +
                                  $"Found {treeCount} Trees ");
                 // Debug.LogWarning(Brain.return_genome());
-                Plot.SaveData(Key, Generation, GrandChild,age, treeCount, ReproductionManager.GetChildCount(), timeOfDeath);
+                Plot.SaveData(Key, Generation, GrandChild,age, treeCount, ReproductionManager.GetChildCount(), timeOfDeath, CauseOfDeath());
                 //Plot.SaveData((int) Brain.return_fitness(), treeCount, Generation);
                 Dead.Invoke();
                 AlsoDead.Invoke(this);
@@ -171,6 +183,26 @@ namespace Animals
             Debug.Log($"[{gameObject.name}] Mutationamount: {Math.Round(MutationAmount, 3)}, chance: {Math.Round(MutationChance, 3)}");
         }
 
+        private int CauseOfDeath()
+        {
+            if (FoodManager.IsStarving())
+            {
+                return (int) Enums.CauseOfDeath.starved;
+            }
+
+            if (ReproductionManager.IsInMenopause())
+            {
+                return (int) Enums.CauseOfDeath.menopause;
+            }
+
+            if (isDrown)
+            {
+                return (int) Enums.CauseOfDeath.drown;
+            }
+            
+            return (int) Enums.CauseOfDeath.other;
+            
+        }
 
     }
 }

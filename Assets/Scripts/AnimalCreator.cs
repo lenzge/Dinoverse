@@ -33,10 +33,12 @@ namespace DefaultNamespace
                 animalController.MutationChance = Random.Range(0.05f, 0.4f);
                 int numRaycasts = Random.Range(4, 8);
                 animalController.Eyes.SetEyeParams(numRaycasts, Random.Range(10,30), Random.Range(100,400));
-                animalController.Brain.CreateBrain(new []{numRaycasts, 32, 2});
+                animalController.Brain.CreateBrain(new []{numRaycasts + 1, 32,32, 2});
                 animalController.MutateCreature();
             }
         }
+        
+        
 
         public AnimalController SpawnAnimal(int key, int grandChild)
         {

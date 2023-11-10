@@ -17,7 +17,7 @@ namespace Animals
             Radius = radius;
             NumRaycasts = numRaycasts;
             AngleBetweenRaycasts = angleBetweenRaycasts;
-            distances = new float[numRaycasts];
+            distances = new float[numRaycasts + 1];
         }
 
         public Vector3 FindFood(Transform characterTransform, Layer food)
@@ -86,19 +86,19 @@ namespace Animals
                     distances[i] = 1;
                 }
             }
-            /*Vector3 thisRayStart = characterTransform.position + Vector3.up * 0.1f;
+            Vector3 thisRayStart = characterTransform.position + Vector3.up * 0.1f;
             if (Physics.Raycast(thisRayStart, characterTransform.forward, out hit, Radius, 1 << (int) Layer.Water))
             {
                 Debug.DrawRay(thisRayStart, characterTransform.forward * hit.distance, Color.blue);
-                distances[5] = hit.distance / Radius;
+                distances[NumRaycasts] = hit.distance / Radius;
             }
             else
             {
                 // Draw a line representing the raycast in the scene view for debugging purposes
                 Debug.DrawRay(thisRayStart, characterTransform.forward * Radius, Color.yellow);
                 // If no food object is detected, set the distance to the maximum length of the raycast
-                distances[5] = 1;
-            }*/
+                distances[NumRaycasts] = 1;
+            }
             
             
             return distances;
