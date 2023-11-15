@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 7978424919749795081}
   - component: {fileID: 7322130286193827268}
   - component: {fileID: -5797262476799351126}
+  - component: {fileID: 9123797498400399532}
   m_Layer: 7
   m_Name: Animal
   m_TagString: Untagged
@@ -132,30 +133,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  MovementController: {fileID: 7449578703545013821}
   CharacterController: {fileID: 4408169497568838984}
-  FoodManager: {fileID: 2830572847685276631}
-  ReproductionManager: {fileID: 7322130286193827268}
-  NeatController: {fileID: 0}
+  Legs: {fileID: 7449578703545013821}
+  Stomach: {fileID: 2830572847685276631}
+  Uterus: {fileID: 7322130286193827268}
   Brain: {fileID: -5797262476799351126}
   Eyes: {fileID: 7978424919749795081}
-  Plot: {fileID: 11400000, guid: 31f510e3cc241da4fa98dae182405cc2, type: 2}
-  weight: 50
+  DNA: {fileID: 9123797498400399532}
   gender: 0
   species: 7
   enemySpecies: 9
   food: 6
-  age: 0
-  MutationAmount: 0
-  MutationChance: 0
+  Plot: {fileID: 0}
+  Age: 0
   Key: 0
+  Population: 0
   Generation: 0
-  GrandChild: 0
-  Fitness: 0
-  Dead:
-    m_PersistentCalls:
-      m_Calls: []
-  AlsoDead:
+  EatenTrees: 0
+  Died:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7449578703545013821
@@ -170,9 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afafd0b034b4c7aaeb0951e42c0f6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 4408169497568838984}
-  animator: {fileID: 8911642007023974860}
-  movementSpeed: 8
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  DNA: {fileID: 9123797498400399532}
+  CharacterController: {fileID: 4408169497568838984}
+  Animator: {fileID: 8911642007023974860}
 --- !u!114 &2830572847685276631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,9 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b469285140b94840a3f20c7eeabc23f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCalories: 1000
-  eatingSpeed: 1
-  currentCalories: 0
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  DNA: {fileID: 9123797498400399532}
 --- !u!114 &7978424919749795081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,15 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1f71e6945f4ac0a22a113c12ace0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 300
-  NumRaycasts: 5
-  AngleBetweenRaycasts: 30
-  distances:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  DNA: {fileID: 9123797498400399532}
 --- !u!114 &7322130286193827268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,8 +209,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33d8757d97345d79301a01667eb8e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimalPrefab: {fileID: 3005528575296122092}
-  MaxChildCount: 5
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  DNA: {fileID: 9123797498400399532}
 --- !u!114 &-5797262476799351126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +223,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37f35498a154fa397cc4b6739c8ece7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  DNA: {fileID: 9123797498400399532}
+  NetworkShape: 
+--- !u!114 &9123797498400399532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005528575296122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d868b030b69740a593eb39b1f7f319a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LifeExpectation: 0000000090010000f4010000
+  Weight: 0000000064000000c8000000
+  MutationAmount:
+  - 0
+  - 0.2
+  - 0.8
+  MutationChance:
+  - 0
+  - 0.05
+  - 0.3
+  EatingSpeed:
+  - 0
+  - 1
+  - 1
+  VisualRadius: 00000000640000002c010000
+  NumRaycasts: 000000000400000008000000
+  AngleBetweenRaycasts: 00000000050000001e000000
+  MovementSpeed: 00000000030000000a000000
+  SexualMaturity: 000000001e00000028000000
+  Menopause: 000000000300000006000000
+  LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0

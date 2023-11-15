@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Animals;
+using Animal;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -9,56 +9,66 @@ namespace DefaultNamespace
         [SerializeField] private GameObject animalPrefab;
         [SerializeField] private int mapSize;
         [SerializeField] private int initialAmount;
-        //[SerializeField] private int offspringAmount;
-        
+
         [SerializeField] private List<AnimalController> animalControllers = new List<AnimalController>();
 
-        private int currentGeneration;
+        private int currentPopulation;
 
         public void Start()
         {
-            currentGeneration = 0;
+            currentPopulation = 0;
             CreateNewGeneration();
         }
+        
+        public void SpawnChildAnimal(int key, int generation, AnimalController parent, int randomOffset)
+        {
+            Random.InitState(randomOffset);
+            Vector3 parentPosition = parent.transform.position;
+            Vector3 spawnPosition = new Vector3(parentPosition.x + Random.Range(10, 30), 0,
+                parentPosition.z + Random.Range(10, 30));
+            AnimalController childController = SpawnAnimal(key, generation, spawnPosition);
+            childController.DNA.CopyValuesFrom(parent.DNA);
+            childController.Brain.Layers = parent.Brain.CopyLayers();
+            childController.DNA.Mutate();
+            childController.InitOrgans(true);
+        }
+        
 
         private void CreateNewGeneration()
         {
-            currentGeneration += 1;
-            Debug.LogWarning($"Create new Generation ({currentGeneration})");
+            currentPopulation += 1;
+            Debug.LogWarning($"Create new Generation ({currentPopulation})");
             for (int i = 0; i < initialAmount; i++)
             {
-                AnimalController animalController = SpawnAnimal(i, 0);
-                Random.InitState((int)System.DateTime.Now.Ticks);
-                animalController.MutationAmount = Random.Range(0.1f, 0.8f);
-                animalController.MutationChance = Random.Range(0.05f, 0.4f);
-                int numRaycasts = Random.Range(4, 8);
-                animalController.Eyes.SetEyeParams(numRaycasts, Random.Range(10,30), Random.Range(100,400));
-                animalController.Brain.CreateBrain(new []{numRaycasts + 1, 32,32, 2});
-                animalController.MutateCreature();
+                SpawnNewPopAnimal(i, 0);
             }
         }
-        
-        
 
-        public AnimalController SpawnAnimal(int key, int grandChild)
+        private void SpawnNewPopAnimal(int key, int generation)
         {
-            Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
+            Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
                 Random.Range(-5 * mapSize, 5 * mapSize));
-            Vector3 newPosition = transform.position + randomPosition;
-            GameObject animal = Instantiate(animalPrefab, newPosition, Quaternion.identity);
+            AnimalController animalController = SpawnAnimal(key, generation, spawnPosition);
+            animalController.DNA.CreateNewDNA();
+            animalController.InitOrgans(false);
+        }
+
+        private AnimalController SpawnAnimal(int key, int generation, Vector3 spawnPosition)
+        {
+            GameObject animal = Instantiate(animalPrefab, spawnPosition, Quaternion.identity);
             AnimalController controller = animal.GetComponent<AnimalController>();
             controller.Key = key;
-            controller.Generation = currentGeneration;
-            controller.GrandChild = grandChild;
+            controller.Population = currentPopulation;
+            controller.Generation = generation;
             controller.UpdateName();
             animalControllers.Add(controller);
-            controller.AlsoDead.AddListener(OnDead);
+            controller.Died.AddListener(OnDead);
             return controller;
         }
 
         private void OnDead(AnimalController animalController)
         {
-            animalController.AlsoDead.RemoveListener(OnDead);
+            animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
 
             if (animalControllers.Count == 0)
