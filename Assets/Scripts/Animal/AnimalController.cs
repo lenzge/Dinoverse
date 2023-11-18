@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DefaultNamespace;
 using Enums;
 using UnityEngine;
@@ -61,7 +62,7 @@ namespace Animal
 
         public void UpdateName()
         {
-            gameObject.name = $"{Key}.{Population}.{Generation}";
+            gameObject.name = $"animal {Key}.{Population}.{Generation}";
         }
 
         public void Update()
@@ -112,8 +113,16 @@ namespace Animal
                     Uterus.GetChildCount(), timeOfDeath, causeOfDeath);
                 
                 Died.Invoke(this);
-                Destroy(gameObject);
+                StartCoroutine(DestroyAfterAni());
             }
+            
+        }
+        
+        IEnumerator DestroyAfterAni()
+        {
+            float timeInterval = 4f / EnvironmentData.TimeSpeed;
+            yield return new WaitForSeconds(timeInterval);
+            Destroy(gameObject);
             
         }
 
@@ -143,6 +152,7 @@ namespace Animal
             if (other.gameObject.layer == (int) Layer.Water)
             {
                 isDrown = true;
+                Legs.Animator.SetTrigger("isDrown");
             }
             
         }

@@ -1,31 +1,46 @@
 ﻿using System.Collections.Generic;
 using Animal;
+using Enums;
 using UnityEngine;
+using Util;
 
 namespace DefaultNamespace
 {
-    public class AnimalCreator : MonoBehaviour
+    public class AnimalCreator : TimeBasedBehaviour
     {
         [SerializeField] private GameObject animalPrefab;
         [SerializeField] private int mapSize;
         [SerializeField] private int initialAmount;
+        [SerializeField] public int stopRespawn;
 
         [SerializeField] private List<AnimalController> animalControllers = new List<AnimalController>();
 
         private int currentPopulation;
+        private int nextKey;
+        public int pastTimeSteps;
+        private Collider[] colliderBuffer = new Collider[1];
 
-        public void Start()
+        protected override void TimedStart()
         {
             currentPopulation = 0;
+            nextKey = 0;
+            pastTimeSteps = 0;
             CreateNewGeneration();
         }
-        
+
+        protected override void TimedUpdate()
+        {
+            pastTimeSteps += 1;
+        }
+
         public void SpawnChildAnimal(int key, int generation, AnimalController parent, int randomOffset)
         {
             Random.InitState(randomOffset);
+            Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
+                Random.Range(-5 * mapSize, 5 * mapSize));
             Vector3 parentPosition = parent.transform.position;
-            Vector3 spawnPosition = new Vector3(parentPosition.x + Random.Range(10, 30), 0,
-                parentPosition.z + Random.Range(10, 30));
+            //Vector3 spawnPosition = new Vector3(parentPosition.x + Random.Range(10, 30), 0,
+                //parentPosition.z + Random.Range(10, 30));
             AnimalController childController = SpawnAnimal(key, generation, spawnPosition);
             childController.DNA.CopyValuesFrom(parent.DNA);
             childController.Brain.Layers = parent.Brain.CopyLayers();
@@ -40,17 +55,33 @@ namespace DefaultNamespace
             Debug.LogWarning($"Create new Generation ({currentPopulation})");
             for (int i = 0; i < initialAmount; i++)
             {
-                SpawnNewPopAnimal(i, 0);
+                SpawnNewPopAnimal(nextKey, 0);
             }
         }
 
         private void SpawnNewPopAnimal(int key, int generation)
         {
-            Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
-                Random.Range(-5 * mapSize, 5 * mapSize));
-            AnimalController animalController = SpawnAnimal(key, generation, spawnPosition);
-            animalController.DNA.CreateNewDNA();
-            animalController.InitOrgans(false);
+            nextKey += 1;
+            while (true)
+            {
+                Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
+                    Random.Range(-5 * mapSize, 5 * mapSize));
+                AnimalController animalController = SpawnAnimal(key, generation, spawnPosition);
+                if (Physics.OverlapSphereNonAlloc(animalController.transform.position, 2, colliderBuffer,
+                    1 << (int) Layer.Water) >= 1)
+                {
+                    animalControllers.Remove(animalController);
+                    animalController.Died.RemoveListener(OnDead);
+                    Destroy(animalController.gameObject);
+                }
+                else
+                {
+                    animalController.DNA.CreateNewDNA();
+                    animalController.InitOrgans(false);
+                    break;
+                }
+            }
+            
         }
 
         private AnimalController SpawnAnimal(int key, int generation, Vector3 spawnPosition)
@@ -71,8 +102,15 @@ namespace DefaultNamespace
             animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
 
+            if (pastTimeSteps < stopRespawn && animalControllers.Count < initialAmount/2)
+            {
+                SpawnNewPopAnimal(nextKey, 0);
+            }
+            
             if (animalControllers.Count == 0)
             {
+                pastTimeSteps = 0;
+                nextKey = 0;
                 CreateNewGeneration();
             }
             
@@ -96,6 +134,11 @@ namespace DefaultNamespace
             {
                 return 5;
             }
+        }
+
+        public int GetAnimalCount()
+        {
+            return animalControllers.Count;
         }
     }
 }

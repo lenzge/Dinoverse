@@ -22,7 +22,7 @@ namespace Animal
             // Move 
             CharacterController.SimpleMove(movementDirection.normalized * (DNA.MovementSpeed[0] * animalController.EnvironmentData.TimeSpeed));
             // TODO only check after a change
-            Animator.speed = animalController.EnvironmentData.TimeSpeed;
+            Animator.speed = animalController.EnvironmentData.TimeSpeed / 2f;
         }
 
         public void SetMoveDirection(Vector2 moveDirection)

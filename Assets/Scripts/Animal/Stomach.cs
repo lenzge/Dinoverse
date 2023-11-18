@@ -14,13 +14,13 @@ namespace Animal
 
         public override void Init(bool isChild = false)
         {
-            maxCalories = DNA.Weight[0] * 25;
+            maxCalories = DNA.Weight[0] * 30;
             currentCalories = maxCalories / 2;
         }
         
         public void BurnCalories(Action action)
         {
-            currentCalories -= DNA.Weight[0]/10f * EvalPAL(action);
+            currentCalories -= DNA.Weight[0]/15f * EvalPAL(action);
         }
         
         public bool TryToEat(Transform animalTransform, float characterRadius, Layer foodType)
@@ -31,7 +31,7 @@ namespace Animal
                 Nurture food = colliderBuffer[0].GetComponent<Nurture>();
                 float eatenCalories = food.Eaten(DNA.EatingSpeed[0]);
                 currentCalories = AddCalories(eatenCalories);
-                Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
+                //Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
                 return true;
             }
 

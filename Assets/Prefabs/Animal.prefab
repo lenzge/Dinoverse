@@ -87,8 +87,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 55.2, y: 3.13, z: -77.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5887082674124543733}
   - {fileID: 2863784096108111227}
@@ -238,8 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d868b030b69740a593eb39b1f7f319a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeExpectation: 0000000090010000f4010000
-  Weight: 0000000064000000c8000000
+  LifeExpectation: 00000000f401000020030000
+  Weight: 00000000640000002c010000
   MutationAmount:
   - 0
   - 0.2
@@ -255,9 +255,12 @@ MonoBehaviour:
   VisualRadius: 00000000640000002c010000
   NumRaycasts: 000000000400000008000000
   AngleBetweenRaycasts: 00000000050000001e000000
-  MovementSpeed: 00000000030000000a000000
-  SexualMaturity: 000000001e00000028000000
-  Menopause: 000000000300000006000000
+  HiddenLayer: 000000000100000006000000
+  MaxNeurons: 000000001000000020000000
+  MinNeurons: 000000000800000010000000
+  MovementSpeed: 00000000080000000f000000
+  SexualMaturity: 000000006400000082000000
+  Menopause: 000000000500000008000000
   LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428
 GameObject:

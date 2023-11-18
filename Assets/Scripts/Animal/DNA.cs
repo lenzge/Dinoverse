@@ -29,6 +29,12 @@ namespace Animal
         public int[] VisualRadius;
         public int[] NumRaycasts;
         public int[] AngleBetweenRaycasts;
+        
+        [Space] 
+        [Header("Brain")] 
+        public int[] HiddenLayer;
+        public int[] MaxNeurons;
+        public int[] MinNeurons;
 
         [Space] 
         [Header("Movement")] 
@@ -74,6 +80,9 @@ namespace Animal
             CreateRandomIntParam(VisualRadius);
             CreateRandomIntParam(NumRaycasts);
             CreateRandomIntParam(AngleBetweenRaycasts);
+            CreateRandomIntParam(HiddenLayer);
+            CreateRandomIntParam(MaxNeurons);
+            CreateRandomIntParam(MinNeurons);
             CreateRandomIntParam(MovementSpeed);
             CreateRandomIntParam(SexualMaturity);
             CreateRandomIntParam(Menopause);
@@ -92,6 +101,9 @@ namespace Animal
                 VisualRadius = CopyIntArray(otherDNA.VisualRadius);
                 NumRaycasts = CopyIntArray(otherDNA.NumRaycasts);
                 AngleBetweenRaycasts = CopyIntArray(otherDNA.AngleBetweenRaycasts);
+                HiddenLayer = CopyIntArray(otherDNA.HiddenLayer);
+                MaxNeurons = CopyIntArray(otherDNA.MaxNeurons);
+                MinNeurons = CopyIntArray(otherDNA.MinNeurons);
                 MovementSpeed = CopyIntArray(otherDNA.MovementSpeed);
                 SexualMaturity = CopyIntArray(otherDNA.SexualMaturity);
                 Menopause = CopyIntArray(otherDNA.Menopause);

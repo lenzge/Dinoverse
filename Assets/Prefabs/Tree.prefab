@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 80.98157, y: -188.81305, z: 208.44301}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 608855415027142904}
@@ -46,12 +46,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846cdfc285b9408f9af99d4aadccf5b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  Prefab: {fileID: 1141243578218203949}
   Mass: 1
-  Calories: 500
+  Calories: 1000
+  SeedAmount: 1
+  SeedInterval: 120
+  NoMoreSeeds: 1
   NurtureEatenEvent:
     m_PersistentCalls:
       m_Calls: []
-  Prefab: {fileID: 1141243578218203949}
+  RandoOffset: 0
 --- !u!135 &5333984604632564154
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -71,7 +76,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 12.66
   m_Center: {x: -0.51, y: 4.63, z: 2.54}
 --- !u!1001 &1151144398855698195
 PrefabInstance:

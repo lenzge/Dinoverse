@@ -11,7 +11,7 @@ namespace Animal
         
         public override void Init(bool isChild)
         {
-            NetworkShape = new []{DNA.NumRaycasts[0] + 1, 32,32, 2};
+            NetworkShape = CreateNetworkShape();
 
             if (!isChild)
             {
@@ -72,6 +72,27 @@ namespace Animal
             for(int i = 0; i < Layers.Length; i++)
             {
                 Layers[i].MutateLayer(mutationChance, mutationAmount);
+            }
+        }
+
+        private int[] CreateNetworkShape()
+        {
+            switch (DNA.HiddenLayer[0])
+            {
+                case 1:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MaxNeurons[0], 2};
+                case 2:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MaxNeurons[0], DNA.MinNeurons[0], 2};
+                case 3:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], 2};
+                case 4:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], 2};
+                case 5:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], 2};
+                case 6:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], 2};
+                default:
+                    return new []{DNA.NumRaycasts[0] +1, DNA.MaxNeurons[0], 2};
             }
         }
 
