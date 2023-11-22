@@ -19,10 +19,10 @@ namespace DefaultNamespace
         private bool isWriting = false;
 
         public void SaveData(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-            int reproduced, int timeOfDeath, int causeOfDeath)
+            int reproduced, int timeOfDeath, int causeOfDeath, int fitness)
         {
             Statistic statistic = new Statistic(key, generation, grandChild, survivedTime, eatenTrees, reproduced,
-                timeOfDeath, causeOfDeath);
+                timeOfDeath, causeOfDeath, fitness);
             statistics.Add(statistic);
             WriteToCSV(statistic);
 
@@ -37,7 +37,7 @@ namespace DefaultNamespace
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,timeOfDeath,causeOfDeath");
+                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,timeOfDeath,causeOfDeath,fitness");
                 }
 
             }
@@ -123,7 +123,7 @@ namespace DefaultNamespace
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
                         writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.SurvivedTime}, " +
-                                         $"{data.EatenTrees}, {data.Reproduced}, {data.TimeOfDeath}, {data.CauseOfDeath}");
+                                         $"{data.EatenTrees}, {data.Reproduced}, {data.TimeOfDeath}, {data.CauseOfDeath}, {data.Fitness}");
                     }
                 }
                 catch (Exception e)
@@ -143,9 +143,10 @@ namespace DefaultNamespace
             public int Reproduced;
             public int TimeOfDeath;
             public int CauseOfDeath;
+            public int Fitness;
 
             public Statistic(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-                int reproduced, int timeOfDeath, int causeOfDeath)
+                int reproduced, int timeOfDeath, int causeOfDeath, int fitness)
             {
                 Key = key;
                 Generation = generation;
@@ -155,7 +156,7 @@ namespace DefaultNamespace
                 Reproduced = reproduced;
                 TimeOfDeath = timeOfDeath;
                 CauseOfDeath = causeOfDeath;
-                
+                Fitness = fitness;
             }
 
         }

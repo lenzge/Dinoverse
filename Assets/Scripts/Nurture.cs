@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.Events;
 using Util;
@@ -77,11 +79,23 @@ namespace DefaultNamespace
 
             if (currentMass == 0)
             {
-                NurtureEatenEvent.Invoke(this, Prefab);
-                Destroy(gameObject);
+                //NurtureEatenEvent.Invoke(this, Prefab);
+                StartCoroutine(Recover());
+                //Destroy(gameObject);
             }
             
             return eatenMass * Calories;
+        }
+
+        IEnumerator Recover()
+        {
+            gameObject.GetComponent<SphereCollider>().enabled = false;
+            gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+            float timeInterval = 10f / EnvironmentData.TimeSpeed;
+            yield return new WaitForSeconds(timeInterval);
+            gameObject.GetComponent<SphereCollider>().enabled = true;
+            gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+            currentMass = Mass;
         }
 
     }

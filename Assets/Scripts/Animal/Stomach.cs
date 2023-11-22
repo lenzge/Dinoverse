@@ -8,19 +8,19 @@ namespace Animal
     {
         public DNA DNA;
         
-        private float maxCalories;
-        private float currentCalories;
+        [SerializeField] private float maxCalories;
+        [SerializeField] private float currentCalories;
         private Collider[] colliderBuffer = new Collider[1];
 
         public override void Init(bool isChild = false)
         {
             maxCalories = DNA.Weight[0] * 30;
-            currentCalories = maxCalories / 2;
+            currentCalories = maxCalories / 4;
         }
         
-        public void BurnCalories(Action action)
+        public void BurnCalories(Action action, float movementSpeed)
         {
-            currentCalories -= DNA.Weight[0]/15f * EvalPAL(action);
+            currentCalories -= DNA.Weight[0]/15f * EvalPAL(action, movementSpeed);
         }
         
         public bool TryToEat(Transform animalTransform, float characterRadius, Layer foodType)
@@ -48,6 +48,11 @@ namespace Animal
 
             return false;
         }
+
+        public float HungerInput()
+        {
+            return currentCalories / maxCalories;
+        }
         
         /// <summary>
         /// Add calories in limit of the maxCalories
@@ -64,16 +69,25 @@ namespace Animal
             return maxCalories;
         }
 
-        private float EvalPAL(Action action)
+        private float EvalPAL(Action action, float movementSpeed)
         {
+            if (movementSpeed < 0)
+            {
+                movementSpeed = DNA.MovementSpeed[1];
+            }
+            else
+            {
+                movementSpeed = DNA.MovementSpeed[0];
+            }
+            
             switch (action)
             {
                 case Action.Rest:
-                    return 1;
+                    return 2;
                 case Action.Eat:
-                    return 1 + DNA.EatingSpeed[0] * 0.25f;
-                case Action.Walk:
-                    return 1 + DNA.MovementSpeed[0] * 0.1f;
+                    return 1 + movementSpeed * 0.1f;
+                case Action.Reproduce:
+                    return 1 + 0.75f;
                 default:
                     return 1;
             }

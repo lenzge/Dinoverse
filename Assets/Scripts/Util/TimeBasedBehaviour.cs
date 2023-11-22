@@ -9,7 +9,7 @@ namespace Util
     {
         public EnvironmentData EnvironmentData;
         private float timeInterval;
-        private float slowTimeIntervalValue = 2;
+        private float slowTimeIntervalValue = 5;
         private float slowTimeInterval;
 
         private void Start()

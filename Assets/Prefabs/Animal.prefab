@@ -150,6 +150,7 @@ MonoBehaviour:
   Population: 0
   Generation: 0
   EatenTrees: 0
+  Fitness: 0
   Died:
     m_PersistentCalls:
       m_Calls: []
@@ -211,6 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   DNA: {fileID: 9123797498400399532}
+  ReproductionEnergy: 0
 --- !u!114 &-5797262476799351126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,14 +254,14 @@ MonoBehaviour:
   - 0
   - 1
   - 1
-  VisualRadius: 00000000640000002c010000
-  NumRaycasts: 000000000400000008000000
+  VisualRadius: 00000000c800000090010000
+  NumRaycasts: 000000000400000006000000
   AngleBetweenRaycasts: 00000000050000001e000000
-  HiddenLayer: 000000000100000006000000
-  MaxNeurons: 000000001000000020000000
+  HiddenLayer: 00000000040000000a000000
+  MaxNeurons: 000000000f00000028000000
   MinNeurons: 000000000800000010000000
-  MovementSpeed: 00000000080000000f000000
-  SexualMaturity: 000000006400000082000000
+  MovementSpeed: 00000000050000000c000000
+  SexualMaturity: 00000000a0000000b4000000
   Menopause: 000000000500000008000000
   LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428

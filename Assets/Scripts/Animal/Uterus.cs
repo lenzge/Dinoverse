@@ -11,23 +11,21 @@ namespace Animal
         private AnimalCreator animalCreator;
 
         private int childCount;
-        private int reproductionEnergy;
+        public int ReproductionEnergy;
 
         public override void Init(bool isChild = false)
         {
             // TODO make animal creator static
             childCount = 0;
-            reproductionEnergy = 0;
+            ReproductionEnergy = 0;
             animalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
         }
 
         public bool TryToReproduce(AnimalController parent)
         {
-            reproductionEnergy += 1;
-
             if (parent.Age >= DNA.SexualMaturity[0] 
                 && childCount <= DNA.Menopause[0]
-                && reproductionEnergy >= GetReproductionEnergy(parent.Generation))
+                && ReproductionEnergy >= 3)
             {
                 childCount += 1;
                 int litterSize = LitterSize(parent.Generation, parent.Age);
@@ -35,9 +33,9 @@ namespace Animal
                 for (int i = 0; i < litterSize; i++)
                 {
                     //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                    animalCreator.SpawnChildAnimal(parent.Key, parent.Generation + 1, parent, i*147);
+                    //animalCreator.SpawnChildAnimal(parent.Key, parent.Generation + 1, parent, i*147);
                 }
-                reproductionEnergy = 0;
+                ReproductionEnergy = 0;
                 return true;
             }
 
@@ -75,7 +73,7 @@ namespace Animal
             }
         }
 
-        public int GetReproductionEnergy(int generation)
+        public int NeededReproductionEnergy(int generation)
         {
             if (generation <= 5)
             {
@@ -93,6 +91,16 @@ namespace Animal
             {
                 return 5;
             }
+        }
+
+        public float SexualMaturityLevel(AnimalController controller)
+        {
+            return (float) controller.Age / DNA.SexualMaturity[0];
+        }
+        
+        public float ReproductionEnergyLevel(AnimalController controller)
+        {
+            return (float) ReproductionEnergy / NeededReproductionEnergy(controller.Generation);
         }
 
         public bool IsInMenopause()

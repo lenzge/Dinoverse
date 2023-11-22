@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79572902cf354d8ba98bf8b2ae3f75e4, type: 3}
   m_Name: Environment Data
   m_EditorClassIdentifier: 
-  MaxTimeSpeed: 10
-  TimeSpeed: 30
+  MaxTimeSpeed: 40
+  TimeSpeed: 10

@@ -18,12 +18,19 @@ namespace DefaultNamespace
         [SerializeField] private int natureAmount;
         [SerializeField] private List<GameObject> grassPrefabs;
         [SerializeField] private int grassAmount;
+        [SerializeField] private GameObject lakePrefab;
+        [SerializeField] private int lakeAmount;
         
         
         private Collider[] colliderBuffer = new Collider[1];
 
         protected override void TimedStart()
         {
+            for (int i = 0; i < lakeAmount; i++)
+            {
+                SpawnNature(lakePrefab);
+            }
+            
             for (int i = 0; i < initialAmount; i++)
             {
                 SpawnNurture(treePrefab);
@@ -50,7 +57,7 @@ namespace DefaultNamespace
         {
             for (int i = 0; i < offspringAmount; i++)
             {
-                //SpawnNurture(treePrefab);
+                SpawnNurture(treePrefab);
             }
         }
 
@@ -69,7 +76,7 @@ namespace DefaultNamespace
                 }
                 else
                 {
-                    nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
+                    //nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
                     break;
                 }
             }
@@ -84,7 +91,7 @@ namespace DefaultNamespace
                 var randomRotation = Quaternion.Euler( -90,Random.Range(0, 360) , 0);
                 GameObject nature = Instantiate(prefab, randomPosition, randomRotation);
                 if (Physics.OverlapSphereNonAlloc(nature.transform.position, 2, colliderBuffer,
-                    1 << (int) Layer.Water) >= 1)
+                    1 << (int) Layer.Water) >= 1 && colliderBuffer[0].gameObject != nature)
                 {
                     Destroy(nature);
                 }
