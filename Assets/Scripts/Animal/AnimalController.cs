@@ -69,9 +69,18 @@ namespace Animal
 
         }
 
-        public void UpdateName()
+        public void UpdateInfo(int key, int population, int generation)
         {
+            Key = key;
+            Population = population;
+            Generation = generation;
             gameObject.name = $"animal {Key}.{Population}.{Generation}";
+        }
+        
+        // TODO implement subspecies
+        public void UpdateInfo(string subspecies)
+        {
+            gameObject.name = $"animal ({subspecies}) {Key}.{Population}.{Generation}";
         }
 
         public void Update()

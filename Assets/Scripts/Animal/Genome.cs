@@ -8,6 +8,8 @@ namespace Animal
     [Serializable]
     public class Genome
     {
+        public string Subspecies = "No name";
+        
         [Header("Brain")] 
         public int[] NetworkShape;
         public float[] Weights;

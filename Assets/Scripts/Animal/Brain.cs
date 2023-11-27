@@ -28,8 +28,6 @@ namespace Animal
 
             //This ensures that the random numbers we generate aren't the same pattern each time. 
             Random.InitState((int)System.DateTime.Now.Ticks);
-
-            MutateNetwork(DNA.MutationChance[0], DNA.MutationAmount[0]);
         }
 
         //This function is used to feed forward the inputs through the network, and return the output, which is the decision of the network, in this case, the direction to move in.
@@ -70,11 +68,11 @@ namespace Animal
         }
         
         //Call the randomness function for each layer in the network.
-        public void MutateNetwork(float mutationChance, float mutationAmount)
+        public void MutateNetwork()
         {
             for(int i = 0; i < Layers.Length; i++)
             {
-                Layers[i].MutateLayer(mutationChance, mutationAmount);
+                Layers[i].MutateLayer(DNA.MutationChance[0], DNA.MutationAmount[0]);
             }
         }
 

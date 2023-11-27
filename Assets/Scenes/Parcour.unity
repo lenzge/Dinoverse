@@ -1957,11 +1957,10 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
   mapSize: 10
-  initialAmount: 1
-  stopRespawn: 0
+  initialAmount: 5
+  stopRespawn: 100000
   BrainBuffer: 10
   GenomeParser: {fileID: 979460215}
-  animalControllers: []
   pastTimeSteps: 0
   DrowningPunishment: 0
 --- !u!4 &979460214
@@ -1991,7 +1990,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91097ba3732473d8268371a8eee344d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FileName: test.json
+  FileName: test3.json
+  GenomesToLoad:
+  - {fileID: 4900000, guid: c596673331cf2604b8223dc19ee8ac3f, type: 3}
+  - {fileID: 4900000, guid: 32f9634f4a4725348bae7c5ad668b926, type: 3}
 --- !u!1 &980321001
 GameObject:
   m_ObjectHideFlags: 0

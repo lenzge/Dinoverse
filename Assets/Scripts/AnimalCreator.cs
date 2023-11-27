@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Animal;
 using Enums;
 using UnityEngine;
 using Util;
+using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
 {
@@ -16,13 +18,14 @@ namespace DefaultNamespace
         [SerializeField] public int BrainBuffer;
         [SerializeField] public GenomeParser GenomeParser;
 
-        [SerializeField] private List<AnimalController> animalControllers = new List<AnimalController>();
+        private List<AnimalController> animalControllers = new List<AnimalController>();
 
         private int currentPopulation;
         private int nextKey;
         public int pastTimeSteps;
         private Collider[] colliderBuffer = new Collider[1];
         private List<GameObject> savedAnimalControllers = new List<GameObject>();
+        private List<Genome> frozenGenomes = new List<Genome>();
         private int bestFitness;
         private float newGenomes;
         public int DrowningPunishment;
@@ -35,6 +38,7 @@ namespace DefaultNamespace
             bestFitness = 0;
             newGenomes = 0.5f;
             DrowningPunishment = 1;
+            frozenGenomes = GenomeParser.LoadAllGenomes();
             CreateNewGeneration();
         }
 
@@ -43,109 +47,86 @@ namespace DefaultNamespace
             pastTimeSteps += 1;
         }
 
-        public void SpawnChildAnimal(int key, int generation, AnimalController parent, int randomOffset)
-        {
-            Random.InitState(randomOffset);
-            Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
-                Random.Range(-5 * mapSize, 5 * mapSize));
-            //Vector3 parentPosition = parent.transform.position;
-            //Vector3 spawnPosition = new Vector3(parentPosition.x + Random.Range(10, 30), 0,
-                //parentPosition.z + Random.Range(10, 30));
-            AnimalController childController = SpawnAnimal(key, generation, spawnPosition);
-            childController.DNA.CopyValuesFrom(parent.DNA);
-            childController.Brain.Layers = parent.Brain.CopyLayers();
-            childController.DNA.Mutate();
-            childController.InitOrgans(true);
-        }
-        
-
         private void CreateNewGeneration()
         {
             currentPopulation += 1;
             Debug.LogWarning($"Create new Generation ({currentPopulation})");
             for (int i = 0; i < initialAmount; i++)
             {
-                SpawnNewPopAnimal(nextKey, 0);
+                //CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
+                CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
             }
         }
 
-        private void SpawnNewPopAnimal(int key, int generation)
-        {
-            nextKey += 1;
-            while (true)
-            {
-                Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
-                    Random.Range(-5 * mapSize, 5 * mapSize));
-                AnimalController animalController = SpawnAnimal(key, generation, spawnPosition);
-                if (Physics.OverlapSphereNonAlloc(animalController.transform.position, 2, colliderBuffer,
-                    1 << (int) Layer.Water) >= 1)
-                {
-                    animalControllers.Remove(animalController);
-                    animalController.Died.RemoveListener(OnDead);
-                    Destroy(animalController.gameObject);
-                }
-                else
-                {
-                    animalController.DNA.CreateNewDNA();
-                    //Genome genome = GenomeParser.LoadFromJson();
-                    //genome.LoadGenome(animalController.Brain, animalController.DNA);
-                    animalController.InitOrgans(false);
-                    break;
-                }
-            }
-            
-        }
-
-        private AnimalController SpawnAnimal(int key, int generation, Vector3 spawnPosition)
-        {
-            //var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
-            GameObject animal = Instantiate(animalPrefab, spawnPosition, Quaternion.identity);
-            AnimalController controller = animal.GetComponent<AnimalController>();
-            controller.Key = key;
-            controller.Population = currentPopulation;
-            controller.Generation = generation;
-            controller.UpdateName();
-            animalControllers.Add(controller);
-            controller.Died.AddListener(OnDead);
-            return controller;
-        }
-
-        private GameObject CreateChildAnimal(int key, int generation, AnimalController parent)
+        private GameObject CreateAnimalObject(int key, int generation, bool spawnInstant, GenomeType genomeType, 
+            SpawnType spawnPositionType, AnimalController parent = null)
         {
             GameObject animal = Instantiate(animalPrefab);
-            AnimalController controller = animal.GetComponent<AnimalController>();
-            controller.Key = key;
-            controller.Population = currentPopulation;
-            controller.Generation = generation;
-            controller.UpdateName();
-            controller.Died.AddListener(OnDead);
-            controller.DNA.CopyValuesFrom(parent.DNA);
-            controller.Brain.Layers = parent.Brain.CopyLayers();
-            controller.DNA.Mutate();
-            controller.InitOrgans(true);
             animal.SetActive(false);
+            AnimalController controller = animal.GetComponent<AnimalController>();
+            controller.UpdateInfo(key, currentPopulation, generation);
+
+            switch (genomeType)
+            {
+                case GenomeType.Random:
+                    controller.DNA.CreateNewDNA();
+                    controller.InitOrgans(false);
+                    controller.Brain.MutateNetwork();
+                    nextKey += 1;
+                    break;
+                case GenomeType.Parent:
+                    if (parent == null) throw new Exception("Try to create a child animal without parent");
+                    controller.DNA.CopyValuesFrom(parent.DNA);
+                    controller.DNA.Mutate();
+                    controller.Brain.Layers = parent.Brain.CopyLayers();
+                    controller.InitOrgans(true);
+                    controller.Brain.MutateNetwork();
+                    break;
+                case GenomeType.Frozen:
+                    // TODO Maybe find a more balanced way later
+                    Genome genome = frozenGenomes.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+                    genome.LoadGenome(controller.Brain, controller.DNA);
+                    controller.InitOrgans(true);
+                    nextKey += 1;
+                    break;
+            }
+
+            if (spawnInstant)
+            {
+                SpawnAnimal(animal,spawnPositionType, parent);
+            }
             return animal;
         }
 
-        private void SpawnAnimal(GameObject animal)
+        private void SpawnAnimal(GameObject animal, SpawnType spawnPositionType, AnimalController parent = null)
         {
             AnimalController controller = animal.GetComponent<AnimalController>();
             animalControllers.Add(controller);
+            controller.Died.AddListener(OnDead);
+            //var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
             while (true)
             {
-                Vector3 spawnPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
-                    Random.Range(-5 * mapSize, 5 * mapSize));
-                animal.transform.position = spawnPosition;
-                if (Physics.OverlapSphereNonAlloc(controller.transform.position, 2, colliderBuffer,
-                    1 << (int) Layer.Water) >= 1)
-                {
-                    
-                }
-                else
+                animal.transform.position = EvaluateSpawnPosition(spawnPositionType, parent);
+                if (Physics.OverlapSphereNonAlloc(animal.transform.position, 2, colliderBuffer,
+                    1 << (int) Layer.Water) < 1)
                 {
                     animal.SetActive(true);
                     break;
                 }
+            }
+        }
+
+        private Vector3 EvaluateSpawnPosition(SpawnType spawnPositionType,AnimalController parent = null)
+        {
+            if (parent != null && spawnPositionType == SpawnType.NearParent)
+            {
+                Vector3 parentPosition = parent.transform.position;
+                return new Vector3(parentPosition.x + Random.Range(10, 30), 0,
+                    parentPosition.z + Random.Range(10, 30));
+            }
+            else{
+                return new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 0,
+                        Random.Range(-5 * mapSize, 5 * mapSize));
             }
         }
 
@@ -154,12 +135,11 @@ namespace DefaultNamespace
             animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
             
-            //GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
-
             if (animalController.Fitness > 0)
             {
                 if (animalController.Fitness >= bestFitness)
                 {
+                    if (animalController.Fitness > bestFitness) GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
                     bestFitness = animalController.Fitness;
                     if (bestFitness >= 8)
                     {
@@ -174,16 +154,18 @@ namespace DefaultNamespace
                     Debug.LogWarning("Best fitness: "+bestFitness);
                     for (int i = 0; i < 6; i++)
                     {
-                        savedAnimalControllers.Insert(0,CreateChildAnimal(animalController.Key,
-                            animalController.Generation + 1, animalController));
+                        savedAnimalControllers.Insert(0,CreateAnimalObject(animalController.Key,
+                            animalController.Generation + 1, false, GenomeType.Parent,
+                            SpawnType.Random, animalController));
                     }
                 }
                 else
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        savedAnimalControllers.Add(CreateChildAnimal(animalController.Key,
-                            animalController.Generation + 1, animalController));
+                        savedAnimalControllers.Add(CreateAnimalObject(animalController.Key,
+                            animalController.Generation + 1, false, GenomeType.Parent,
+                            SpawnType.Random, animalController));
                     }
                 }
 
@@ -197,17 +179,20 @@ namespace DefaultNamespace
                 }
             }
 
+            Debug.LogWarning(pastTimeSteps + " " + animalControllers.Count);
             if (pastTimeSteps < stopRespawn && animalControllers.Count < initialAmount)
             {
+                Debug.LogWarning(newGenomes + " " + savedAnimalControllers.Count);
                 if (Random.value >= newGenomes && savedAnimalControllers.Count > 0)
                 {
                     GameObject parent = savedAnimalControllers[0];
-                    SpawnAnimal(parent);
+                    SpawnAnimal(parent, SpawnType.Random);
                     savedAnimalControllers.RemoveAt(0);
                 }
                 else
                 {
-                    SpawnNewPopAnimal(nextKey, 0);
+                    //CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
+                    CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
                 }
             }
             
