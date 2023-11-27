@@ -20,6 +20,7 @@ namespace Animal
         public Brain Brain;
         public Eyes Eyes;
         public DNA DNA;
+        public GameObject Hearts;
         
         [Space]
         [Header("Info")]
@@ -91,21 +92,30 @@ namespace Animal
             {
                 case Action.Rest:
                     Legs.SetMoveDirection(Vector2.zero, 0);
+                    Legs.Animator.SetInteger("Action", 3);
+                    Hearts.SetActive(false);
                     break;
                 case Action.Eat:
                     Legs.SetMoveDirection(new Vector2(output[0], output[1]), output[2]);
+                    Legs.Animator.SetInteger("Action", 2);
+                    Hearts.SetActive(false);
                     bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
                     if (isEating) Fitness += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
                     break;
                 case Action.Reproduce:
+                    Legs.SetMoveDirection(Vector2.zero, 0);
+                    Legs.Animator.SetInteger("Action", 4);
+                    Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(this);
                     if (reproduced) Fitness += 5;
                     if (reproduced) Age += 5000;
                     break;
                 default:
                     Legs.SetMoveDirection(Vector2.zero, 0);
+                    Legs.Animator.SetInteger("Action", 3);
+                    Hearts.SetActive(false);
                     break;
             }
             
@@ -184,8 +194,11 @@ namespace Animal
         
         IEnumerator DestroyAfterAni()
         {
-            float timeInterval = 4f / EnvironmentData.TimeSpeed;
-            yield return new WaitForSeconds(timeInterval);
+            if (isDrown)
+            {
+                float timeInterval = 4f / EnvironmentData.TimeSpeed;
+                yield return new WaitForSeconds(timeInterval);
+            }
             Destroy(gameObject);
             
         }
