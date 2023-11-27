@@ -113,13 +113,13 @@ namespace Animal
             public float[] Biases;
             public float [] Nodes;
 
-            private int inputs;
-            private int neurons;
+            public int Inputs;
+            public int Neurons;
             
             public Layer(int inputs, int neurons)
             {
-                this.inputs = inputs;
-                this.neurons = neurons;
+                this.Inputs = inputs;
+                this.Neurons = neurons;
 
                 Weights = new float [neurons, inputs];
                 Biases = new float[neurons];
@@ -129,12 +129,12 @@ namespace Animal
             //for the next layer, and so on, until we get to the output layer, which is returned as the output of the network.
             public void Forward(float [] inputsArray)
             {
-                Nodes = new float [neurons];
+                Nodes = new float [Neurons];
 
-                for(int i = 0;i < neurons ; i++)
+                for(int i = 0;i < Neurons ; i++)
                 {
                     //sum of weights times inputs
-                    for(int j = 0; j < inputs; j++)
+                    for(int j = 0; j < Inputs; j++)
                     {
                         Nodes[i] += Weights[i,j] * inputsArray[j];
                     }
@@ -182,9 +182,9 @@ namespace Animal
             //This is used to randomly modify the weights and biases for the Evolution Sim and Genetic Algorithm.
             public void MutateLayer(float mutationChance, float mutationAmount)
             {
-                for(int i = 0; i < neurons; i++)
+                for(int i = 0; i < Neurons; i++)
                 {
-                    for(int j = 0; j < inputs; j++)
+                    for(int j = 0; j < Inputs; j++)
                     {
                         if(Random.value < mutationChance)
                         {

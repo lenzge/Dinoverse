@@ -14,6 +14,7 @@ namespace DefaultNamespace
         [SerializeField] private int initialAmount;
         [SerializeField] public int stopRespawn;
         [SerializeField] public int BrainBuffer;
+        [SerializeField] public GenomeParser GenomeParser;
 
         [SerializeField] private List<AnimalController> animalControllers = new List<AnimalController>();
 
@@ -86,6 +87,8 @@ namespace DefaultNamespace
                 else
                 {
                     animalController.DNA.CreateNewDNA();
+                    //Genome genome = GenomeParser.LoadFromJson();
+                    //genome.LoadGenome(animalController.Brain, animalController.DNA);
                     animalController.InitOrgans(false);
                     break;
                 }
@@ -150,6 +153,8 @@ namespace DefaultNamespace
         {
             animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
+            
+            //GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
 
             if (animalController.Fitness > 0)
             {

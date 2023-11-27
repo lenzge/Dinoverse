@@ -21,6 +21,7 @@ namespace Animal
         public Eyes Eyes;
         public DNA DNA;
         public GameObject Hearts;
+        public Genome Genome;
         
         [Space]
         [Header("Info")]

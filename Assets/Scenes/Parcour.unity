@@ -1934,6 +1934,7 @@ GameObject:
   m_Component:
   - component: {fileID: 979460214}
   - component: {fileID: 979460213}
+  - component: {fileID: 979460215}
   m_Layer: 0
   m_Name: AnimalCreator
   m_TagString: Untagged
@@ -1956,9 +1957,10 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
   mapSize: 10
-  initialAmount: 5
-  stopRespawn: 500000
+  initialAmount: 1
+  stopRespawn: 0
   BrainBuffer: 10
+  GenomeParser: {fileID: 979460215}
   animalControllers: []
   pastTimeSteps: 0
   DrowningPunishment: 0
@@ -1977,6 +1979,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &979460215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979460212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d91097ba3732473d8268371a8eee344d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FileName: test.json
 --- !u!1 &980321001
 GameObject:
   m_ObjectHideFlags: 0
