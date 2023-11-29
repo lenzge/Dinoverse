@@ -1,6 +1,8 @@
 ﻿using System;
 using DefaultNamespace;
+using Enums;
 using UnityEngine;
+using Action = Enums.Action;
 using Random = UnityEngine.Random;
 
 namespace Animal
@@ -11,6 +13,7 @@ namespace Animal
         private AnimalCreator animalCreator;
 
         private int childCount;
+        private Collider[] colliderBuffer;
         public int ReproductionEnergy;
 
         public override void Init(bool isChild = false)
@@ -18,31 +21,46 @@ namespace Animal
             // TODO make animal creator static
             childCount = 0;
             ReproductionEnergy = 0;
+            colliderBuffer = new Collider[2];
             animalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
         }
 
-        public bool TryToReproduce(AnimalController parent)
+        public bool TryToReproduce(AnimalController parent, Layer species)
         {
-            if (parent.Age >= DNA.SexualMaturity[0] 
-                && childCount <= DNA.Menopause[0]
-                && ReproductionEnergy >= 3)
+            if (CanReproduce(parent))
             {
-                childCount += 1;
-                int litterSize = LitterSize(parent.Generation, parent.Age);
-                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times");
-                for (int i = 0; i < litterSize; i++)
+                if (Physics.OverlapSphereNonAlloc(parent.transform.position, 50, colliderBuffer,
+                    1 << (int) species) >= 2) // min 2, because of self interaction
                 {
-                    //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                    //animalCreator.SpawnChildAnimal(parent.Key, parent.Generation + 1, parent, i*147);
+                    foreach (var collider in colliderBuffer)
+                    {
+                        if (collider.gameObject != parent.gameObject)
+                        {
+                            AnimalController mate = collider.gameObject.GetComponent<AnimalController>();
+                            if (mate.Uterus.CanReproduce(mate)) // && mate.CurrentAction == Action.Reproduce -- to difficult!
+                            {
+                                childCount += 1;
+                                int litterSize = LitterSize(parent.Generation, parent.Age);
+                                litterSize = 10;
+                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {colliderBuffer[0]} and {colliderBuffer[1]}");
+                                for (int i = 0; i < litterSize; i++)
+                                {
+                                    //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
+                                }
+                                ReproductionEnergy = 0;
+                                return true;
+                            }
+                        }
+                    }
                 }
-                ReproductionEnergy = 0;
-                return true;
+                
             }
 
             return false;
         }
 
-        public int LitterSize(int generation, int age)
+        private int LitterSize(int generation, int age)
         {
             if (animalCreator.GetAnimalCount() >= 300)
             {
@@ -117,6 +135,17 @@ namespace Animal
         {
             return childCount;
         }
-        
+
+        public bool CanReproduce(AnimalController animal)
+        {
+            if (animal.Age >= DNA.SexualMaturity[0]
+                && childCount <= DNA.Menopause[0]
+                && ReproductionEnergy >= 2)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Animal
         public int[] NetworkShape;
         public Layer[] Layers;
 
-        private int stdInputNeurons = 3;
+        private int stdInputNeurons = 3 + 12;
         private int outputNeurons = 6;
         
         public override void Init(bool isChild)

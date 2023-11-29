@@ -79,8 +79,8 @@ namespace DefaultNamespace
 
             if (currentMass == 0)
             {
-                //NurtureEatenEvent.Invoke(this, Prefab);
                 StartCoroutine(Recover());
+                //NurtureEatenEvent.Invoke(this, Prefab);
                 //Destroy(gameObject);
             }
             

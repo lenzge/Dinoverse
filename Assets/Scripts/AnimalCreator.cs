@@ -58,6 +58,15 @@ namespace DefaultNamespace
             }
         }
 
+        public void CreateChildObject(int key, int generation, 
+            SpawnType spawnPositionType, AnimalController parent)
+        {
+            savedAnimalControllers.Insert(0,CreateAnimalObject(key,
+                generation, false, GenomeType.Parent,
+                spawnPositionType, parent));
+        }
+        
+        
         private GameObject CreateAnimalObject(int key, int generation, bool spawnInstant, GenomeType genomeType, 
             SpawnType spawnPositionType, AnimalController parent = null)
         {
@@ -141,27 +150,34 @@ namespace DefaultNamespace
                 {
                     if (animalController.Fitness > bestFitness) GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
                     bestFitness = animalController.Fitness;
-                    if (bestFitness >= 8)
+                    Debug.LogWarning("Best fitness: "+ bestFitness);
+                    
+                    if (bestFitness >= 20)
                     {
-                        DrowningPunishment = 10;
+                        DrowningPunishment = 20;
                         newGenomes = 0.1f;
                     }
-                    else if (bestFitness >= 3)
+                    else if (bestFitness >= 10)
                     {
-                        DrowningPunishment = 5;
+                        DrowningPunishment = 10;
                         newGenomes = 0.25f;
                     }
-                    Debug.LogWarning("Best fitness: "+bestFitness);
-                    for (int i = 0; i < 6; i++)
+                    else if (bestFitness >= 4)
+                    {
+                        DrowningPunishment = 5;
+                        newGenomes = 0.35f;
+                    }
+                    
+                    for (int i = 0; i < 8; i++)
                     {
                         savedAnimalControllers.Insert(0,CreateAnimalObject(animalController.Key,
                             animalController.Generation + 1, false, GenomeType.Parent,
                             SpawnType.Random, animalController));
                     }
                 }
-                else
+                else if (animalController.Fitness >= bestFitness / 4)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 6; i++)
                     {
                         savedAnimalControllers.Add(CreateAnimalObject(animalController.Key,
                             animalController.Generation + 1, false, GenomeType.Parent,
@@ -169,6 +185,7 @@ namespace DefaultNamespace
                     }
                 }
 
+                // Delete some frozen brains, if they are to many
                 if (savedAnimalControllers.Count > BrainBuffer)
                 {
                     for (int i = BrainBuffer; i < savedAnimalControllers.Count; i++)
@@ -178,11 +195,10 @@ namespace DefaultNamespace
                     savedAnimalControllers.RemoveRange(BrainBuffer, savedAnimalControllers.Count - BrainBuffer);
                 }
             }
-
-            Debug.LogWarning(pastTimeSteps + " " + animalControllers.Count);
+            
+            // Spawn saved or new animal, when there aren't enough on the map
             if (pastTimeSteps < stopRespawn && animalControllers.Count < initialAmount)
             {
-                Debug.LogWarning(newGenomes + " " + savedAnimalControllers.Count);
                 if (Random.value >= newGenomes && savedAnimalControllers.Count > 0)
                 {
                     GameObject parent = savedAnimalControllers[0];
@@ -195,14 +211,6 @@ namespace DefaultNamespace
                     CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
                 }
             }
-            
-            /*if (animalControllers.Count == 0)
-            {
-                pastTimeSteps = 0;
-                nextKey = 0;
-                CreateNewGeneration();
-            }*/
-            
         }
 
         public int GetReproductionEnergy()

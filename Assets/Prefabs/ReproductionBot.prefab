@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: -5797262476799351126}
   - component: {fileID: 9123797498400399532}
   m_Layer: 7
-  m_Name: Animal
+  m_Name: ReproductionBot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  isBot: 1
   CharacterController: {fileID: 4408169497568838984}
   Legs: {fileID: 7449578703545013821}
   Stomach: {fileID: 2830572847685276631}
@@ -246,7 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d868b030b69740a593eb39b1f7f319a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeExpectation: 0000000020030000e8030000
+  LifeExpectation: 000000006400000064000000
   Weight: 00000000640000002c010000
   MutationAmount:
   - 0
@@ -267,8 +268,8 @@ MonoBehaviour:
   MaxNeurons: 000000002800000064000000
   MinNeurons: 00000000140000001e000000
   MovementSpeed: 00000000050000000c000000
-  SexualMaturity: 000000006400000082000000
-  Menopause: 000000000500000008000000
+  SexualMaturity: 000000000000000000000000
+  Menopause: 00000000e8030000e8030000
   LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428
 GameObject:
@@ -4025,13 +4026,36 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5266576751871063230, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6263515290870240721}
   m_SourcePrefab: {fileID: 100100000, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
 --- !u!4 &3675119331676557459 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4782104867855052292, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
   m_PrefabInstance: {fileID: 8168921166256946839}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4056464686410943017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5266576751871063230, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}
+  m_PrefabInstance: {fileID: 8168921166256946839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &6263515290870240721
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4056464686410943017}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: -7063386254157539375, guid: 90a4e27551327c04493c2ec4f6ce0554, type: 3}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!95 &8911642007023974860 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 788505648243853147, guid: 9345f36f46f790d47a8aae94c1a5b5ba, type: 3}

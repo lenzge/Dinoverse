@@ -15,7 +15,7 @@ namespace Animal
         public override void Init(bool isChild = false)
         {
             maxCalories = DNA.Weight[0] * 30;
-            currentCalories = maxCalories / 4;
+            currentCalories = maxCalories / 2;
         }
         
         public void BurnCalories(Action action, float movementSpeed)
