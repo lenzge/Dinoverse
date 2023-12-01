@@ -14,6 +14,7 @@ namespace DefaultNamespace
         [SerializeField] private GameObject animalPrefab;
         [SerializeField] private int mapSize;
         [SerializeField] private int initialAmount;
+        [SerializeField] private int minAmount;
         [SerializeField] public int stopRespawn;
         [SerializeField] public int BrainBuffer;
         [SerializeField] public GenomeParser GenomeParser;
@@ -27,15 +28,37 @@ namespace DefaultNamespace
         private List<GameObject> savedAnimalControllers = new List<GameObject>();
         private List<Genome> frozenGenomes = new List<Genome>();
         private int bestFitness;
+        private int fitnessToScore;
+        private int animalsScoredFitness;
         private float newGenomes;
+        
         public int DrowningPunishment;
+        public int MaxTrees;
+        public int MinTrees;
+        public int LakeCount;
+        public int ReproductionEnergy;
+        public int ReproductionRadius;
+        public bool SelfReproduction;
+        public bool MutualReproduction;
 
         protected override void TimedStart()
         {
             currentPopulation = 0;
             nextKey = 0;
             pastTimeSteps = 0;
+            
             bestFitness = 0;
+            fitnessToScore = 2;
+            animalsScoredFitness = 0;
+
+            MaxTrees = 200;
+            MinTrees = 100;
+            LakeCount = 5;
+            ReproductionEnergy = 2;
+            ReproductionRadius = 200;
+            SelfReproduction = true;
+            MutualReproduction = false;
+            
             newGenomes = 0.5f;
             DrowningPunishment = 1;
             frozenGenomes = GenomeParser.LoadAllGenomes();
@@ -53,22 +76,22 @@ namespace DefaultNamespace
             Debug.LogWarning($"Create new Generation ({currentPopulation})");
             for (int i = 0; i < initialAmount; i++)
             {
-                //CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
-                CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
+                CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
+                //CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
             }
         }
 
-        public void CreateChildObject(int key, int generation, 
-            SpawnType spawnPositionType, AnimalController parent)
+        public void CreateChildObject(int key, int generation, GenomeType genomeType,
+            SpawnType spawnPositionType, AnimalController parent, AnimalController parent2 = null)
         {
             savedAnimalControllers.Insert(0,CreateAnimalObject(key,
-                generation, false, GenomeType.Parent,
-                spawnPositionType, parent));
+                generation, false, genomeType,
+                spawnPositionType, parent, parent2));
         }
         
         
         private GameObject CreateAnimalObject(int key, int generation, bool spawnInstant, GenomeType genomeType, 
-            SpawnType spawnPositionType, AnimalController parent = null)
+            SpawnType spawnPositionType, AnimalController parent = null, AnimalController parent2 = null)
         {
             GameObject animal = Instantiate(animalPrefab);
             animal.SetActive(false);
@@ -88,6 +111,16 @@ namespace DefaultNamespace
                     controller.DNA.CopyValuesFrom(parent.DNA);
                     controller.DNA.Mutate();
                     controller.Brain.Layers = parent.Brain.CopyLayers();
+                    controller.InitOrgans(true);
+                    controller.Brain.MutateNetwork();
+                    break;
+                case GenomeType.Crossover:
+                    if (parent == null || parent2 == null) throw new Exception("Try to create a child animal without parent");
+                    controller.DNA.CopyValuesFrom(parent.DNA);
+                    controller.DNA.CrossoverDNA(parent2.DNA);
+                    controller.DNA.Mutate();
+                    controller.Brain.Layers = parent.Brain.CopyLayers();
+                    controller.Brain.CrossoverNetwork(parent2.Brain);
                     controller.InitOrgans(true);
                     controller.Brain.MutateNetwork();
                     break;
@@ -143,46 +176,45 @@ namespace DefaultNamespace
         {
             animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
-            
-            if (animalController.Fitness > 0)
+
+            if (animalController.Fitness >= fitnessToScore)
             {
+                animalsScoredFitness += 1;
+                
                 if (animalController.Fitness >= bestFitness)
                 {
-                    if (animalController.Fitness > bestFitness) GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
+                    if (animalController.Fitness > bestFitness)
+                        GenomeParser.SaveToJson(animalController.Brain, animalController.DNA);
                     bestFitness = animalController.Fitness;
-                    Debug.LogWarning("Best fitness: "+ bestFitness);
-                    
-                    if (bestFitness >= 20)
-                    {
-                        DrowningPunishment = 20;
-                        newGenomes = 0.1f;
-                    }
-                    else if (bestFitness >= 10)
-                    {
-                        DrowningPunishment = 10;
-                        newGenomes = 0.25f;
-                    }
-                    else if (bestFitness >= 4)
-                    {
-                        DrowningPunishment = 5;
-                        newGenomes = 0.35f;
-                    }
-                    
-                    for (int i = 0; i < 8; i++)
-                    {
-                        savedAnimalControllers.Insert(0,CreateAnimalObject(animalController.Key,
-                            animalController.Generation + 1, false, GenomeType.Parent,
-                            SpawnType.Random, animalController));
-                    }
+                    Debug.LogWarning("Best fitness: " + bestFitness);
                 }
-                else if (animalController.Fitness >= bestFitness / 4)
+
+                if (fitnessToScore <= 20)
                 {
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         savedAnimalControllers.Add(CreateAnimalObject(animalController.Key,
-                            animalController.Generation + 1, false, GenomeType.Parent,
-                            SpawnType.Random, animalController));
+                                            animalController.Generation + 1, false, GenomeType.Parent,
+                                            SpawnType.Random, animalController));
                     }
+                }
+
+                if (animalsScoredFitness >= 50)
+                {
+                    Debug.LogWarning("50 Animals Scored " + fitnessToScore);
+                    if (fitnessToScore < 5) fitnessToScore += 1;
+                    else if (fitnessToScore < 10) fitnessToScore += 2;
+                    else
+                    {
+                        if (MaxTrees > MinTrees) MaxTrees -= 10;
+                        if (LakeCount < 15) LakeCount += 1;
+                        if (ReproductionEnergy < 5) ReproductionEnergy += 1;
+                        ReproductionRadius -= 10;
+                        if (fitnessToScore >= 25) SelfReproduction = false;
+                        if (fitnessToScore >= 40) MutualReproduction = true;
+                        fitnessToScore += 5;
+                    }
+                    animalsScoredFitness = 0;
                 }
 
                 // Delete some frozen brains, if they are to many
@@ -197,20 +229,25 @@ namespace DefaultNamespace
             }
             
             // Spawn saved or new animal, when there aren't enough on the map
-            if (pastTimeSteps < stopRespawn && animalControllers.Count < initialAmount)
+            if (animalControllers.Count < initialAmount)
             {
                 if (Random.value >= newGenomes && savedAnimalControllers.Count > 0)
                 {
-                    GameObject parent = savedAnimalControllers[0];
-                    SpawnAnimal(parent, SpawnType.Random);
-                    savedAnimalControllers.RemoveAt(0);
+                    while (animalControllers.Count < initialAmount && savedAnimalControllers.Count > 0)
+                    {
+                        GameObject parent = savedAnimalControllers[0];
+                        SpawnAnimal(parent, SpawnType.Random);
+                        savedAnimalControllers.RemoveAt(0);
+                    }
+                    
                 }
-                else
+                else if (pastTimeSteps < stopRespawn)
                 {
-                    //CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
-                    CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
+                    CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
+                    //CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);
                 }
             }
+
         }
 
         public int GetReproductionEnergy()

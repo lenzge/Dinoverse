@@ -16,6 +16,7 @@ namespace DefaultNamespace
         public int SeedAmount;
         public int SeedInterval;
         public int NoMoreSeeds;
+        public int MaxAge;
 
         [HideInInspector]
         public UnityEvent<Nurture,GameObject> NurtureEatenEvent;
@@ -31,7 +32,7 @@ namespace DefaultNamespace
         {
             currentMass = Mass;
             seedCount = 0;
-            age = Random.Range(-20,0);
+            age = 0;
             environmentCreator = GameObject.Find("Environment").GetComponent<EnvironmentCreator>();
         }
 
@@ -39,7 +40,13 @@ namespace DefaultNamespace
         {
             age += 1;
 
-            if (seedCount < NoMoreSeeds && age == SeedInterval)
+            if (age >= MaxAge)
+            {
+                NurtureEatenEvent.Invoke(this, Prefab);
+                Destroy(gameObject);
+            }
+
+            /*if (seedCount < NoMoreSeeds && age == SeedInterval)
             {
                 age = Random.Range(-20,0);
                 seedCount += 1;
@@ -58,7 +65,7 @@ namespace DefaultNamespace
                     }
                     
                 }
-            }
+            }*/
         }
 
         public float Eaten(float eatingSpeed)
@@ -79,9 +86,9 @@ namespace DefaultNamespace
 
             if (currentMass == 0)
             {
-                StartCoroutine(Recover());
-                //NurtureEatenEvent.Invoke(this, Prefab);
-                //Destroy(gameObject);
+                //StartCoroutine(Recover());
+                NurtureEatenEvent.Invoke(this, Prefab);
+                Destroy(gameObject);
             }
             
             return eatenMass * Calories;

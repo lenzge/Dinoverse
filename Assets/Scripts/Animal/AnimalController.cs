@@ -128,7 +128,7 @@ namespace Animal
                     Hearts.SetActive(false);
                     bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
-                    if (isEating) Fitness += 2;
+                    if (isEating) Fitness += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
                     break;
                 case Action.Reproduce:
@@ -136,7 +136,7 @@ namespace Animal
                     Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(this, species);
-                    if (reproduced) Fitness += 20;
+                    if (reproduced) Fitness += 5;
                     if (reproduced) StartCoroutine(ReproductionFreeze());
                     //if (reproduced) Age += 5000;
                     break;
@@ -167,31 +167,31 @@ namespace Animal
 
         private float[] PerceiveInputs()
         {
-            float[] inputs = new float[DNA.NumRaycasts[0]*2 + 3 + 12];
+            float[] inputs = new float[DNA.NumRaycasts[0]*3 + 3];
             
-            // x Food Raycasts and 1 Water Raycast (already normed)
-            float[] raycasts = Eyes.LookAround(characterTransform, food);
+            // DNA.NumRaycasts[0] (5) Food Raycasts and 3 Water Raycasts, DNA.NumRaycasts[0] (5) Friends Raycasts(already normed)
+            float[] raycasts = Eyes.LookAround(characterTransform, food, species, CharacterController.radius);
             for (int i = 0; i < raycasts.Length; i++)
             {
                 inputs[i] = raycasts[i];
             }
 
             // Current calories relative to max calories
-            inputs[DNA.NumRaycasts[0]*2 + 0] = Stomach.HungerInput();
+            inputs[DNA.NumRaycasts[0]*3 + 0] = Stomach.HungerInput();
             
             // Current age relative to SexualMaturity
-            inputs[DNA.NumRaycasts[0]*2 + 1] = Uterus.SexualMaturityLevel(this);
+            inputs[DNA.NumRaycasts[0]*3 + 1] = Uterus.SexualMaturityLevel(this);
             
             // Current Reproduction Energy relative to the needed one
-            inputs[DNA.NumRaycasts[0]*2 + 2] = Uterus.ReproductionEnergyLevel(this);
+            inputs[DNA.NumRaycasts[0]*3 + 2] = Uterus.ReproductionEnergyLevel(this);
             
             // Nearest mates relative position, relative age and relative eaten Trees (to the best seen)
-            float[] mates = Eyes.LookForMate(characterTransform, species);
+            /*float[] mates = Eyes.LookForMate(characterTransform, species);
             for (int i = 0; i < mates.Length; i++)
             {
                 inputs[DNA.NumRaycasts[0]*2 + 3 + i] = mates[i];
             }
-            
+            */
             return inputs;
         }
 
@@ -268,7 +268,7 @@ namespace Animal
 
             if (isDrown)
             {
-                Fitness -= AnimalCreator.DrowningPunishment;
+                //Fitness -= AnimalCreator.DrowningPunishment;
                 return (int) Enums.CauseOfDeath.drown;
             }
             

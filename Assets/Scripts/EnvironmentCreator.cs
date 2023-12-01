@@ -9,6 +9,8 @@ namespace DefaultNamespace
 {
     public class EnvironmentCreator : TimeBasedBehaviour
     {
+        public AnimalCreator AnimalCreator;
+        
         [SerializeField] private GameObject treePrefab;
         [SerializeField] private int mapSize;
         [SerializeField] private int initialAmount;
@@ -20,13 +22,16 @@ namespace DefaultNamespace
         [SerializeField] private int grassAmount;
         [SerializeField] private GameObject lakePrefab;
         [SerializeField] private int lakeAmount;
-        
-        
+
+        private int treeCount;
         private Collider[] colliderBuffer = new Collider[1];
 
         protected override void TimedStart()
         {
-            for (int i = 0; i < lakeAmount; i++)
+            AnimalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
+            lakeAmount = AnimalCreator.LakeCount;
+            
+            for (int i = 0; i < AnimalCreator.LakeCount; i++)
             {
                 SpawnNature(lakePrefab);
             }
@@ -55,9 +60,14 @@ namespace DefaultNamespace
 
         protected override void TimedSlowUpdate()
         {
+            if (AnimalCreator.LakeCount > lakeAmount)
+            {
+                SpawnNature(lakePrefab);
+                lakeAmount += 1;
+            }
             for (int i = 0; i < offspringAmount; i++)
             {
-                SpawnNurture(treePrefab);
+                //SpawnNurture(treePrefab);
             }
         }
 
@@ -76,7 +86,8 @@ namespace DefaultNamespace
                 }
                 else
                 {
-                    //nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
+                    treeCount += 1;
+                    nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
                     break;
                 }
             }
@@ -127,8 +138,12 @@ namespace DefaultNamespace
         
         private void SpawnNewNurture(Nurture oldNurture, GameObject prefab)
         {
+            treeCount -= 1;
             oldNurture.NurtureEatenEvent.RemoveListener(SpawnNewNurture);
-            SpawnNurture(prefab);
+            if (treeCount < AnimalCreator.MaxTrees)
+            {
+                SpawnNurture(prefab);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using DefaultNamespace;
 using Enums;
+using Unity.VisualScripting;
 using UnityEngine;
 using Action = Enums.Action;
 using Random = UnityEngine.Random;
@@ -13,6 +14,7 @@ namespace Animal
         private AnimalCreator animalCreator;
 
         private int childCount;
+        private int trySoHard;
         private Collider[] colliderBuffer;
         public int ReproductionEnergy;
 
@@ -21,7 +23,8 @@ namespace Animal
             // TODO make animal creator static
             childCount = 0;
             ReproductionEnergy = 0;
-            colliderBuffer = new Collider[2];
+            trySoHard = 0;
+            colliderBuffer = new Collider[4];
             animalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
         }
 
@@ -29,32 +32,53 @@ namespace Animal
         {
             if (CanReproduce(parent))
             {
-                if (Physics.OverlapSphereNonAlloc(parent.transform.position, 50, colliderBuffer,
-                    1 << (int) species) >= 2) // min 2, because of self interaction
+                trySoHard += 1;
+                if (Physics.OverlapSphereNonAlloc(parent.transform.position, parent.AnimalCreator.ReproductionRadius, colliderBuffer,
+                    1 << (int) species) >= 4) // min 2, because of self interaction
                 {
                     foreach (var collider in colliderBuffer)
                     {
-                        if (collider.gameObject != parent.gameObject)
+                        if (collider.gameObject != parent.gameObject && !collider.isTrigger)
                         {
-                            AnimalController mate = collider.gameObject.GetComponent<AnimalController>();
-                            if (mate.Uterus.CanReproduce(mate)) // && mate.CurrentAction == Action.Reproduce -- to difficult!
+                            AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
+                            if (mate.Uterus.CanReproduce(mate) && (mate.CurrentAction == Action.Reproduce || !parent.AnimalCreator.MutualReproduction)) //  -- to difficult!
                             {
                                 childCount += 1;
                                 int litterSize = LitterSize(parent.Generation, parent.Age);
-                                litterSize = 10;
-                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {colliderBuffer[0]} and {colliderBuffer[1]}");
+                                litterSize = 3;
+                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {mate} and {parent}");
                                 for (int i = 0; i < litterSize; i++)
                                 {
                                     //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
+                                    //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, mate);
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
                                 }
                                 ReproductionEnergy = 0;
+                                trySoHard = 0;
                                 return true;
                             }
                         }
                     }
                 }
-                
+                if (trySoHard >= 50 && parent.AnimalCreator.SelfReproduction)
+                {
+                    childCount += 1; 
+                    int litterSize = 8;
+                    Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. ALONE");
+                    for (int i = 0; i < litterSize; i++)
+                    {
+                        //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
+                        //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
+                        animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
+                    }
+                    ReproductionEnergy = 0;
+                    trySoHard = 0;
+                    return true;
+                }
+
             }
 
             return false;
@@ -140,7 +164,7 @@ namespace Animal
         {
             if (animal.Age >= DNA.SexualMaturity[0]
                 && childCount <= DNA.Menopause[0]
-                && ReproductionEnergy >= 2)
+                && ReproductionEnergy >= animal.AnimalCreator.ReproductionEnergy)
             {
                 return true;
             }

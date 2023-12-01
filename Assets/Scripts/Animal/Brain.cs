@@ -9,7 +9,7 @@ namespace Animal
         public int[] NetworkShape;
         public Layer[] Layers;
 
-        private int stdInputNeurons = 3 + 12;
+        private int stdInputNeurons = 3;
         private int outputNeurons = 6;
         
         public override void Init(bool isChild)
@@ -70,14 +70,27 @@ namespace Animal
         //Call the randomness function for each layer in the network.
         public void MutateNetwork()
         {
+            Random.InitState((int)System.DateTime.Now.Ticks);
             for(int i = 0; i < Layers.Length; i++)
             {
                 Layers[i].MutateLayer(DNA.MutationChance[0], DNA.MutationAmount[0]);
             }
         }
+        
+        public void CrossoverNetwork(Brain other)
+        {
+            Random.InitState((int)System.DateTime.Now.Ticks);
+            
+            for(int i = 0; i < Layers.Length; i++)
+            {
+                Layers[i].CrossoverLayer(other.Layers[i]);
+            }
+        }
 
         private int[] CreateNetworkShape()
         {
+            return new []{DNA.NumRaycasts[0]*3 +stdInputNeurons, DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
+            
             switch (DNA.HiddenLayer[0])
             {
                 case 1:
@@ -193,6 +206,25 @@ namespace Animal
                     if(Random.value < mutationChance)
                     {
                         Biases[i] += Random.Range(-1.0f, 1.0f)*mutationAmount;
+                    }
+                }
+            }
+            
+            public void CrossoverLayer(Layer other)
+            {
+                for(int i = 0; i < Neurons; i++)
+                {
+                    for(int j = 0; j < Inputs; j++)
+                    {
+                        if(Random.value <= 0.5)
+                        {
+                            Weights[i,j] =other.Weights[i,j];
+                        }
+                    }
+
+                    if(Random.value <= 0.5)
+                    {
+                        Biases[i] = other.Biases[i];
                     }
                 }
             }

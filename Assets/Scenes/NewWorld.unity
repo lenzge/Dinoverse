@@ -1103,11 +1103,19 @@ MonoBehaviour:
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
   mapSize: 250
   initialAmount: 100
-  stopRespawn: 50000
+  minAmount: 30
+  stopRespawn: 1000
   BrainBuffer: 50
   GenomeParser: {fileID: 979460215}
   pastTimeSteps: 0
   DrowningPunishment: 0
+  MaxTrees: 0
+  MinTrees: 0
+  LakeCount: 0
+  ReproductionEnergy: 0
+  ReproductionRadius: 0
+  SelfReproduction: 0
+  MutualReproduction: 0
 --- !u!4 &979460214
 Transform:
   m_ObjectHideFlags: 0
@@ -1135,7 +1143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91097ba3732473d8268371a8eee344d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FileName: Sex2.json
+  FileName: ph.json
   GenomesToLoad: []
 --- !u!1 &980321001
 GameObject:
@@ -1162,13 +1170,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980321001}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.027877856, y: 0.31974208, z: 0.14334688, w: 0.9361835}
-  m_LocalPosition: {x: -1175, y: 344.50314, z: -68}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0.31439012, z: 0, w: 0.9492939}
+  m_LocalPosition: {x: -1190.5, y: 344.50314, z: -88.85}
+  m_LocalScale: {x: 1, y: 1, z: 1.2266}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 129580381}
-  m_LocalEulerAnglesHint: {x: -8.272, y: 36.648, z: 14.667}
+  m_LocalEulerAnglesHint: {x: 0, y: 36.648, z: 0}
 --- !u!65 &980321003
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1283,10 +1291,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  AnimalCreator: {fileID: 0}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
   mapSize: 250
-  initialAmount: 250
-  offspringAmount: 1
+  initialAmount: 200
+  offspringAmount: 5
   naturePrefabs:
   - {fileID: 8418140824823713206, guid: cf48c0d1483d5e041b24a20e034dc8e1, type: 3}
   - {fileID: 2304620870787016613, guid: 3d80d6fd93940404b802bd60ebea1ac7, type: 3}
@@ -1351,8 +1360,8 @@ Transform:
   m_GameObject: {fileID: 1069099789}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.79652035, z: -0, w: 0.60461175}
-  m_LocalPosition: {x: -663.2074, y: 361, z: 912.68414}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -549.44, y: 361, z: 944.44}
+  m_LocalScale: {x: 1, y: 1, z: 2.0301}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 129580381}
@@ -1984,13 +1993,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1723002462}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.13412638, y: -0.9827919, z: -0.05775554, w: 0.11311283}
-  m_LocalPosition: {x: -1071, y: 344.50314, z: 686}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: -0.9945964, z: 0, w: 0.10381685}
+  m_LocalPosition: {x: -1040.4, y: 358, z: 817.92}
+  m_LocalScale: {x: 1, y: 1, z: 2.1222}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 129580381}
-  m_LocalEulerAnglesHint: {x: -8.272, y: -167.935, z: 14.667}
+  m_LocalEulerAnglesHint: {x: 0, y: -168.082, z: 0}
 --- !u!65 &1723002464
 BoxCollider:
   m_ObjectHideFlags: 0

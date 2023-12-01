@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5887082674124543733}
-  - component: {fileID: 8825047206911672888}
+  - component: {fileID: 8609736013061283247}
   m_Layer: 7
   m_Name: Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5887082674124543733
 Transform:
   m_ObjectHideFlags: 0
@@ -32,8 +32,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8443286493046005390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8825047206911672888
-BoxCollider:
+--- !u!136 &8609736013061283247
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -47,12 +47,14 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.05, y: 3.54, z: 3.75}
-  m_Center: {x: 0, y: 1.11, z: -1.62}
+  serializedVersion: 2
+  m_Radius: 5.61
+  m_Height: 13.62
+  m_Direction: 1
+  m_Center: {x: 0, y: 6.4, z: -0.2}
 --- !u!1 &3005528575296122092
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  isBot: 0
   CharacterController: {fileID: 4408169497568838984}
   Legs: {fileID: 7449578703545013821}
   Stomach: {fileID: 2830572847685276631}
@@ -260,14 +263,14 @@ MonoBehaviour:
   - 0
   - 1
   - 1
-  VisualRadius: 00000000c800000090010000
-  NumRaycasts: 000000000300000005000000
+  VisualRadius: 00000000640000002c010000
+  NumRaycasts: 000000000500000005000000
   AngleBetweenRaycasts: 00000000050000001e000000
-  HiddenLayer: 00000000020000000a000000
-  MaxNeurons: 000000002800000064000000
-  MinNeurons: 00000000140000001e000000
+  HiddenLayer: 000000000200000002000000
+  MaxNeurons: 000000002000000020000000
+  MinNeurons: 000000000c0000000c000000
   MovementSpeed: 00000000050000000c000000
-  SexualMaturity: 000000006400000082000000
+  SexualMaturity: 000000001e000000c8000000
   Menopause: 000000000500000008000000
   LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428

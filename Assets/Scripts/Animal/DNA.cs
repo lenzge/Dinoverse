@@ -62,7 +62,8 @@ namespace Animal
             //MutateIntParam(NumRaycasts); Will stay constant
             MutateIntParam(AngleBetweenRaycasts);
             MutateIntParam(MovementSpeed);
-            MutateIntParam(SexualMaturity);
+            //MutateIntParam(SexualMaturity);
+            if (SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1;
             MutateIntParam(Menopause);
             MutateIntParam(LitterSize);
         }
@@ -84,7 +85,8 @@ namespace Animal
             CreateRandomIntParam(MaxNeurons);
             CreateRandomIntParam(MinNeurons);
             CreateRandomIntParam(MovementSpeed);
-            CreateRandomIntParam(SexualMaturity);
+            //CreateRandomIntParam(SexualMaturity);
+            SexualMaturity[0] = SexualMaturity[1]; 
             CreateRandomIntParam(Menopause);
             CreateRandomIntParam(LitterSize);
         }
@@ -112,6 +114,29 @@ namespace Animal
             else
             {
                 Debug.LogWarning("Cannot copy values from null DNA.");
+            }
+        }
+        
+        public void CrossoverDNA(DNA otherDNA)
+        {
+            Random.InitState((int)System.DateTime.Now.Ticks);
+            if (otherDNA != null)
+            {
+                if(Random.value <= 0.5) LifeExpectation = CopyIntArray(otherDNA.LifeExpectation);
+                if(Random.value <= 0.5) Weight = CopyIntArray(otherDNA.Weight);
+                if(Random.value <= 0.5) MutationAmount = CopyFloatArray(otherDNA.MutationAmount);
+                if(Random.value <= 0.5) MutationChance = CopyFloatArray(otherDNA.MutationChance);
+                if(Random.value <= 0.5) EatingSpeed = CopyFloatArray(otherDNA.EatingSpeed);
+                if(Random.value <= 0.5) VisualRadius = CopyIntArray(otherDNA.VisualRadius);
+                if(Random.value <= 0.5) AngleBetweenRaycasts = CopyIntArray(otherDNA.AngleBetweenRaycasts);
+                if(Random.value <= 0.5) MovementSpeed = CopyIntArray(otherDNA.MovementSpeed);
+                if(Random.value <= 0.5) SexualMaturity = CopyIntArray(otherDNA.SexualMaturity);
+                if(Random.value <= 0.5) Menopause = CopyIntArray(otherDNA.Menopause);
+                if(Random.value <= 0.5) LitterSize = CopyIntArray(otherDNA.LitterSize);
+            }
+            else
+            {
+                Debug.LogWarning("Cannot crossover values from null DNA.");
             }
         }
 

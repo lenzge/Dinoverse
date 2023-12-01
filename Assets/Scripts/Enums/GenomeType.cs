@@ -4,6 +4,7 @@
     {
         Random,
         Parent,
-        Frozen
+        Frozen, 
+        Crossover
     }
 }
