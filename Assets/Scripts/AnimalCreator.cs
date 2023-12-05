@@ -48,14 +48,14 @@ namespace DefaultNamespace
             pastTimeSteps = 0;
             
             bestFitness = 0;
-            fitnessToScore = 2;
+            fitnessToScore = 3;
             animalsScoredFitness = 0;
 
             MaxTrees = 200;
             MinTrees = 100;
-            LakeCount = 5;
+            LakeCount = 12;
             ReproductionEnergy = 2;
-            ReproductionRadius = 200;
+            ReproductionRadius = 170;
             SelfReproduction = true;
             MutualReproduction = false;
             
@@ -84,9 +84,29 @@ namespace DefaultNamespace
         public void CreateChildObject(int key, int generation, GenomeType genomeType,
             SpawnType spawnPositionType, AnimalController parent, AnimalController parent2 = null)
         {
-            savedAnimalControllers.Insert(0,CreateAnimalObject(key,
-                generation, false, genomeType,
-                spawnPositionType, parent, parent2));
+            if (genomeType == GenomeType.Parent && fitnessToScore >= 20)
+            {
+                if (savedAnimalControllers.Count >= 25)
+                {
+                    savedAnimalControllers.Insert(25,CreateAnimalObject(key,
+                        generation, false, genomeType,
+                        spawnPositionType, parent, parent2));
+                }
+                else
+                {
+                    savedAnimalControllers.Add(CreateAnimalObject(key,
+                        generation, false, genomeType,
+                        spawnPositionType, parent, parent2));
+                }
+                
+            }
+            else
+            {
+                savedAnimalControllers.Insert(0,CreateAnimalObject(key,
+                    generation, false, genomeType,
+                    spawnPositionType, parent, parent2));
+            }
+            
         }
         
         
@@ -177,6 +197,8 @@ namespace DefaultNamespace
             animalController.Died.RemoveListener(OnDead);
             animalControllers.Remove(animalController);
 
+            EvaluateFitness(animalController);
+
             if (animalController.Fitness >= fitnessToScore)
             {
                 animalsScoredFitness += 1;
@@ -189,9 +211,9 @@ namespace DefaultNamespace
                     Debug.LogWarning("Best fitness: " + bestFitness);
                 }
 
-                if (fitnessToScore <= 20)
+                if (fitnessToScore <= 30)
                 {
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 7; i++)
                     {
                         savedAnimalControllers.Add(CreateAnimalObject(animalController.Key,
                                             animalController.Generation + 1, false, GenomeType.Parent,
@@ -201,18 +223,47 @@ namespace DefaultNamespace
 
                 if (animalsScoredFitness >= 50)
                 {
-                    Debug.LogWarning("50 Animals Scored " + fitnessToScore);
-                    if (fitnessToScore < 5) fitnessToScore += 1;
-                    else if (fitnessToScore < 10) fitnessToScore += 2;
-                    else
+                    Debug.LogWarning($"[{Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f)}]50 Animals Scored " + fitnessToScore);
+                    animalController.NewLevel = 1;
+                    
+                    if (fitnessToScore < 9) fitnessToScore += 2;
+                    else if (fitnessToScore == 9)
+                    {
+                        ReproductionEnergy = 3;
+                        fitnessToScore += 2;
+                    }
+                    else if (fitnessToScore == 11 || fitnessToScore == 14 || fitnessToScore == 17)
                     {
                         if (MaxTrees > MinTrees) MaxTrees -= 10;
-                        if (LakeCount < 15) LakeCount += 1;
-                        if (ReproductionEnergy < 5) ReproductionEnergy += 1;
+                        if (LakeCount < 20) LakeCount += 1;
                         ReproductionRadius -= 10;
-                        if (fitnessToScore >= 25) SelfReproduction = false;
-                        if (fitnessToScore >= 40) MutualReproduction = true;
-                        fitnessToScore += 5;
+                        fitnessToScore += 3;
+                    }
+                    else if (fitnessToScore == 20)
+                    {
+                        ReproductionEnergy = 4;
+                        fitnessToScore += 2;
+                    }
+                    else if (fitnessToScore == 22 || fitnessToScore == 25)
+                    {
+                        if (MaxTrees > MinTrees) MaxTrees -= 10;
+                        if (LakeCount < 20) LakeCount += 1;
+                        ReproductionRadius -= 10;
+                        fitnessToScore += 3;
+                    }
+                    else if (fitnessToScore == 28)
+                    {
+                        ReproductionEnergy = 5;
+                        fitnessToScore += 3;
+                    }
+                    else if (fitnessToScore > 28)
+                    {
+                        if (MaxTrees > MinTrees) MaxTrees -= 10;
+                        if (LakeCount < 20) LakeCount += 1;
+                        ReproductionRadius -= 10;
+                        if (fitnessToScore >= 40) SelfReproduction = false;
+                        if (fitnessToScore >= 52) MutualReproduction = true;
+                        fitnessToScore += 4;
                     }
                     animalsScoredFitness = 0;
                 }
@@ -248,6 +299,15 @@ namespace DefaultNamespace
                 }
             }
 
+        }
+
+        public void EvaluateFitness(AnimalController animal)
+        {
+            animal.Fitness += animal.Age / 50;
+            animal.Fitness += animal.EatenTrees;
+            animal.Fitness += animal.Uterus.GetChildCountSolo() * 3;
+            animal.Fitness += animal.Uterus.GetChildCountMutual() * 5;
+            if (animal.IsDrown) animal.Fitness -= 10;
         }
 
         public int GetReproductionEnergy()

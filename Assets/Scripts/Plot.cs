@@ -19,10 +19,10 @@ namespace DefaultNamespace
         private bool isWriting = false;
 
         public void SaveData(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-            int reproduced, int timeOfDeath, int causeOfDeath, int fitness)
+            int reproduced, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel)
         {
-            Statistic statistic = new Statistic(key, generation, grandChild, survivedTime, eatenTrees, reproduced,
-                timeOfDeath, causeOfDeath, fitness);
+            Statistic statistic = new Statistic(key, generation, grandChild, survivedTime, eatenTrees, reproduced, 
+                reproducedMutual,timeOfDeath, causeOfDeath, fitness, newLevel);
             statistics.Add(statistic);
             WriteToCSV(statistic);
 
@@ -37,7 +37,8 @@ namespace DefaultNamespace
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,timeOfDeath,causeOfDeath,fitness");
+                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,reproducedMutual," +
+                                     "timeOfDeath,causeOfDeath,fitness,newLevel");
                 }
 
             }
@@ -123,7 +124,8 @@ namespace DefaultNamespace
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
                         writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.SurvivedTime}, " +
-                                         $"{data.EatenTrees}, {data.Reproduced}, {data.TimeOfDeath}, {data.CauseOfDeath}, {data.Fitness}");
+                                         $"{data.EatenTrees}, {data.Reproduced}, {data.ReproducedMutual}, {data.TimeOfDeath}, " +
+                                         $"{data.CauseOfDeath}, {data.Fitness}, {data.NewLevel}");
                     }
                 }
                 catch (Exception e)
@@ -141,12 +143,14 @@ namespace DefaultNamespace
             public int SurvivedTime;
             public int EatenTrees;
             public int Reproduced;
+            public int ReproducedMutual;
             public int TimeOfDeath;
             public int CauseOfDeath;
             public int Fitness;
+            public int NewLevel;
 
             public Statistic(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-                int reproduced, int timeOfDeath, int causeOfDeath, int fitness)
+                int reproduced, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel)
             {
                 Key = key;
                 Generation = generation;
@@ -154,9 +158,11 @@ namespace DefaultNamespace
                 SurvivedTime = survivedTime;
                 EatenTrees = eatenTrees;
                 Reproduced = reproduced;
+                ReproducedMutual = reproducedMutual;
                 TimeOfDeath = timeOfDeath;
                 CauseOfDeath = causeOfDeath;
                 Fitness = fitness;
+                NewLevel = newLevel;
             }
 
         }

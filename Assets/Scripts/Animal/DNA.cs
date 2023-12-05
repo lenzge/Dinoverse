@@ -63,7 +63,7 @@ namespace Animal
             MutateIntParam(AngleBetweenRaycasts);
             MutateIntParam(MovementSpeed);
             //MutateIntParam(SexualMaturity);
-            if (SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1;
+            if (Random.value < 0.5 && SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1;
             MutateIntParam(Menopause);
             MutateIntParam(LitterSize);
         }

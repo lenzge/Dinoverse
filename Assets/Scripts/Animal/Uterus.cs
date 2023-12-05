@@ -13,7 +13,8 @@ namespace Animal
         public DNA DNA;
         private AnimalCreator animalCreator;
 
-        private int childCount;
+        private int soloChildCount;
+        private int mutualChildCount;
         private int trySoHard;
         private Collider[] colliderBuffer;
         public int ReproductionEnergy;
@@ -21,7 +22,8 @@ namespace Animal
         public override void Init(bool isChild = false)
         {
             // TODO make animal creator static
-            childCount = 0;
+            soloChildCount = 0;
+            mutualChildCount = 0;
             ReproductionEnergy = 0;
             trySoHard = 0;
             colliderBuffer = new Collider[4];
@@ -43,7 +45,7 @@ namespace Animal
                             AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
                             if (mate.Uterus.CanReproduce(mate) && (mate.CurrentAction == Action.Reproduce || !parent.AnimalCreator.MutualReproduction)) //  -- to difficult!
                             {
-                                childCount += 1;
+                                mutualChildCount += 1;
                                 int litterSize = LitterSize(parent.Generation, parent.Age);
                                 litterSize = 3;
                                 Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {mate} and {parent}");
@@ -53,6 +55,7 @@ namespace Animal
                                     //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
                                     animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
                                     animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, mate);
+                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
                                     animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
                                     animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
                                 }
@@ -65,8 +68,8 @@ namespace Animal
                 }
                 if (trySoHard >= 50 && parent.AnimalCreator.SelfReproduction)
                 {
-                    childCount += 1; 
-                    int litterSize = 8;
+                    soloChildCount += 1; 
+                    int litterSize = 10;
                     Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. ALONE");
                     for (int i = 0; i < litterSize; i++)
                     {
@@ -92,8 +95,8 @@ namespace Animal
             }
             if (animalCreator.GetAnimalCount() >= 200)
             {
-                if (childCount > 3) return 3;
-                else return childCount;
+                if (soloChildCount > 3) return 3;
+                else return soloChildCount;
             }
             else
             {
@@ -101,8 +104,8 @@ namespace Animal
                 
                 if (animalCreator.pastTimeSteps < animalCreator.stopRespawn) litterSize += 3;
                 
-                if (childCount > 5) litterSize += 5;
-                else litterSize += childCount;
+                if (soloChildCount > 5) litterSize += 5;
+                else litterSize += soloChildCount;
                 
                 if (generation > 5) litterSize += 5;
                 else litterSize += generation;
@@ -147,7 +150,7 @@ namespace Animal
 
         public bool IsInMenopause()
         {
-            if (childCount == DNA.Menopause[0])
+            if (soloChildCount == DNA.Menopause[0])
             {
                 return true;
             }
@@ -155,15 +158,19 @@ namespace Animal
             return false;
         }
 
-        public int GetChildCount()
+        public int GetChildCountSolo()
         {
-            return childCount;
+            return soloChildCount;
+        }
+        public int GetChildCountMutual()
+        {
+            return mutualChildCount;
         }
 
         public bool CanReproduce(AnimalController animal)
         {
             if (animal.Age >= DNA.SexualMaturity[0]
-                && childCount <= DNA.Menopause[0]
+                && soloChildCount <= DNA.Menopause[0]
                 && ReproductionEnergy >= animal.AnimalCreator.ReproductionEnergy)
             {
                 return true;

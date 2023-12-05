@@ -41,11 +41,11 @@ namespace Animal
         public int Generation;
         public int EatenTrees;
         public int Fitness;
+        public int NewLevel;
+        public bool IsDrown;
 
         [Space]
         public Action CurrentAction;
-        
-        private bool isDrown;
         private bool isReproducing;
 
         private Transform characterTransform;
@@ -65,7 +65,8 @@ namespace Animal
             Age = 0;
             EatenTrees = 0;
             Fitness = 0;
-            isDrown = false;
+            IsDrown = false;
+            NewLevel = 0;
             drowningPunishment = 1;
             
             TimedUpdate();
@@ -128,7 +129,6 @@ namespace Animal
                     Hearts.SetActive(false);
                     bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
-                    if (isEating) Fitness += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
                     break;
                 case Action.Reproduce:
@@ -136,7 +136,6 @@ namespace Animal
                     Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(this, species);
-                    if (reproduced) Fitness += 5;
                     if (reproduced) StartCoroutine(ReproductionFreeze());
                     //if (reproduced) Age += 5000;
                     break;
@@ -220,13 +219,14 @@ namespace Animal
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
                 Debug.Log($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
-                                 $"Reproduced {Uterus.GetChildCount()} times, " +
+                                 $"Reproduced {Uterus.GetChildCountSolo()} times solo, " +
+                                 $"Reproduced {Uterus.GetChildCountMutual()} times mutual, " +
                                  $"Found {EatenTrees} Trees. " +
                                  $"Cause of Death: {(CauseOfDeath)Enum.Parse(typeof(CauseOfDeath), causeOfDeath.ToString())}");
-                Plot.SaveData(Key, Population, Generation,Age, EatenTrees, 
-                    Uterus.GetChildCount(), timeOfDeath, causeOfDeath, Fitness);
-                
+
                 Died.Invoke(this);
+                Plot.SaveData(Key, Population, Generation,Age, EatenTrees, 
+                    Uterus.GetChildCountSolo(), Uterus.GetChildCountMutual(),timeOfDeath, causeOfDeath, Fitness, NewLevel);
                 StartCoroutine(DestroyAfterAni());
             }
             
@@ -234,7 +234,7 @@ namespace Animal
         
         IEnumerator DestroyAfterAni()
         {
-            if (isDrown)
+            if (IsDrown)
             {
                 float timeInterval = 4f / EnvironmentData.TimeSpeed;
                 yield return new WaitForSeconds(timeInterval);
@@ -266,9 +266,8 @@ namespace Animal
                 return (int) Enums.CauseOfDeath.decrepitude;
             }
 
-            if (isDrown)
+            if (IsDrown)
             {
-                //Fitness -= AnimalCreator.DrowningPunishment;
                 return (int) Enums.CauseOfDeath.drown;
             }
             
@@ -280,7 +279,7 @@ namespace Animal
         {
             if (other.gameObject.layer == (int) Layer.Water)
             {
-                isDrown = true;
+                IsDrown = true;
                 Legs.Animator.SetTrigger("isDrown");
             }
             
