@@ -227,7 +227,8 @@ namespace Animal
                 Died.Invoke(this);
                 Plot.SaveData(Key, Population, Generation,Age, EatenTrees, 
                     Uterus.GetChildCountSolo(), Uterus.GetChildCountMutual(),timeOfDeath, causeOfDeath, Fitness, NewLevel);
-                StartCoroutine(DestroyAfterAni());
+                //StartCoroutine(DestroyAfterAni());
+                Destroy(gameObject);
             }
             
         }
