@@ -570,27 +570,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalScale.x
-      value: 7
+      value: 1.7009825
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalScale.y
-      value: 7
+      value: 1.7009825
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalScale.z
-      value: 6.81361
+      value: 1.1589831
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -19.779
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -29
+      value: -5.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.000091553
+      value: -0.69876
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94d2a383536fb7c44b95d71bc2ca20ab, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1101,8 +1101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
-  mapSize: 170
-  initialAmount: 120
+  mapSize: 20
+  initialAmount: 1
   minAmount: 30
   stopRespawn: 2000
   BrainBuffer: 100
@@ -1125,13 +1125,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 979460212}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.0021041024, y: -0.0017341251, z: -0.0007433147, w: 0.999996}
   m_LocalPosition: {x: 0, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.241, y: -0.199, z: -0.085}
 --- !u!114 &979460215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1294,18 +1294,18 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   AnimalCreator: {fileID: 0}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-  mapSize: 170
-  initialAmount: 180
+  mapSize: 20
+  initialAmount: 20
   offspringAmount: 5
   naturePrefabs:
   - {fileID: 8418140824823713206, guid: cf48c0d1483d5e041b24a20e034dc8e1, type: 3}
   - {fileID: 2304620870787016613, guid: 3d80d6fd93940404b802bd60ebea1ac7, type: 3}
-  natureAmount: 10
+  natureAmount: 1
   grassPrefabs:
   - {fileID: 6282618204053580033, guid: 2158d76f4062fe441b61d17a6c34b67d, type: 3}
   - {fileID: 2609836572451821920, guid: 6d7a8f827be0ec34eb8cf73780b85a1d, type: 3}
   - {fileID: 2247226870530488208, guid: 362b677245cc78643a8e9ebc48462671, type: 3}
-  grassAmount: 100
+  grassAmount: 10
   lakePrefab: {fileID: 794029667189866463, guid: fa4ef4d16094ffc4c8d4ae749d9a3a6e, type: 3}
   lakeAmount: 10
 --- !u!64 &1025934452
@@ -1474,13 +1474,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120272216}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 429, y: -473, z: 44}
+  m_LocalRotation: {x: 0.28918147, y: -0, z: -0, w: 0.9572743}
+  m_LocalPosition: {x: 429, y: -450, z: 495}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 570020336}
-  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 33.618, y: 0, z: 0}
 --- !u!114 &1120272220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2126,8 +2126,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 643.1948, y: 905.0647, z: 943.9249}
-  m_Center: {x: 246.59798, y: -138.52992, z: -118.0959}
+  m_Size: {x: 643.1948, y: 905.0647, z: 478.39343}
+  m_Center: {x: 246.59792, y: -138.52992, z: 114.66838}
 --- !u!1 &1947000725
 GameObject:
   m_ObjectHideFlags: 0

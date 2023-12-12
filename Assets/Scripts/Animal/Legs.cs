@@ -30,7 +30,14 @@ namespace Animal
 
         public void SetMoveDirection(Vector2 moveDirection, float speed)
         {
-            movementDirection = new Vector3(moveDirection.normalized.x, 0, moveDirection.normalized.y);
+            if (moveDirection == Vector2.zero)
+            {
+                movementDirection = Vector3.zero;
+            }
+            else
+            {
+                movementDirection = new Vector3(moveDirection.normalized.x, 0, moveDirection.normalized.y);
+            }
             if (speed < 0)
             {
                 currentMovementSpeed = DNA.MovementSpeed[1];

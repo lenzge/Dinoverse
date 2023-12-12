@@ -10,7 +10,8 @@ namespace Animal
     public class Eyes : Organ
     {
         public DNA DNA;
-        
+
+        public float NavigationFitness;
         private float[] distances;
         //private Collider[] animalBuffer;
         //private AnimalController[] nearestAnimals;
@@ -18,14 +19,17 @@ namespace Animal
 
         private int mateAmount = 3;
         private int mostEatenTreesSeen;
+        private int bestFitnessSeen;
 
         public override void Init(bool isChild = false)
         {
-            distances = new float[DNA.NumRaycasts[0] * 3];
+            distances = new float[DNA.NumRaycasts[0] * 4];
             //animalBuffer = new Collider[3];
             //nearestAnimals = new AnimalController[3];
             //mateInfos = new float[mateAmount * 4];
             mostEatenTreesSeen = 1; // no zero devision
+            bestFitnessSeen = 1; // no zero devision
+            NavigationFitness = 0;
         }
 
         public float[] LookAround(Transform characterTransform, Layer food, Layer species, float characterRadius)
@@ -80,8 +84,19 @@ namespace Animal
                 }
             }
             
+            // Navigation Fitness
+            
+            for (int i = 0; i < WaterRaycasts; i++)
+            {
+                if (distances[WaterRaycasts + i] <= 0.3)
+                {
+                    NavigationFitness -= 1;
+                    break;
+                }
+            }
+
             // Look for Friends
-            for (int i = 0; i < DNA.NumRaycasts[0]; i++)
+            for (int i = 0; i < DNA.NumRaycasts[0]*2; i++)
             {
                 float angle = ((2 * i + 1 - DNA.NumRaycasts[0]) * (float) DNA.AngleBetweenRaycasts[0] / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
@@ -93,15 +108,20 @@ namespace Animal
                     hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce(hit.collider.GetComponentInParent<AnimalController>()))
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
-                    //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue);
+                    //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue,1);
                     distances[DNA.NumRaycasts[0] + WaterRaycasts + i] = hit.distance / DNA.VisualRadius[0];
+                    hit.collider.GetComponentInParent<AnimalController>().EvaluateFitness();
+                    if (hit.collider.GetComponentInParent<AnimalController>().Fitness > bestFitnessSeen)
+                        bestFitnessSeen = hit.collider.GetComponentInParent<AnimalController>().Fitness;
+                    distances[DNA.NumRaycasts[0] + WaterRaycasts + ++i] = Mathf.Clamp(((float) hit.collider.GetComponentInParent<AnimalController>().Fitness / bestFitnessSeen), 0,1);
                 }
                 else
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
-                    //Debug.DrawRay(rayStart, rayDirection * DNA.VisualRadius[0], Color.yellow);
+                    //Debug.DrawRay(rayStart, rayDirection * DNA.VisualRadius[0], Color.yellow,1);
                     // If no food object is detected, set the distance to the maximum length of the raycast
                     distances[DNA.NumRaycasts[0] + WaterRaycasts + i] = 1;
+                    distances[DNA.NumRaycasts[0] + WaterRaycasts + ++i] = 0;
                 }
             }
             
@@ -182,6 +202,15 @@ namespace Animal
         {
             // Convert the array elements to strings and join them with commas
             return "[" + string.Join(" , ", array) + "]";
+        }
+        
+        private float Invert(float input)
+        {
+            float invert = (1 - input) * 10;
+            
+            invert = Math.Max(0, Math.Min(10, invert));
+
+            return invert;
         }
     }
 }

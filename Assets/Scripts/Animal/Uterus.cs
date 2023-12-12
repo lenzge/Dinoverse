@@ -34,8 +34,8 @@ namespace Animal
         {
             if (CanReproduce(parent))
             {
-                trySoHard += 1;
-                if (Physics.OverlapSphereNonAlloc(parent.transform.position, parent.AnimalCreator.ReproductionRadius, colliderBuffer,
+                //trySoHard += 1;
+                if (Physics.OverlapSphereNonAlloc(parent.transform.position, 40, colliderBuffer,
                     1 << (int) species) >= 4) // min 2, because of self interaction
                 {
                     foreach (var collider in colliderBuffer)
@@ -45,19 +45,21 @@ namespace Animal
                             AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
                             if (mate.Uterus.CanReproduce(mate) && (mate.CurrentAction == Action.Reproduce || !parent.AnimalCreator.MutualReproduction)) //  -- to difficult!
                             {
+                                mate.EvaluateFitness();
+                                parent.EvaluateFitness();
+                                int litterSize = LitterSize(parent.Fitness, mate.Fitness);
+                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {parent.name} with Fitness {parent.Fitness}");
                                 mutualChildCount += 1;
-                                int litterSize = LitterSize(parent.Generation, parent.Age);
-                                litterSize = 3;
-                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {mate} and {parent}");
+                                bool prio = litterSize >= 5;
                                 for (int i = 0; i < litterSize; i++)
                                 {
                                     //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
                                     //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, mate);
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
-                                    animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
+                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
+                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, mate);
+                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
+                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
+                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
                                 }
                                 ReproductionEnergy = 0;
                                 trySoHard = 0;
@@ -75,7 +77,7 @@ namespace Animal
                     {
                         //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
                         //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
-                        animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
+                        animalCreator.CreateChildObject(false,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
                     }
                     ReproductionEnergy = 0;
                     trySoHard = 0;
@@ -87,34 +89,33 @@ namespace Animal
             return false;
         }
 
-        private int LitterSize(int generation, int age)
+        private int LitterSize(int parentFitness, int mateFitness)
         {
-            if (animalCreator.GetAnimalCount() >= 300)
+            int meanFitness = (parentFitness + mateFitness) / 2;
+
+            if (meanFitness <= 0)
             {
-                return 1;
+                return 2;
             }
-            if (animalCreator.GetAnimalCount() >= 200)
+            else if (meanFitness < animalCreator.FitnessToScore / 2)
             {
-                if (soloChildCount > 3) return 3;
-                else return soloChildCount;
+                return 3;
+            }
+            else if (meanFitness < animalCreator.FitnessToScore)
+            {
+                return 4;
+            }
+            else if (meanFitness == animalCreator.FitnessToScore)
+            {
+                return 5;
+            }
+            else if (meanFitness > animalCreator.FitnessToScore)
+            {
+                return 6;
             }
             else
             {
-                int litterSize = 0;
-                
-                if (animalCreator.pastTimeSteps < animalCreator.stopRespawn) litterSize += 3;
-                
-                if (soloChildCount > 5) litterSize += 5;
-                else litterSize += soloChildCount;
-                
-                if (generation > 5) litterSize += 5;
-                else litterSize += generation;
-                
-                if (age > 500) litterSize += 5;
-                else litterSize += age / 100;
-
-                if (litterSize > 10) return 10;
-                else return  litterSize;
+                return 1;
             }
         }
 

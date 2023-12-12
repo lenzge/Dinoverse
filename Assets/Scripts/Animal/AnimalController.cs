@@ -47,6 +47,8 @@ namespace Animal
         [Space]
         public Action CurrentAction;
         private bool isReproducing;
+        private bool isInDrownAni;
+        private Vector2 lastDirection;
 
         private Transform characterTransform;
         
@@ -66,6 +68,7 @@ namespace Animal
             EatenTrees = 0;
             Fitness = 0;
             IsDrown = false;
+            isInDrownAni = false;
             NewLevel = 0;
             drowningPunishment = 1;
             
@@ -89,11 +92,26 @@ namespace Animal
 
         public void Update()
         {
+            if (isInDrownAni) return;
             Legs.Move(this, characterTransform);
+        }
+        
+        public int EvaluateFitness()
+        {
+            int fitness = 0;
+            fitness += Age / 50; //25
+            fitness += EatenTrees * 1; //2
+            fitness += Uterus.GetChildCountSolo() * 3;
+            fitness += Uterus.GetChildCountMutual() * 3; // 6
+            //if (IsDrown) fitness -= 10;
+            //fitness += (int) Eyes.NavigationFitness;
+            Fitness = fitness;
+            return fitness;
         }
 
         protected override void TimedUpdate()
         {
+            if (isInDrownAni) return;
             if (isBot)
             {
                 Age = 50;
@@ -110,21 +128,25 @@ namespace Animal
             Age += 1;
             if (isReproducing) return;
 
+            //Debug.Log("last direction " + lastDirection);
             float[] inputs = PerceiveInputs();
             float[] output = Brain.Survive(inputs);
 
             CurrentAction = EvaluateAction(output);
             //Debug.Log($"[{name}] inputs: {ArrayToString(inputs)}, outputs: {ArrayToString(output)}, Action: {CurrentAction}");
+            //Debug.Log("new direction " + new Vector2(output[0], output[1]));
 
             switch (CurrentAction)
             {
                 case Action.Rest:
                     Legs.SetMoveDirection(Vector2.zero, 0);
+                    lastDirection = Vector2.zero;
                     Legs.Animator.SetInteger("Action", 3);
                     Hearts.SetActive(false);
                     break;
                 case Action.Eat:
                     Legs.SetMoveDirection(new Vector2(output[0], output[1]), output[2]);
+                    lastDirection = new Vector2(output[0], output[1]);
                     Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(false);
                     bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
@@ -133,6 +155,7 @@ namespace Animal
                     break;
                 case Action.Reproduce:
                     Legs.SetMoveDirection(new Vector2(output[0], output[1]), output[2]);
+                    lastDirection = new Vector2(output[0], output[1]);
                     Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(this, species);
@@ -141,6 +164,7 @@ namespace Animal
                     break;
                 default:
                     Legs.SetMoveDirection(Vector2.zero, 0);
+                    lastDirection = Vector2.zero;
                     Legs.Animator.SetInteger("Action", 3);
                     Hearts.SetActive(false);
                     break;
@@ -166,7 +190,7 @@ namespace Animal
 
         private float[] PerceiveInputs()
         {
-            float[] inputs = new float[DNA.NumRaycasts[0]*3 + 3];
+            float[] inputs = new float[DNA.NumRaycasts[0]*4 + 5];
             
             // DNA.NumRaycasts[0] (5) Food Raycasts and 3 Water Raycasts, DNA.NumRaycasts[0] (5) Friends Raycasts(already normed)
             float[] raycasts = Eyes.LookAround(characterTransform, food, species, CharacterController.radius);
@@ -176,13 +200,17 @@ namespace Animal
             }
 
             // Current calories relative to max calories
-            inputs[DNA.NumRaycasts[0]*3 + 0] = Stomach.HungerInput();
+            inputs[DNA.NumRaycasts[0]*4 + 0] = Stomach.HungerInput();
             
             // Current age relative to SexualMaturity
-            inputs[DNA.NumRaycasts[0]*3 + 1] = Uterus.SexualMaturityLevel(this);
+            inputs[DNA.NumRaycasts[0]*4 + 1] = Uterus.SexualMaturityLevel(this);
             
             // Current Reproduction Energy relative to the needed one
-            inputs[DNA.NumRaycasts[0]*3 + 2] = Uterus.ReproductionEnergyLevel(this);
+            inputs[DNA.NumRaycasts[0]*4 + 2] = Uterus.ReproductionEnergyLevel(this);
+            
+            // last movement direction
+            inputs[DNA.NumRaycasts[0] * 4 + 3] = lastDirection.x;
+            inputs[DNA.NumRaycasts[0] * 4 + 4] = lastDirection.y;
             
             // Nearest mates relative position, relative age and relative eaten Trees (to the best seen)
             /*float[] mates = Eyes.LookForMate(characterTransform, species);
@@ -214,11 +242,13 @@ namespace Animal
 
         private void KillIfDead()
         {
+            EvaluateFitness();
             int causeOfDeath = CauseOfDeath();
             if (causeOfDeath != (int) Enums.CauseOfDeath.other)
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
                 Debug.Log($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
+                                 $"Fitness {Fitness}, " +
                                  $"Reproduced {Uterus.GetChildCountSolo()} times solo, " +
                                  $"Reproduced {Uterus.GetChildCountMutual()} times mutual, " +
                                  $"Found {EatenTrees} Trees. " +
@@ -227,7 +257,8 @@ namespace Animal
                 Died.Invoke(this);
                 Plot.SaveData(Key, Population, Generation,Age, EatenTrees, 
                     Uterus.GetChildCountSolo(), Uterus.GetChildCountMutual(),timeOfDeath, causeOfDeath, Fitness, NewLevel);
-                StartCoroutine(DestroyAfterAni());
+                //StartCoroutine(DestroyAfterAni());
+                Destroy(gameObject);
             }
             
         }
@@ -236,6 +267,9 @@ namespace Animal
         {
             if (IsDrown)
             {
+                isInDrownAni = true;
+                CharacterController.enabled = false;
+                GetComponentInChildren<CapsuleCollider>().enabled = false;
                 float timeInterval = 4f / EnvironmentData.TimeSpeed;
                 yield return new WaitForSeconds(timeInterval);
             }
@@ -248,7 +282,7 @@ namespace Animal
             isReproducing = true;
             Legs.SetMoveDirection(Vector2.zero, 0);
             Legs.Animator.SetInteger("Action", 4);
-            float timeInterval = 4f / EnvironmentData.TimeSpeed;
+            float timeInterval = 6f / EnvironmentData.TimeSpeed;
             yield return new WaitForSeconds(timeInterval);
             isReproducing = false;
 
@@ -285,7 +319,7 @@ namespace Animal
             
         }
         
-        private string ArrayToString(float[] array)
+        public static string ArrayToString(float[] array)
         {
             // Convert the array elements to strings and join them with commas
             return "[" + string.Join(" , ", array) + "]";
