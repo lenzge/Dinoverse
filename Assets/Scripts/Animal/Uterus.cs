@@ -146,7 +146,7 @@ namespace Animal
         
         public float ReproductionEnergyLevel(AnimalController controller)
         {
-            return (float) ReproductionEnergy / NeededReproductionEnergy(controller.Generation);
+            return (float) ReproductionEnergy / animalCreator.ReproductionEnergy;
         }
 
         public bool IsInMenopause()
