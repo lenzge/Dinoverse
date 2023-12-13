@@ -1295,7 +1295,7 @@ MonoBehaviour:
   AnimalCreator: {fileID: 0}
   treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
   mapSize: 170
-  initialAmount: 180
+  initialAmount: 160
   offspringAmount: 5
   naturePrefabs:
   - {fileID: 8418140824823713206, guid: cf48c0d1483d5e041b24a20e034dc8e1, type: 3}

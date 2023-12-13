@@ -48,12 +48,12 @@ namespace DefaultNamespace
             pastTimeSteps = 0;
             
             bestFitness = 0;
-            FitnessToScore = 3;
+            FitnessToScore = 5;
             animalsScoredFitness = 0;
 
             MaxTrees = 160;
-            MinTrees = 100;
-            LakeCount = 8; //12
+            MinTrees = 80;
+            LakeCount = 0; //8; //12
             ReproductionEnergy = 1;
             ReproductionRadius = 170;
             SelfReproduction = true;
@@ -217,32 +217,32 @@ namespace DefaultNamespace
                     Debug.LogWarning($"[{Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f)}]50 Animals Scored " + FitnessToScore);
                     animalController.NewLevel = 1;
                     
-                    if (FitnessToScore < 15) FitnessToScore += 3;
+                    if (FitnessToScore < 15) FitnessToScore += 5;
                     else if (FitnessToScore == 15)
                     {
                         ReproductionEnergy = 2;
-                        FitnessToScore += 3;
+                        FitnessToScore += 5;
                     }
-                    else if (FitnessToScore == 18 || FitnessToScore == 21 || FitnessToScore == 24)
+                    else if (FitnessToScore == 20 || FitnessToScore == 26)
                     {
-                        if (MaxTrees > MinTrees) MaxTrees -= 10;
-                        if (LakeCount < 20) LakeCount += 1;
+                        if (MaxTrees > MinTrees) MaxTrees -= 20;
+                        //if (LakeCount < 20) LakeCount += 1;
                         ReproductionRadius -= 10;
                         FitnessToScore += 3;
                     }
-                    else if (FitnessToScore == 27)
+                    else if (FitnessToScore == 23 || FitnessToScore == 29)
                     {
-                        ReproductionEnergy = 3;
+                        ReproductionEnergy += 1;
                         FitnessToScore += 3;
                     }
-                    else if (FitnessToScore == 30 || FitnessToScore == 33)
+                    else if (FitnessToScore > 30)
                     {
-                        if (MaxTrees > MinTrees) MaxTrees -= 10;
-                        if (LakeCount < 20) LakeCount += 1;
+                        if (MaxTrees > MinTrees) MaxTrees -= 20;
+                        //if (LakeCount < 20) LakeCount += 1;
                         ReproductionRadius -= 10;
                         FitnessToScore += 3;
                     }
-                    else if (FitnessToScore == 36)
+                    /*else if (FitnessToScore == 33)
                     {
                         ReproductionEnergy = 4;
                         FitnessToScore += 3;
@@ -255,7 +255,7 @@ namespace DefaultNamespace
                         //if (fitnessToScore >= 40) SelfReproduction = false;
                         if (FitnessToScore >= 52) MutualReproduction = true;
                         FitnessToScore += 4;
-                    }
+                    }*/
                     animalsScoredFitness = 0;
                 }
 

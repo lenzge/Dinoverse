@@ -53,7 +53,7 @@ MonoBehaviour:
   SeedAmount: 1
   SeedInterval: 120
   NoMoreSeeds: 1
-  MaxAge: 1000
+  MaxAge: 600
   NurtureEatenEvent:
     m_PersistentCalls:
       m_Calls: []
