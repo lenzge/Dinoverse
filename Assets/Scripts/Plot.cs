@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 using UnityEngine;
 
 namespace DefaultNamespace

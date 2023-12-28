@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SmallerWorld.unity
+    guid: dd6e8d83b02543c4e90b11eb2314e5c2
   m_configObjects: {}

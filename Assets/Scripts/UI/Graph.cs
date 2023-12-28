@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace DefaultNamespace.UI
 {
@@ -59,7 +59,7 @@ namespace DefaultNamespace.UI
         {
             GameObject connectionObject = new GameObject("dotConnection", typeof(Image));
             connectionObject.transform.SetParent(graphContainer, false);
-            connectionObject.GetComponent<Image>().color = new Color(1, 1, 1, .5f);
+            connectionObject.GetComponent<Image>().tintColor = new Color(1, 1, 1, .5f);
             RectTransform rectTransform = connectionObject.GetComponent<RectTransform>();
             Vector2 direction = (dotPositionB - dotPositionA).normalized;
             float distance = Vector2.Distance(dotPositionA, dotPositionB);
