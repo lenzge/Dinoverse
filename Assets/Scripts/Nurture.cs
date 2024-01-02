@@ -33,7 +33,6 @@ namespace DefaultNamespace
             currentMass = Mass;
             seedCount = 0;
             age = 0;
-            environmentCreator = GameObject.Find("Environment").GetComponent<EnvironmentCreator>();
         }
 
         protected override void TimedUpdate()

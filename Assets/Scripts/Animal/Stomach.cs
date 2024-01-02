@@ -6,21 +6,19 @@ namespace Animal
 {
     public class Stomach : Organ
     {
-        public DNA DNA;
-        
         [SerializeField] private float maxCalories;
         [SerializeField] private float currentCalories;
         private Collider[] colliderBuffer = new Collider[1];
 
         public override void Init(bool isChild = false)
         {
-            maxCalories = DNA.Weight[0] * 30;
+            maxCalories = animalController.DNA.Weight[0] * 30;
             currentCalories = maxCalories / 2;
         }
         
         public void BurnCalories(Action action, float movementSpeed)
         {
-            currentCalories -= DNA.Weight[0]/15f * EvalPAL(action, movementSpeed);
+            currentCalories -= animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed);
         }
         
         public bool TryToEat(Transform animalTransform, float characterRadius, Layer foodType)
@@ -29,7 +27,7 @@ namespace Animal
                 1 << (int) foodType) >= 1)
             {
                 Nurture food = colliderBuffer[0].GetComponent<Nurture>();
-                float eatenCalories = food.Eaten(DNA.EatingSpeed[0]);
+                float eatenCalories = food.Eaten(animalController.DNA.EatingSpeed[0]);
                 currentCalories = AddCalories(eatenCalories);
                 //Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
                 return true;
@@ -73,11 +71,11 @@ namespace Animal
         {
             if (movementSpeed < 0)
             {
-                movementSpeed = DNA.MovementSpeed[1];
+                movementSpeed = animalController.DNA.MovementSpeed[1];
             }
             else
             {
-                movementSpeed = DNA.MovementSpeed[0];
+                movementSpeed = animalController.DNA.MovementSpeed[0];
             }
             
             switch (action)

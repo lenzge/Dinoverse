@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Animal
 {
-    public class GenomeParser : MonoBehaviour
+    [CreateAssetMenu(menuName = "Data/Genome Parser")]
+    public class GenomeParser : ScriptableObject
     {
         [Header("Save new Genome in")]
         public string FileName = "placeholder.json";

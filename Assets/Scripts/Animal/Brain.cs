@@ -4,8 +4,6 @@ namespace Animal
 {
     public class Brain : Organ
     {
-        public DNA DNA;
-        
         public int[] NetworkShape;
         public Layer[] Layers;
 
@@ -73,7 +71,7 @@ namespace Animal
             Random.InitState((int)System.DateTime.Now.Ticks);
             for(int i = 0; i < Layers.Length; i++)
             {
-                Layers[i].MutateLayer(DNA.MutationChance[0], DNA.MutationAmount[0]);
+                Layers[i].MutateLayer(animalController.DNA.MutationChance[0], animalController.DNA.MutationAmount[0]);
             }
         }
         
@@ -89,9 +87,9 @@ namespace Animal
 
         private int[] CreateNetworkShape()
         {
-            return new []{DNA.NumRaycasts[0]*4 +stdInputNeurons, DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
+            return new []{animalController.DNA.NumRaycasts[0]*4 +stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
             
-            switch (DNA.HiddenLayer[0])
+            /*switch (DNA.HiddenLayer[0])
             {
                 case 1:
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], outputNeurons};
@@ -115,7 +113,7 @@ namespace Animal
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], outputNeurons};
                 default:
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], outputNeurons};
-            }
+            }*/
         }
 
         public class Layer

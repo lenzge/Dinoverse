@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; width: 100%; height: 100%;">
+        <ui:VisualElement style="flex-grow: 1; align-self: center; justify-content: center; width: 80%; height: 80%; align-items: stretch; margin-top: 6%; margin-bottom: 5%; background-color: rgba(60, 55, 55, 0.55);">
+            <ui:GroupBox style="flex-direction: row; justify-content: space-around; align-self: auto;">
+                <ui:GroupBox name="Animals" style="width: 276px;">
+                    <ui:GroupBox name="Reproduction" style="height: 110px; width: 211px;">
+                        <ui:Label tabindex="-1" text="Reproduction" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
+                        <ui:RadioButton label="Sexual" name="Sexual" value="true" />
+                        <ui:RadioButton label="Asexual" name="Asexual" />
+                    </ui:GroupBox>
+                    <ui:GroupBox name="Other" style="width: 267px;">
+                        <ui:Toggle label="Predation" name="Predation" />
+                        <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Reproduction Energy" value="1" name="ReproductionEnergy" style="margin-right: 2px; width: 211px;" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+                <ui:GroupBox name="Environment" style="width: 276px; flex-direction: column;">
+                    <ui:GroupBox name="Other" style="width: 267px;">
+                        <ui:IntegerField label="Initial Trees" value="150" name="InitialTrees" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Max Trees" value="150" name="MaxTrees" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="MinTrees" value="1" name="MinTrees" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="LakeCount" value="1" name="LakeCount" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="MapSize" value="150" name="MapSize" style="margin-right: 2px; width: 211px;" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+            </ui:GroupBox>
+            <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Start" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; width: 79px; height: 24px; align-self: center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

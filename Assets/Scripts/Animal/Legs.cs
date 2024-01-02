@@ -4,14 +4,12 @@ namespace Animal
 {
     public class Legs : Organ
     {
-        public DNA DNA;
-        public CharacterController CharacterController;
         public Animator Animator;
 
         private Vector3 movementDirection = Vector3.zero;
         private int currentMovementSpeed;
 
-        public void Move(AnimalController animalController, Transform characterTransform)
+        public void Move(Transform characterTransform)
         {
             // Rotate in the right direction
             if (movementDirection != Vector3.zero)
@@ -23,7 +21,7 @@ namespace Animal
             }
             
             // Move 
-            CharacterController.SimpleMove(movementDirection.normalized * (currentMovementSpeed * animalController.EnvironmentData.TimeSpeed));
+            animalController.CharacterController.SimpleMove(movementDirection.normalized * (currentMovementSpeed * animalController.EnvironmentData.TimeSpeed));
             // TODO only check after a change
             Animator.speed = animalController.EnvironmentData.TimeSpeed * currentMovementSpeed / 10f;
         }
@@ -40,11 +38,11 @@ namespace Animal
             }
             if (speed < 0)
             {
-                currentMovementSpeed = DNA.MovementSpeed[1];
+                currentMovementSpeed = animalController.DNA.MovementSpeed[1];
             }
             else
             {
-                currentMovementSpeed = DNA.MovementSpeed[0];
+                currentMovementSpeed = animalController.DNA.MovementSpeed[0];
             }
             //currentMovementSpeed = (int) (DNA.MovementSpeed[0] * Mathf.Abs(speed));
         }

@@ -12,8 +12,8 @@ namespace Animal
 {
     public class AnimalController: TimeBasedBehaviour
     {
-        public bool isBot;
-        
+        public AnimalCreator AnimalCreator;
+
         [Header("Organs n stuff")]
         public CharacterController CharacterController;
         public Legs Legs;
@@ -34,7 +34,6 @@ namespace Animal
         [Space]
         [Header("Plot Infos")]
         public Plot Plot;
-        public AnimalCreator AnimalCreator;
         public int Age;
         public int Key;
         public int Population;
@@ -61,8 +60,7 @@ namespace Animal
             // TODO make Plot Static
             characterTransform = transform;
             Plot = GameObject.Find("Plot").GetComponent<Plot>();
-            AnimalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
-            
+
             // Reset Variables
             Age = 0;
             EatenTrees = 0;
@@ -93,7 +91,7 @@ namespace Animal
         public void Update()
         {
             if (isInDrownAni) return;
-            Legs.Move(this, characterTransform);
+            Legs.Move(characterTransform);
         }
         
         public int EvaluateFitness()
@@ -112,19 +110,7 @@ namespace Animal
         protected override void TimedUpdate()
         {
             if (isInDrownAni) return;
-            if (isBot)
-            {
-                Age = 50;
-                EatenTrees = 2;
-                Uterus.ReproductionEnergy = 2;
-                CurrentAction = Action.Reproduce;
-                Legs.SetMoveDirection(Vector2.zero, 0);
-                Legs.Animator.SetInteger("Action", 4);
-                Hearts.SetActive(true);
-                return;
-            }
-            
-            
+
             Age += 1;
             if (isReproducing) return;
 
@@ -158,7 +144,7 @@ namespace Animal
                     lastDirection = new Vector2(output[0], output[1]);
                     Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(true);
-                    bool reproduced = Uterus.TryToReproduce(this, species);
+                    bool reproduced = Uterus.TryToReproduce(species);
                     if (reproduced) StartCoroutine(ReproductionFreeze());
                     //if (reproduced) Age += 5000;
                     break;
@@ -203,10 +189,10 @@ namespace Animal
             inputs[DNA.NumRaycasts[0]*4 + 0] = Stomach.HungerInput();
             
             // Current age relative to SexualMaturity
-            inputs[DNA.NumRaycasts[0]*4 + 1] = Uterus.SexualMaturityLevel(this);
+            inputs[DNA.NumRaycasts[0]*4 + 1] = Uterus.SexualMaturityLevel();
             
             // Current Reproduction Energy relative to the needed one
-            inputs[DNA.NumRaycasts[0]*4 + 2] = Uterus.ReproductionEnergyLevel(this);
+            inputs[DNA.NumRaycasts[0]*4 + 2] = Uterus.ReproductionEnergyLevel();
             
             // last movement direction
             inputs[DNA.NumRaycasts[0] * 4 + 3] = lastDirection.x;

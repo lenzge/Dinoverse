@@ -9,80 +9,63 @@ namespace Animal
 {
     public class Uterus : Organ
     {
-        public DNA DNA;
-        private AnimalCreator animalCreator;
-
-        private int soloChildCount;
-        private int mutualChildCount;
-        private int trySoHard;
-        private Collider[] colliderBuffer;
         public int ReproductionEnergy;
+        
+        // Plot Data
+        public int SoloChildCount { get; private set; }
+        public int MutualChildCount {get; private set; }
+        
+        private Collider[] colliderBuffer;
 
         public override void Init(bool isChild = false)
         {
-            // TODO make animal creator static
-            soloChildCount = 0;
-            mutualChildCount = 0;
+            SoloChildCount = 0;
+            MutualChildCount = 0;
             ReproductionEnergy = 0;
-            trySoHard = 0;
             colliderBuffer = new Collider[4];
-            animalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
         }
 
-        public bool TryToReproduce(AnimalController parent, Layer species)
+        public bool TryToReproduce(Layer species)
         {
-            if (CanReproduce(parent))
+            if (!CanReproduce()) return false;
+            
+            if (EnvironmentData.SexualReproduction && Physics.OverlapSphereNonAlloc(animalController.transform.position, 40, colliderBuffer,
+                1 << (int) species) >= 4) // min 2, because of self interaction
             {
-                //trySoHard += 1;
-                if (Physics.OverlapSphereNonAlloc(parent.transform.position, 40, colliderBuffer,
-                    1 << (int) species) >= 4) // min 2, because of self interaction
+                foreach (var collider in colliderBuffer)
                 {
-                    foreach (var collider in colliderBuffer)
+                    if (collider.gameObject != animalController.gameObject && !collider.isTrigger)
                     {
-                        if (collider.gameObject != parent.gameObject && !collider.isTrigger)
+                        AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
+                        if (mate.Uterus.CanReproduce() && mate.CurrentAction == Action.Reproduce) //  -- to difficult!
                         {
-                            AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
-                            if (mate.Uterus.CanReproduce(mate) && (mate.CurrentAction == Action.Reproduce || !parent.AnimalCreator.MutualReproduction)) //  -- to difficult!
+                            mate.EvaluateFitness();
+                            animalController.EvaluateFitness();
+                            int litterSize = LitterSize(animalController.Fitness, mate.Fitness);
+                            Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
+                            MutualChildCount += 1;
+                            bool prio = false;
+                            for (int i = 0; i < litterSize; i++)
                             {
-                                mate.EvaluateFitness();
-                                parent.EvaluateFitness();
-                                int litterSize = LitterSize(parent.Fitness, mate.Fitness);
-                                Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {parent.name} with Fitness {parent.Fitness}");
-                                mutualChildCount += 1;
-                                bool prio = litterSize >= 5;
-                                for (int i = 0; i < litterSize; i++)
-                                {
-                                    //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                                    //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
-                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
-                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, mate);
-                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
-                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
-                                    animalCreator.CreateChildObject(prio,parent.Key, parent.Generation + 1, GenomeType.Crossover,SpawnType.Random, parent, mate);
-                                }
-                                ReproductionEnergy = 0;
-                                trySoHard = 0;
-                                return true;
+                                animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,SpawnType.Random, animalController, mate);
                             }
+                            ReproductionEnergy = 0;
+                            return true;
                         }
                     }
                 }
-                if (trySoHard >= 50 && parent.AnimalCreator.SelfReproduction)
+            }
+            else if (!EnvironmentData.SexualReproduction)
+            {
+                SoloChildCount += 1; 
+                int litterSize = 10;
+                Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Alone");
+                for (int i = 0; i < litterSize; i++)
                 {
-                    soloChildCount += 1; 
-                    int litterSize = 10;
-                    Debug.LogWarning($"[{parent.name}] Reproduced {litterSize} times. ALONE");
-                    for (int i = 0; i < litterSize; i++)
-                    {
-                        //create a new agent, and set its position to the parent's position + a random offset in the x and z directions (so they don't all spawn on top of each other)
-                        //animalCreator.CreateChildObject(parent.Key, parent.Generation + 1, SpawnType.Random, parent);
-                        animalCreator.CreateChildObject(false,parent.Key, parent.Generation + 1, GenomeType.Parent,SpawnType.Random, parent);
-                    }
-                    ReproductionEnergy = 0;
-                    trySoHard = 0;
-                    return true;
+                    animalController.AnimalCreator.CreateChildObject(false,animalController.Key, animalController.Generation + 1, GenomeType.Parent,SpawnType.Random, animalController);
                 }
-
+                ReproductionEnergy = 0;
+                return true;
             }
 
             return false;
@@ -96,19 +79,19 @@ namespace Animal
             {
                 return 2;
             }
-            else if (meanFitness < animalCreator.FitnessToScore / 2)
+            else if (meanFitness < animalController.AnimalCreator.FitnessToScore / 2)
             {
                 return 3;
             }
-            else if (meanFitness < animalCreator.FitnessToScore)
+            else if (meanFitness < animalController.AnimalCreator.FitnessToScore)
             {
                 return 4;
             }
-            else if (meanFitness == animalCreator.FitnessToScore)
+            else if (meanFitness == animalController.AnimalCreator.FitnessToScore)
             {
                 return 5;
             }
-            else if (meanFitness > animalCreator.FitnessToScore)
+            else if (meanFitness > animalController.AnimalCreator.FitnessToScore)
             {
                 return 6;
             }
@@ -138,19 +121,19 @@ namespace Animal
             }
         }
 
-        public float SexualMaturityLevel(AnimalController controller)
+        public float SexualMaturityLevel()
         {
-            return (float) controller.Age / DNA.SexualMaturity[0];
+            return (float) animalController.Age / animalController.DNA.SexualMaturity[0];
         }
         
-        public float ReproductionEnergyLevel(AnimalController controller)
+        public float ReproductionEnergyLevel()
         {
-            return (float) ReproductionEnergy / animalCreator.ReproductionEnergy;
+            return (float) ReproductionEnergy / animalController.EnvironmentData.ReproductionEnergy;
         }
 
         public bool IsInMenopause()
         {
-            if (soloChildCount == DNA.Menopause[0])
+            if (SoloChildCount == animalController.DNA.Menopause[0])
             {
                 return true;
             }
@@ -160,18 +143,18 @@ namespace Animal
 
         public int GetChildCountSolo()
         {
-            return soloChildCount;
+            return SoloChildCount;
         }
         public int GetChildCountMutual()
         {
-            return mutualChildCount;
+            return MutualChildCount;
         }
 
-        public bool CanReproduce(AnimalController animal)
+        public bool CanReproduce()
         {
-            if (animal.Age >= DNA.SexualMaturity[0]
-                && soloChildCount <= DNA.Menopause[0]
-                && ReproductionEnergy >= animal.AnimalCreator.ReproductionEnergy)
+            if (animalController.Age >= animalController.DNA.SexualMaturity[0]
+                && SoloChildCount <= animalController.DNA.Menopause[0]
+                && ReproductionEnergy >= animalController.EnvironmentData.ReproductionEnergy)
             {
                 return true;
             }

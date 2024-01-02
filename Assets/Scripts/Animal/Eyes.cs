@@ -9,8 +9,6 @@ namespace Animal
     
     public class Eyes : Organ
     {
-        public DNA DNA;
-
         public float NavigationFitness;
         private float[] distances;
         //private Collider[] animalBuffer;
@@ -23,7 +21,7 @@ namespace Animal
 
         public override void Init(bool isChild = false)
         {
-            distances = new float[DNA.NumRaycasts[0] * 4];
+            distances = new float[animalController.DNA.NumRaycasts[0] * 4];
             //animalBuffer = new Collider[3];
             //nearestAnimals = new AnimalController[3];
             //mateInfos = new float[mateAmount * 4];
@@ -36,19 +34,19 @@ namespace Animal
         {
             // Look for Food
             RaycastHit hit;
-            for (int i = 0; i < DNA.NumRaycasts[0]; i++)
+            for (int i = 0; i < animalController.DNA.NumRaycasts[0]; i++)
             {
-                float angle = ((2 * i + 1 - DNA.NumRaycasts[0]) * (float) DNA.AngleBetweenRaycasts[0] / 2);
+                float angle = ((2 * i + 1 - animalController.DNA.NumRaycasts[0]) * (float) animalController.DNA.AngleBetweenRaycasts[0] / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Vector3 rayDirection = rotation * characterTransform.forward;
                 // Increase the starting point of the raycast by 0.1 units
                 Vector3 rayStart = characterTransform.position + Vector3.up * 0.1f;
-                if (Physics.Raycast(rayStart, rayDirection, out hit, DNA.VisualRadius[0], 1 << (int) food))
+                if (Physics.Raycast(rayStart, rayDirection, out hit, animalController.DNA.VisualRadius[0], 1 << (int) food))
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.red);
-                    distances[i] = hit.distance / DNA.VisualRadius[0];
+                    distances[i] = hit.distance / animalController.DNA.VisualRadius[0];
                 }
                 else
                 {
@@ -63,17 +61,17 @@ namespace Animal
             int WaterRaycasts = 5;
             for (int i = 0; i < WaterRaycasts; i++)
             {
-                float angle = ((2 * i + 1 - WaterRaycasts) * (float) DNA.AngleBetweenRaycasts[0] / 2);
+                float angle = ((2 * i + 1 - WaterRaycasts) * (float) animalController.DNA.AngleBetweenRaycasts[0] / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Vector3 rayDirection = rotation * characterTransform.forward;
                 // Increase the starting point of the raycast by 0.1 units
                 Vector3 rayStart = characterTransform.position + Vector3.up * 0.1f;
-                if (Physics.Raycast(rayStart, rayDirection, out hit, DNA.VisualRadius[0], 1 << (int) Layer.Water))
+                if (Physics.Raycast(rayStart, rayDirection, out hit, animalController.DNA.VisualRadius[0], 1 << (int) Layer.Water))
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue);
-                    distances[WaterRaycasts + i] = hit.distance / DNA.VisualRadius[0];
+                    distances[WaterRaycasts + i] = hit.distance / animalController.DNA.VisualRadius[0];
                 }
                 else
                 {
@@ -96,32 +94,32 @@ namespace Animal
             }
 
             // Look for Friends
-            for (int i = 0; i < DNA.NumRaycasts[0]*2; i++)
+            for (int i = 0; i < animalController.DNA.NumRaycasts[0]*2; i++)
             {
-                float angle = ((2 * i + 1 - DNA.NumRaycasts[0]) * (float) DNA.AngleBetweenRaycasts[0] / 2);
+                float angle = ((2 * i + 1 - animalController.DNA.NumRaycasts[0]) * (float) animalController.DNA.AngleBetweenRaycasts[0] / 2);
                 // Rotate the direction of the raycast by the specified angle around the y-axis of the agent
                 Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Vector3 rayDirection = rotation * characterTransform.forward;
                 // Increase the starting point of the raycast by 0.1 units
                 Vector3 rayStart = characterTransform.position + Vector3.up * 0.1f;
-                if (Physics.Raycast(rayStart, rayDirection, out hit, DNA.VisualRadius[0], 1 << (int) species) &&
-                    hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce(hit.collider.GetComponentInParent<AnimalController>()))
+                if (Physics.Raycast(rayStart, rayDirection, out hit, animalController.DNA.VisualRadius[0], 1 << (int) species) &&
+                    hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce())
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue,1);
-                    distances[DNA.NumRaycasts[0] + WaterRaycasts + i] = hit.distance / DNA.VisualRadius[0];
+                    distances[animalController.DNA.NumRaycasts[0] + WaterRaycasts + i] = hit.distance / animalController.DNA.VisualRadius[0];
                     hit.collider.GetComponentInParent<AnimalController>().EvaluateFitness();
                     if (hit.collider.GetComponentInParent<AnimalController>().Fitness > bestFitnessSeen)
                         bestFitnessSeen = hit.collider.GetComponentInParent<AnimalController>().Fitness;
-                    distances[DNA.NumRaycasts[0] + WaterRaycasts + ++i] = Mathf.Clamp(((float) hit.collider.GetComponentInParent<AnimalController>().Fitness / bestFitnessSeen), 0,1);
+                    distances[animalController.DNA.NumRaycasts[0] + WaterRaycasts + ++i] = Mathf.Clamp(((float) hit.collider.GetComponentInParent<AnimalController>().Fitness / bestFitnessSeen), 0,1);
                 }
                 else
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * DNA.VisualRadius[0], Color.yellow,1);
                     // If no food object is detected, set the distance to the maximum length of the raycast
-                    distances[DNA.NumRaycasts[0] + WaterRaycasts + i] = 1;
-                    distances[DNA.NumRaycasts[0] + WaterRaycasts + ++i] = 0;
+                    distances[animalController.DNA.NumRaycasts[0] + WaterRaycasts + i] = 1;
+                    distances[animalController.DNA.NumRaycasts[0] + WaterRaycasts + ++i] = 0;
                 }
             }
             
@@ -150,7 +148,7 @@ namespace Animal
                         {
                             if (animalBuffer[j].gameObject != gameObject &&
                                 nearestAnimalIter < mateAmount &&
-                                animalBuffer[j].gameObject.GetComponent<AnimalController>().Uterus.CanReproduce(animalBuffer[j].gameObject.GetComponent<AnimalController>()))
+                                animalBuffer[j].gameObject.GetComponent<AnimalController>().Uterus.CanReproduce())
                             {
                                 //Debug.LogWarning($"[{characterTransform.gameObject}] Found Partner {animalBuffer[j].gameObject} in {i} iterations");
                                 nearestAnimals[nearestAnimalIter++] = animalBuffer[j].gameObject.GetComponent<AnimalController>();

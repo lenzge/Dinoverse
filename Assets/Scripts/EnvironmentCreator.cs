@@ -2,41 +2,39 @@
 using System.Collections.Generic;
 using Enums;
 using UnityEngine;
-using Util;
 using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
 {
-    public class EnvironmentCreator : TimeBasedBehaviour
+    [CreateAssetMenu(menuName = "Data/EnvironmentCreator")]
+    public class EnvironmentCreator : ScriptableObject
     {
-        public AnimalCreator AnimalCreator;
+        [Header("References")]
+        [SerializeField] private EnvironmentData environmentData;
         
+        [Header("Nurture")]
         [SerializeField] private GameObject treePrefab;
-        [SerializeField] private int mapSize;
-        [SerializeField] private int initialAmount;
-        [SerializeField] private int offspringAmount;
 
+        [Header("Nature")]
         [SerializeField] private List<GameObject> naturePrefabs;
         [SerializeField] private int natureAmount;
         [SerializeField] private List<GameObject> grassPrefabs;
         [SerializeField] private int grassAmount;
         [SerializeField] private GameObject lakePrefab;
-        [SerializeField] private int lakeAmount;
 
-        private int treeCount;
+        private int currentTreeCount;
         private Collider[] colliderBuffer = new Collider[1];
 
-        protected override void TimedStart()
+        public void StartGame()
         {
-            AnimalCreator = GameObject.Find("AnimalCreator").GetComponent<AnimalCreator>();
-            lakeAmount = AnimalCreator.LakeCount;
+            currentTreeCount = 0;
             
-            for (int i = 0; i < AnimalCreator.LakeCount; i++)
+            for (int i = 0; i < environmentData.LakeCount; i++)
             {
                 SpawnNature(lakePrefab);
             }
             
-            for (int i = 0; i < initialAmount; i++)
+            for (int i = 0; i < environmentData.InitialTreeAmount; i++)
             {
                 SpawnNurture(treePrefab);
             }
@@ -58,7 +56,7 @@ namespace DefaultNamespace
             }
         }
 
-        protected override void TimedSlowUpdate()
+        /*protected override void TimedSlowUpdate()
         {
             if (AnimalCreator.LakeCount > lakeAmount)
             {
@@ -69,15 +67,15 @@ namespace DefaultNamespace
             {
                 //SpawnNurture(treePrefab);
             }
-        }
+        }*/
 
         private void SpawnNurture(GameObject prefab)
         {
             while (true)
             {
                 var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
-                Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 5.6f,
-                    Random.Range(-5 * mapSize, 5 * mapSize));
+                Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 5.6f,
+                    Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize));
                 GameObject nurture = Instantiate(prefab, randomPosition, randomRotation);
                 if (Physics.OverlapSphereNonAlloc(nurture.transform.position, 2, colliderBuffer,
                     1 << (int) Layer.Water) >= 1)
@@ -86,7 +84,7 @@ namespace DefaultNamespace
                 }
                 else
                 {
-                    treeCount += 1;
+                    currentTreeCount += 1;
                     nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
                     break;
                 }
@@ -97,8 +95,8 @@ namespace DefaultNamespace
         {
             while (true)
             {
-                Vector3 randomPosition = new Vector3(Random.Range(-5 * mapSize, 5 * mapSize), 1.06f,
-                    Random.Range(-5 * mapSize, 5 * mapSize));
+                Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 1.06f,
+                    Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize));
                 var randomRotation = Quaternion.Euler( -90,Random.Range(0, 360) , 0);
                 GameObject nature = Instantiate(prefab, randomPosition, randomRotation);
                 if (Physics.OverlapSphereNonAlloc(nature.transform.position, 2, colliderBuffer,
@@ -113,7 +111,7 @@ namespace DefaultNamespace
             }
         }
         
-        public void SpawnNurtureSeed(GameObject prefab, Vector3 position, int randomOffset)
+        /*public void SpawnNurtureSeed(GameObject prefab, Vector3 position, int randomOffset)
         {
             while (true)
             {
@@ -134,13 +132,13 @@ namespace DefaultNamespace
                     break;
                 }
             }
-        }
+        }*/
         
         private void SpawnNewNurture(Nurture oldNurture, GameObject prefab)
         {
-            treeCount -= 1;
+            currentTreeCount -= 1;
             oldNurture.NurtureEatenEvent.RemoveListener(SpawnNewNurture);
-            if (treeCount < AnimalCreator.MaxTrees)
+            if (currentTreeCount < environmentData.MaxTrees)
             {
                 SpawnNurture(prefab);
             }

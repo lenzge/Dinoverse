@@ -13,4 +13,17 @@ MonoBehaviour:
   m_Name: Environment Data
   m_EditorClassIdentifier: 
   MaxTimeSpeed: 40
-  TimeSpeed: 10
+  TimeSpeed: 27
+  SexualReproduction: 0
+  AllowPredation: 0
+  InitialAnimalAmount: 100
+  MaxAnimalAmount: 150
+  ReproductionEnergy: 1
+  InitialTreeAmount: 150
+  MaxTrees: 150
+  MinTrees: 0
+  LakeCount: 2
+  MapSize: 150
+  TimeSpeedChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []

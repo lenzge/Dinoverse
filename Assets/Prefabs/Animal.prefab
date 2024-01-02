@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  isBot: 0
+  AnimalCreator: {fileID: 11400000, guid: 21fcf64e610ca044282c471b8a42349e, type: 2}
   CharacterController: {fileID: 4408169497568838984}
   Legs: {fileID: 7449578703545013821}
   Stomach: {fileID: 2830572847685276631}
@@ -149,7 +149,6 @@ MonoBehaviour:
   enemySpecies: 9
   food: 6
   Plot: {fileID: 0}
-  AnimalCreator: {fileID: 0}
   Age: 0
   Key: 0
   Population: 0
@@ -176,8 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  DNA: {fileID: 9123797498400399532}
-  CharacterController: {fileID: 4408169497568838984}
+  animalController: {fileID: 7300952516653624235}
   Animator: {fileID: 8911642007023974860}
 --- !u!114 &2830572847685276631
 MonoBehaviour:
@@ -192,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  DNA: {fileID: 9123797498400399532}
+  animalController: {fileID: 7300952516653624235}
   maxCalories: 0
   currentCalories: 0
 --- !u!114 &7978424919749795081
@@ -208,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  DNA: {fileID: 9123797498400399532}
+  animalController: {fileID: 7300952516653624235}
   NavigationFitness: 0
 --- !u!114 &7322130286193827268
 MonoBehaviour:
@@ -223,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  DNA: {fileID: 9123797498400399532}
+  animalController: {fileID: 7300952516653624235}
   ReproductionEnergy: 0
 --- !u!114 &-5797262476799351126
 MonoBehaviour:
@@ -238,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  DNA: {fileID: 9123797498400399532}
+  animalController: {fileID: 7300952516653624235}
   NetworkShape: 
 --- !u!114 &9123797498400399532
 MonoBehaviour:
