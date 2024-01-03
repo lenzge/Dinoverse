@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Numerics;
 using DefaultNamespace;
 using Enums;
 using UnityEngine;
 using UnityEngine.Events;
 using Util;
 using Action = Enums.Action;
+using Vector2 = UnityEngine.Vector2;
 
 namespace Animal
 {
@@ -107,6 +109,31 @@ namespace Animal
             return fitness;
         }
 
+        private Vector2 SetMovementDirection(float x, float y)
+        {
+            if (Mathf.Abs(x) < 0.01 && Mathf.Abs(y) < 0.01)
+            {
+                return Vector2.zero;
+            }
+            else return new Vector2(x, y);
+        }
+
+        private int SetMovementSpeed(float speedValue, Vector2 direction)
+        {
+            if (speedValue < 0.01 || direction == Vector2.zero)
+            {
+                return 0;
+            }
+            else if (speedValue < 0.5)
+            {
+                return DNA.MovementSpeed[1];
+            }
+            else
+            {
+                return DNA.MovementSpeed[0];
+            }
+        }
+
         protected override void TimedUpdate()
         {
             if (isInDrownAni) return;
@@ -120,43 +147,38 @@ namespace Animal
 
             CurrentAction = EvaluateAction(output);
             //Debug.Log($"[{name}] inputs: {ArrayToString(inputs)}, outputs: {ArrayToString(output)}, Action: {CurrentAction}");
-            //Debug.Log("new direction " + new Vector2(output[0], output[1]));
+
+            Vector2 movementDirection = SetMovementDirection(output[0], output[1]);
+            int movementSpeed = SetMovementSpeed(output[2], movementDirection);
+            Legs.SetMoveDirection(movementDirection, movementSpeed);
+            lastDirection = movementDirection;
+
+            //Debug.Log($"[{name}] Direction {new Vector2(output[0], output[1])}, speed: {output[2]} \n" +
+                      //$"corrected: {movementDirection}, {movementSpeed}, {Legs.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")}");
 
             switch (CurrentAction)
             {
-                case Action.Rest:
-                    Legs.SetMoveDirection(Vector2.zero, 0);
-                    lastDirection = Vector2.zero;
-                    Legs.Animator.SetInteger("Action", 3);
+                case Action.Chill:
                     Hearts.SetActive(false);
                     break;
                 case Action.Eat:
-                    Legs.SetMoveDirection(new Vector2(output[0], output[1]), output[2]);
-                    lastDirection = new Vector2(output[0], output[1]);
-                    Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(false);
                     bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
                     break;
                 case Action.Reproduce:
-                    Legs.SetMoveDirection(new Vector2(output[0], output[1]), output[2]);
-                    lastDirection = new Vector2(output[0], output[1]);
-                    Legs.Animator.SetInteger("Action", 2);
                     Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(species);
                     if (reproduced) StartCoroutine(ReproductionFreeze());
                     //if (reproduced) Age += 5000;
                     break;
                 default:
-                    Legs.SetMoveDirection(Vector2.zero, 0);
-                    lastDirection = Vector2.zero;
-                    Legs.Animator.SetInteger("Action", 3);
                     Hearts.SetActive(false);
                     break;
             }
             
-            Stomach.BurnCalories(CurrentAction, output[2]);
+            Stomach.BurnCalories(CurrentAction, movementSpeed);
             KillIfDead();
         }
 
@@ -217,11 +239,14 @@ namespace Animal
                 case 0:
                     return Action.Eat;
                 case 1:
-                    return Action.Rest;
+                    return Action.Chill;
                 case 2:
-                    return Action.Reproduce;
+                    if (Uterus.CanReproduce())
+                        return Action.Reproduce;
+                    else
+                        return Action.Chill;
                 default:
-                    return Action.Rest;
+                    return Action.Chill;
             }
         }
         
@@ -267,8 +292,8 @@ namespace Animal
         {
             isReproducing = true;
             Legs.SetMoveDirection(Vector2.zero, 0);
-            Legs.Animator.SetInteger("Action", 4);
-            float timeInterval = 6f / EnvironmentData.TimeSpeed;
+            //Legs.Animator.SetInteger("Action", 4);
+            float timeInterval = 15f / EnvironmentData.TimeSpeed;
             yield return new WaitForSeconds(timeInterval);
             isReproducing = false;
 

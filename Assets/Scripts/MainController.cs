@@ -14,8 +14,6 @@ namespace DefaultNamespace
         public void StartGame()
         {
             pastTimeSteps = 0;
-            int mapSize = EnvironmentData.MapSize / 20;
-            environment.transform.localScale = new Vector3(mapSize, mapSize, 6.8f);
             animalCreator.StartGame();
             environmentCreator.StartGame();
         }

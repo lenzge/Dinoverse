@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 8063632373946108869}
   - component: {fileID: 7372208261912657008}
   - component: {fileID: 1441621051892326419}
-  - component: {fileID: 8526836478871107935}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -302,23 +301,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &8526836478871107935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4709730257011361263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62a2bb7085c845d9814a4c8299ee252b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
-  treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
-  mapSize: 10
-  initialAmount: 1
-  offspringAmount: 3
 --- !u!1 &5352382272361601011
 GameObject:
   m_ObjectHideFlags: 0

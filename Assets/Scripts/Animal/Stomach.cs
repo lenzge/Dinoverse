@@ -6,6 +6,7 @@ namespace Animal
 {
     public class Stomach : Organ
     {
+        
         [SerializeField] private float maxCalories;
         [SerializeField] private float currentCalories;
         private Collider[] colliderBuffer = new Collider[1];
@@ -69,23 +70,14 @@ namespace Animal
 
         private float EvalPAL(Action action, float movementSpeed)
         {
-            if (movementSpeed < 0)
-            {
-                movementSpeed = animalController.DNA.MovementSpeed[1];
-            }
-            else
-            {
-                movementSpeed = animalController.DNA.MovementSpeed[0];
-            }
-            
             switch (action)
             {
-                case Action.Rest:
-                    return 2;
+                case Action.Chill:
+                    return 1 + movementSpeed * 0.02f;
                 case Action.Eat:
-                    return 1 + movementSpeed * 0.1f;
+                    return 1 + 0.2f + movementSpeed * 0.02f;
                 case Action.Reproduce:
-                    return 1 + 0.75f;
+                    return 1 + 0.3f + movementSpeed * 0.02f;
                 default:
                     return 1;
             }

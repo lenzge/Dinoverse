@@ -9,6 +9,11 @@ namespace Animal
         private Vector3 movementDirection = Vector3.zero;
         private int currentMovementSpeed;
 
+        public override void Init(bool isChild = false)
+        {
+            EnvironmentData.TimeSpeedChangedEvent.AddListener(OnTimeScaleChanged);
+        }
+
         public void Move(Transform characterTransform)
         {
             // Rotate in the right direction
@@ -16,19 +21,31 @@ namespace Animal
             {
                 Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
                 characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation, toRotation, 700 * Time.deltaTime);
-                
-                
             }
             
             // Move 
             animalController.CharacterController.SimpleMove(movementDirection.normalized * (currentMovementSpeed * animalController.EnvironmentData.TimeSpeed));
-            // TODO only check after a change
-            Animator.speed = animalController.EnvironmentData.TimeSpeed * currentMovementSpeed / 10f;
         }
 
-        public void SetMoveDirection(Vector2 moveDirection, float speed)
+        private void OnTimeScaleChanged(int speed)
         {
-            if (moveDirection == Vector2.zero)
+            switch (speed)
+            {
+                case <= 5:
+                    Animator.speed = speed / 3f ;
+                    break;
+                case <= 20:
+                    Animator.speed = speed / 5f ;
+                    break;
+                default:
+                    Animator.speed = speed / 9f ;
+                    break;
+            }
+        }
+
+        public void SetMoveDirection(Vector2 moveDirection, int speed)
+        {
+            if (moveDirection == Vector2.zero || speed == 0)
             {
                 movementDirection = Vector3.zero;
             }
@@ -36,15 +53,8 @@ namespace Animal
             {
                 movementDirection = new Vector3(moveDirection.normalized.x, 0, moveDirection.normalized.y);
             }
-            if (speed < 0)
-            {
-                currentMovementSpeed = animalController.DNA.MovementSpeed[1];
-            }
-            else
-            {
-                currentMovementSpeed = animalController.DNA.MovementSpeed[0];
-            }
-            //currentMovementSpeed = (int) (DNA.MovementSpeed[0] * Mathf.Abs(speed));
+            currentMovementSpeed = speed;
+            Animator.SetInteger("MovementSpeed", currentMovementSpeed);
         }
     }
 }

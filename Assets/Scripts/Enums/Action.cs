@@ -4,7 +4,7 @@
     {
         Walk = 1,
         Eat = 2,
-        Rest = 3,
+        Chill = 3,
         Reproduce = 4,
     }
 }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a2bb7085c845d9814a4c8299ee252b, type: 3}
+  m_Name: Environment Creator Small
+  m_EditorClassIdentifier: 
+  environmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  treePrefab: {fileID: 1141243578218203949, guid: 0870d2d720887794c85f2b010115f480, type: 3}
+  naturePrefabs:
+  - {fileID: 8418140824823713206, guid: cf48c0d1483d5e041b24a20e034dc8e1, type: 3}
+  - {fileID: 2304620870787016613, guid: 3d80d6fd93940404b802bd60ebea1ac7, type: 3}
+  natureAmount: 2
+  grassPrefabs:
+  - {fileID: 6282618204053580033, guid: 2158d76f4062fe441b61d17a6c34b67d, type: 3}
+  - {fileID: 2609836572451821920, guid: 6d7a8f827be0ec34eb8cf73780b85a1d, type: 3}
+  - {fileID: 2247226870530488208, guid: 362b677245cc78643a8e9ebc48462671, type: 3}
+  grassAmount: 10
+  lakePrefab: {fileID: 794029667189866463, guid: fa4ef4d16094ffc4c8d4ae749d9a3a6e, type: 3}
