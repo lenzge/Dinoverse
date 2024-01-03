@@ -52,13 +52,18 @@ namespace Animal
         {
             return currentCalories / maxCalories;
         }
+
+        public float GetCurrentCalories()
+        {
+            return currentCalories;
+        }
         
         /// <summary>
         /// Add calories in limit of the maxCalories
         /// </summary>
         /// <param name="eatenCalories"></param>
         /// <returns></returns>
-        private float AddCalories(float eatenCalories)
+        public float AddCalories(float eatenCalories)
         {
             float newCalories = currentCalories + eatenCalories;
             if (newCalories <= maxCalories)
@@ -78,6 +83,8 @@ namespace Animal
                     return 1 + 0.2f + movementSpeed * 0.02f;
                 case Action.Reproduce:
                     return 1 + 0.3f + movementSpeed * 0.02f;
+                case Action.Fight:
+                    return 1 + 0.8f + movementSpeed * 0.02f;
                 default:
                     return 1;
             }

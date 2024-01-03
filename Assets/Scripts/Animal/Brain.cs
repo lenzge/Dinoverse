@@ -8,7 +8,7 @@ namespace Animal
         public Layer[] Layers;
 
         private int stdInputNeurons = 5;
-        private int outputNeurons = 6;
+        private int outputNeurons = 7;
         
         public override void Init(bool isChild)
         {

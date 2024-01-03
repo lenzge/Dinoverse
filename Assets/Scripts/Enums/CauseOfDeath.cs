@@ -5,6 +5,7 @@
         starved = 1,
         drown = 2,
         decrepitude = 3,
-        other = 4,
+        killed = 4,
+        other = 5,
     }
 }

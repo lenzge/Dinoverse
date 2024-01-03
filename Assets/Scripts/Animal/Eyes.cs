@@ -102,8 +102,8 @@ namespace Animal
                 Vector3 rayDirection = rotation * characterTransform.forward;
                 // Increase the starting point of the raycast by 0.1 units
                 Vector3 rayStart = characterTransform.position + Vector3.up * 0.1f;
-                if (Physics.Raycast(rayStart, rayDirection, out hit, animalController.DNA.VisualRadius[0], 1 << (int) species) &&
-                    hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce())
+                if (Physics.Raycast(rayStart, rayDirection, out hit, animalController.DNA.VisualRadius[0], 1 << (int) species)) 
+                    //&& hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce())
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue,1);

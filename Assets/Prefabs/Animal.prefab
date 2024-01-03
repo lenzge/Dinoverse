@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 7978424919749795081}
   - component: {fileID: 7322130286193827268}
   - component: {fileID: -5797262476799351126}
+  - component: {fileID: 1762320046558842001}
   - component: {fileID: 9123797498400399532}
   m_Layer: 7
   m_Name: Animal
@@ -142,6 +143,7 @@ MonoBehaviour:
   Uterus: {fileID: 7322130286193827268}
   Brain: {fileID: -5797262476799351126}
   Eyes: {fileID: 7978424919749795081}
+  Weapon: {fileID: 1762320046558842001}
   DNA: {fileID: 9123797498400399532}
   Hearts: {fileID: 6451768403980592733}
   gender: 0
@@ -157,6 +159,7 @@ MonoBehaviour:
   Fitness: 0
   NewLevel: 0
   IsDrown: 0
+  IsKilled: 0
   CurrentAction: 0
   Died:
     m_PersistentCalls:
@@ -238,6 +241,20 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalController: {fileID: 7300952516653624235}
   NetworkShape: 
+--- !u!114 &1762320046558842001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005528575296122092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03fdff0966054592a00a8d006b4948fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
+  animalController: {fileID: 7300952516653624235}
 --- !u!114 &9123797498400399532
 MonoBehaviour:
   m_ObjectHideFlags: 0

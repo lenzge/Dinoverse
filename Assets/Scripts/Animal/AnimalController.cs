@@ -23,6 +23,7 @@ namespace Animal
         public Uterus Uterus;
         public Brain Brain;
         public Eyes Eyes;
+        public Weapon Weapon;
         public DNA DNA;
         public GameObject Hearts;
 
@@ -44,12 +45,14 @@ namespace Animal
         public int Fitness;
         public int NewLevel;
         public bool IsDrown;
+        public bool IsKilled;
 
         [Space]
         public Action CurrentAction;
-        private bool isReproducing;
+        private bool isInAnimationFreeze;
         private bool isInDrownAni;
         private Vector2 lastDirection;
+        private int actionSpace;
 
         private Transform characterTransform;
         
@@ -68,10 +71,16 @@ namespace Animal
             EatenTrees = 0;
             Fitness = 0;
             IsDrown = false;
+            IsKilled = false;
             isInDrownAni = false;
             NewLevel = 0;
             drowningPunishment = 1;
             
+            actionSpace = 3;
+            if (EnvironmentData.AllowPredation)
+            {
+                actionSpace = 4;
+            }
             TimedUpdate();
 
         }
@@ -109,6 +118,11 @@ namespace Animal
             return fitness;
         }
 
+        public int GetStrength()
+        {
+            return DNA.Weight[0] * 10 + (int) Stomach.GetCurrentCalories();
+        }
+
         private Vector2 SetMovementDirection(float x, float y)
         {
             if (Mathf.Abs(x) < 0.01 && Mathf.Abs(y) < 0.01)
@@ -139,7 +153,9 @@ namespace Animal
             if (isInDrownAni) return;
 
             Age += 1;
-            if (isReproducing) return;
+            if (isInAnimationFreeze) return;
+            
+            KillIfDead();
 
             //Debug.Log("last direction " + lastDirection);
             float[] inputs = PerceiveInputs();
@@ -173,13 +189,17 @@ namespace Animal
                     if (reproduced) StartCoroutine(ReproductionFreeze());
                     //if (reproduced) Age += 5000;
                     break;
+                case Action.Fight:
+                    Hearts.SetActive(false);
+                    bool fight = Weapon.TryToFight(species);
+                    if (fight) StartCoroutine(FightFreeze());
+                    break;
                 default:
                     Hearts.SetActive(false);
                     break;
             }
             
             Stomach.BurnCalories(CurrentAction, movementSpeed);
-            KillIfDead();
         }
 
         public void InitOrgans(bool isChild)
@@ -189,6 +209,7 @@ namespace Animal
             Legs.Init();
             Stomach.Init();
             Uterus.Init();
+            Weapon.Init();
         }
 
         public float AgeLevel()
@@ -230,9 +251,9 @@ namespace Animal
             return inputs;
         }
 
-        private Action EvaluateAction(float[] inputs)
+        private Action EvaluateAction(float[] outputs)
         {
-            float[] actionInputs = inputs.Skip(3).Take(3).ToArray();
+            float[] actionInputs = outputs.Skip(3).Take(actionSpace).ToArray();
             int index = Array.IndexOf(actionInputs, actionInputs.Max());
             switch (index)
             {
@@ -245,6 +266,8 @@ namespace Animal
                         return Action.Reproduce;
                     else
                         return Action.Chill;
+                case 3:
+                    return Action.Fight;
                 default:
                     return Action.Chill;
             }
@@ -290,13 +313,25 @@ namespace Animal
         
         IEnumerator ReproductionFreeze()
         {
-            isReproducing = true;
+            isInAnimationFreeze = true;
             Legs.SetMoveDirection(Vector2.zero, 0);
             //Legs.Animator.SetInteger("Action", 4);
             float timeInterval = 15f / EnvironmentData.TimeSpeed;
             yield return new WaitForSeconds(timeInterval);
-            isReproducing = false;
+            isInAnimationFreeze = false;
 
+        }
+        
+        public IEnumerator FightFreeze()
+        {
+            isInAnimationFreeze = true;
+            Hearts.SetActive(false);
+            Legs.SetMoveDirection(Vector2.zero, 0);
+            Legs.Animator.SetBool("Fight", true);
+            float timeInterval = 10f / EnvironmentData.TimeSpeed;
+            yield return new WaitForSeconds(timeInterval);
+            Legs.Animator?.SetBool("Fight", false);
+            isInAnimationFreeze = false;
         }
 
         private int CauseOfDeath()
@@ -314,6 +349,11 @@ namespace Animal
             if (IsDrown)
             {
                 return (int) Enums.CauseOfDeath.drown;
+            }
+
+            if (IsKilled)
+            {
+                return (int) Enums.CauseOfDeath.killed;
             }
             
             return (int) Enums.CauseOfDeath.other;
@@ -335,6 +375,7 @@ namespace Animal
             // Convert the array elements to strings and join them with commas
             return "[" + string.Join(" , ", array) + "]";
         }
+        
         
 
     }
