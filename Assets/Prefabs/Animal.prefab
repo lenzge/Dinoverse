@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 844001921611428584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51,10 +51,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 5.61
-  m_Height: 13.62
+  m_Radius: 7
+  m_Height: 13.87
   m_Direction: 1
-  m_Center: {x: 0, y: 6.4, z: -0.2}
+  m_Center: {x: 0, y: 4.8, z: -0.2}
 --- !u!1 &3005528575296122092
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +210,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalController: {fileID: 7300952516653624235}
-  NavigationFitness: 0
 --- !u!114 &7322130286193827268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +287,7 @@ MonoBehaviour:
   MaxNeurons: 000000002800000028000000
   MinNeurons: 000000000c0000000c000000
   MovementSpeed: 00000000050000000c000000
-  SexualMaturity: 0000000028000000c8000000
+  SexualMaturity: 000000001e0000001e000000
   Menopause: 000000000500000008000000
   LitterSize: 000000000200000005000000
 --- !u!1 &4541974121232668428

@@ -37,11 +37,11 @@ namespace Animal
                     if (collider.gameObject != animalController.gameObject && !collider.isTrigger)
                     {
                         AnimalController mate = collider.gameObject.GetComponentInParent<AnimalController>();
-                        if (mate.Uterus.CanReproduce() && mate.CurrentAction == Action.Reproduce) //  -- to difficult!
+                        if (mate.Uterus.CanReproduce())  // && mate.CurrentAction == Action.Reproduce) -- to difficult! 
                         {
                             mate.EvaluateFitness();
                             animalController.EvaluateFitness();
-                            int litterSize = LitterSize(animalController.Fitness, mate.Fitness);
+                            int litterSize = LitterSize(animalController.Fitness, mate.Fitness) * 5;
                             Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
                             MutualChildCount += 1;
                             bool prio = false;
@@ -58,7 +58,7 @@ namespace Animal
             else if (!EnvironmentData.SexualReproduction)
             {
                 SoloChildCount += 1; 
-                int litterSize = 10;
+                int litterSize = 3;
                 Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Alone");
                 for (int i = 0; i < litterSize; i++)
                 {
@@ -77,23 +77,23 @@ namespace Animal
 
             if (meanFitness <= 0)
             {
-                return 2;
+                return 6;
             }
             else if (meanFitness < animalController.AnimalCreator.FitnessToScore / 2)
             {
-                return 3;
+                return 7;
             }
             else if (meanFitness < animalController.AnimalCreator.FitnessToScore)
             {
-                return 4;
+                return 8;
             }
             else if (meanFitness == animalController.AnimalCreator.FitnessToScore)
             {
-                return 5;
+                return 9;
             }
             else if (meanFitness > animalController.AnimalCreator.FitnessToScore)
             {
-                return 6;
+                return 10;
             }
             else
             {

@@ -219,35 +219,30 @@ namespace Animal
 
         private float[] PerceiveInputs()
         {
-            float[] inputs = new float[DNA.NumRaycasts[0]*4 + 5];
+            float[] inputs = new float[DNA.NumRaycasts[0]*6 + 7];
             
-            // DNA.NumRaycasts[0] (5) Food Raycasts and 3 Water Raycasts, DNA.NumRaycasts[0] (5) Friends Raycasts(already normed)
-            float[] raycasts = Eyes.LookAround(characterTransform, food, species, CharacterController.radius);
+            float[] raycasts = Eyes.LookAround(characterTransform, food, species);
             for (int i = 0; i < raycasts.Length; i++)
             {
                 inputs[i] = raycasts[i];
             }
 
+            inputs[DNA.NumRaycasts[0]*6] = Eyes.FoodDensity(food);
+            inputs[DNA.NumRaycasts[0]*6 + 1] = Eyes.AnimalDensity(species);
+
             // Current calories relative to max calories
-            inputs[DNA.NumRaycasts[0]*4 + 0] = Stomach.HungerInput();
+            inputs[DNA.NumRaycasts[0]*6 + 2] = Stomach.HungerInput();
             
             // Current age relative to SexualMaturity
-            inputs[DNA.NumRaycasts[0]*4 + 1] = Uterus.SexualMaturityLevel();
+            inputs[DNA.NumRaycasts[0]*6 + 3] = Uterus.SexualMaturityLevel();
             
             // Current Reproduction Energy relative to the needed one
-            inputs[DNA.NumRaycasts[0]*4 + 2] = Uterus.ReproductionEnergyLevel();
+            inputs[DNA.NumRaycasts[0]*6 + 4] = Uterus.ReproductionEnergyLevel();
             
             // last movement direction
-            inputs[DNA.NumRaycasts[0] * 4 + 3] = lastDirection.x;
-            inputs[DNA.NumRaycasts[0] * 4 + 4] = lastDirection.y;
+            inputs[DNA.NumRaycasts[0] * 6 + 5] = lastDirection.x;
+            inputs[DNA.NumRaycasts[0] * 6 + 6] = lastDirection.y;
             
-            // Nearest mates relative position, relative age and relative eaten Trees (to the best seen)
-            /*float[] mates = Eyes.LookForMate(characterTransform, species);
-            for (int i = 0; i < mates.Length; i++)
-            {
-                inputs[DNA.NumRaycasts[0]*2 + 3 + i] = mates[i];
-            }
-            */
             return inputs;
         }
 

@@ -7,7 +7,7 @@ namespace Animal
         public int[] NetworkShape;
         public Layer[] Layers;
 
-        private int stdInputNeurons = 5;
+        private int stdInputNeurons = 7;
         private int outputNeurons = 7;
         
         public override void Init(bool isChild)
@@ -87,7 +87,7 @@ namespace Animal
 
         private int[] CreateNetworkShape()
         {
-            return new []{animalController.DNA.NumRaycasts[0]*4 +stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
+            return new []{animalController.DNA.NumRaycasts[0]*6 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
             
             /*switch (DNA.HiddenLayer[0])
             {
