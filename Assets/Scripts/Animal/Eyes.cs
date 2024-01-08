@@ -37,7 +37,7 @@ namespace Animal
                     // Draw a line representing the raycast in the scene view for debugging purposes
                     //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.red, 0.5f);
                     distances[j++] = hit.distance / animalController.DNA.VisualRadius[0];
-                    distances[j++] = hit.collider.GetComponent<Nurture>().Calories / 1000f;
+                    distances[j++] = hit.collider.GetComponent<Nurture>().CurrentCalories / 1000f;
                 }
                 else
                 {

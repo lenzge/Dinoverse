@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enums;
 using UnityEngine;
+using Util;
 using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
@@ -22,12 +23,12 @@ namespace DefaultNamespace
         [SerializeField] private int grassAmount;
         [SerializeField] private GameObject lakePrefab;
 
-        private int currentTreeCount;
+        public int CurrentTreeCount;
         private Collider[] colliderBuffer = new Collider[1];
 
         public void StartGame()
         {
-            currentTreeCount = 0;
+            CurrentTreeCount = 0;
             
             for (int i = 0; i < environmentData.LakeCount; i++)
             {
@@ -36,7 +37,7 @@ namespace DefaultNamespace
             
             for (int i = 0; i < environmentData.InitialTreeAmount; i++)
             {
-                SpawnNurture(treePrefab);
+                SpawnNurture(treePrefab, true);
             }
             
             for (int i = 0; i < natureAmount; i++)
@@ -69,7 +70,7 @@ namespace DefaultNamespace
             }
         }*/
 
-        private void SpawnNurture(GameObject prefab)
+        public void SpawnNurture(GameObject prefab, bool firstGeneration = false)
         {
             while (true)
             {
@@ -84,8 +85,10 @@ namespace DefaultNamespace
                 }
                 else
                 {
-                    currentTreeCount += 1;
+                    CurrentTreeCount += 1;
                     nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
+                    if (firstGeneration) nurture.GetComponent<Nurture>().FirstGeneration = true;
+                    else nurture.GetComponent<Nurture>().FirstGeneration = false;
                     break;
                 }
             }
@@ -111,16 +114,19 @@ namespace DefaultNamespace
             }
         }
         
-        /*public void SpawnNurtureSeed(GameObject prefab, Vector3 position, int randomOffset)
+        
+        public void SpawnNurtureSeed(GameObject prefab, Vector3 position, int randomOffset)
         {
-            while (true)
+            for (int i = 0; i < 10; i++)
             {
-                Vector2 rando = RNG.RandomDonut(55, 20, randomOffset);
+                var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
+                Vector2 rando = RNG.RandomDonut(60, 25, randomOffset);
+                //Vector2 rando = new Vector2(Random.Range(5, 30),Random.Range(7, 26));
                 Vector3 randomPosition = new Vector3(position.x + rando.x, 4,
                          position.z + rando.y);
                 
-                Vector3 newPosition = transform.position + randomPosition;
-                GameObject nurture = Instantiate(prefab, newPosition, Quaternion.identity);
+                Vector3 newPosition = randomPosition;
+                GameObject nurture = Instantiate(prefab, newPosition, randomRotation);
                 if (Physics.OverlapSphereNonAlloc(nurture.transform.position, 2, colliderBuffer,
                     1 << (int) Layer.Water) >= 1)
                 {
@@ -128,18 +134,23 @@ namespace DefaultNamespace
                 }
                 else
                 {
+                    CurrentTreeCount += 1;
                     nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
+                    nurture.GetComponent<Nurture>().FirstGeneration = false;
                     break;
                 }
             }
-        }*/
+        }
         
         private void SpawnNewNurture(Nurture oldNurture, GameObject prefab)
         {
-            currentTreeCount -= 1;
+            CurrentTreeCount -= 1;
             oldNurture.NurtureEatenEvent.RemoveListener(SpawnNewNurture);
-            if (currentTreeCount < environmentData.MaxTrees)
+            if (environmentData.ConstantTreeAmount && CurrentTreeCount < environmentData.MaxTrees || 
+                CurrentTreeCount < environmentData.MinTrees)
             {
+                Debug.LogError("spawn from dead");
+                RNG.DebugRNG();
                 SpawnNurture(prefab);
             }
         }

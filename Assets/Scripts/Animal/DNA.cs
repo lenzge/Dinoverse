@@ -23,6 +23,7 @@ namespace Animal
         [Space] 
         [Header("Food")]
         public float[] EatingSpeed;
+        public float[] Carnivore;
         
         [Space] 
         [Header("Eyes")] 
@@ -58,6 +59,7 @@ namespace Animal
             MutateIntParam(LifeExpectation);
             MutateIntParam(Weight);
             MutateFloatParam(EatingSpeed);
+            MutateFloatParam(Carnivore);
             MutateIntParam(VisualRadius);
             //MutateIntParam(NumRaycasts); Will stay constant
             MutateIntParam(AngleBetweenRaycasts);
@@ -78,6 +80,7 @@ namespace Animal
             CreateRandomIntParam(LifeExpectation);
             CreateRandomIntParam(Weight);
             CreateRandomFloatParam(EatingSpeed);
+            CreateRandomFloatParam(Carnivore);
             CreateRandomIntParam(VisualRadius);
             CreateRandomIntParam(NumRaycasts);
             CreateRandomIntParam(AngleBetweenRaycasts);
@@ -100,6 +103,7 @@ namespace Animal
                 MutationAmount = CopyFloatArray(otherDNA.MutationAmount);
                 MutationChance = CopyFloatArray(otherDNA.MutationChance);
                 EatingSpeed = CopyFloatArray(otherDNA.EatingSpeed);
+                Carnivore = CopyFloatArray(otherDNA.Carnivore);
                 VisualRadius = CopyIntArray(otherDNA.VisualRadius);
                 NumRaycasts = CopyIntArray(otherDNA.NumRaycasts);
                 AngleBetweenRaycasts = CopyIntArray(otherDNA.AngleBetweenRaycasts);
@@ -127,6 +131,7 @@ namespace Animal
                 if(Random.value <= 0.5) MutationAmount = CopyFloatArray(otherDNA.MutationAmount);
                 if(Random.value <= 0.5) MutationChance = CopyFloatArray(otherDNA.MutationChance);
                 if(Random.value <= 0.5) EatingSpeed = CopyFloatArray(otherDNA.EatingSpeed);
+                if(Random.value <= 0.5) Carnivore = CopyFloatArray(otherDNA.Carnivore);
                 if(Random.value <= 0.5) VisualRadius = CopyIntArray(otherDNA.VisualRadius);
                 if(Random.value <= 0.5) AngleBetweenRaycasts = CopyIntArray(otherDNA.AngleBetweenRaycasts);
                 if(Random.value <= 0.5) MovementSpeed = CopyIntArray(otherDNA.MovementSpeed);

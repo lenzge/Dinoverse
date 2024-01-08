@@ -22,15 +22,16 @@ namespace Animal
             currentCalories -= animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed);
         }
         
-        public bool TryToEat(Transform animalTransform, float characterRadius, Layer foodType)
+        public bool TryToEatPlants(Transform animalTransform, float characterRadius, Layer foodType)
         {
             if (Physics.OverlapSphereNonAlloc(animalTransform.position, characterRadius, colliderBuffer,
                 1 << (int) foodType) >= 1)
             {
                 Nurture food = colliderBuffer[0].GetComponent<Nurture>();
                 float eatenCalories = food.Eaten(animalController.DNA.EatingSpeed[0]);
-                currentCalories = AddCalories(eatenCalories);
-                //Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
+                currentCalories = AddCalories(eatenCalories, FoodSource.plant);
+                Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
+                if (currentCalories == 0) return false;
                 return true;
             }
 
@@ -63,8 +64,16 @@ namespace Animal
         /// </summary>
         /// <param name="eatenCalories"></param>
         /// <returns></returns>
-        public float AddCalories(float eatenCalories)
+        public float AddCalories(float eatenCalories, FoodSource food)
         {
+            if (food == FoodSource.meat)
+            {
+                eatenCalories *= animalController.DNA.Carnivore[0];
+            }
+            else if (food == FoodSource.plant)
+            {
+                eatenCalories *= 1 - animalController.DNA.Carnivore[0];
+            }
             float newCalories = currentCalories + eatenCalories;
             if (newCalories <= maxCalories)
             {

@@ -40,13 +40,13 @@ namespace Animal
             if (animalController.GetStrength() >= prey.GetStrength())
             {
                 prey.IsKilled = true;
-                animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories());
+                animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories(), FoodSource.meat);
                 Debug.LogWarning($"Attacker [{name}] got {prey.Stomach.GetCurrentCalories()} calories from prey {prey.name}.");
             }
             else if (prey.CurrentAction != Action.Fight)
             {
                 animalController.IsKilled = true;
-                prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories());
+                prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories(), FoodSource.meat);
                 Debug.LogWarning($"Prey [{prey.name}] got {animalController.Stomach.GetCurrentCalories()} calories from predator {name}.");
             }
 

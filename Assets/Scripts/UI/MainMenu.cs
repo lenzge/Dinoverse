@@ -61,7 +61,16 @@ namespace DefaultNamespace.UI
             IntegerField mapSize = root.Q<IntegerField>("MapSize");
             mapSize.value = environmentData.MapSize;
             mapSize.RegisterValueChangedCallback(OnMapSizeChanged);
+            
+            Toggle constantTreeAmount = root.Q<Toggle>("ConstantTreeAmount");
+            constantTreeAmount.value = environmentData.ConstantTreeAmount;
+            constantTreeAmount.RegisterValueChangedCallback(OnConstantTreeAmountChanged);
 
+        }
+
+        private void OnConstantTreeAmountChanged(ChangeEvent<bool> evt)
+        {
+            environmentData.ConstantTreeAmount = evt.newValue;
         }
 
         private void OnMapSizeChanged(ChangeEvent<int> evt)

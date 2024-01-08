@@ -50,6 +50,7 @@ namespace Animal
                                 animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,SpawnType.Random, animalController, mate);
                             }
                             ReproductionEnergy = 0;
+                            animalController.Genome.CompareGenomes(mate.Genome);
                             return true;
                         }
                     }

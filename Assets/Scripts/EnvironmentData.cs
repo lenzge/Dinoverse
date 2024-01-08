@@ -23,6 +23,7 @@ namespace DefaultNamespace
         public int MinTrees;
         public int LakeCount;
         public int MapSize;
+        public bool ConstantTreeAmount;
         
         [HideInInspector]
         public UnityEvent<int> TimeSpeedChangedEvent;

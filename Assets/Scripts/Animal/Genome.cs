@@ -23,6 +23,7 @@ namespace Animal
         public float[] MutationAmount;
         public float[] MutationChance;
         public float[] EatingSpeed;
+        public float[] Carnivore;
         public int[] VisualRadius;
         public int[] NumRaycasts;
         public int[] AngleBetweenRaycasts;
@@ -34,6 +35,61 @@ namespace Animal
         public int[] Menopause;
         public int[] LitterSize;
 
+
+        public void CompareGenomes(Genome other)
+        {
+            float weightsDiff = ArrayDiff(Weights, other.Weights) * 3;
+            float biasesDiff = ArrayDiff(Biases, other.Biases) * 3;
+            
+            float lifeExpectationDiff = Diff(LifeExpectation, other.LifeExpectation);
+            float mutationAmountDiff = Diff(MutationAmount, other.MutationAmount);
+            float mutationChanceDiff = Diff(MutationChance, other.MutationChance);
+            float eatingSpeedDiff = Diff(EatingSpeed, other.EatingSpeed);
+            float carnivoreDiff = Diff(Carnivore, other.Carnivore);
+            float visualRadiusDiff = Diff(VisualRadius, other.VisualRadius);
+            float angleBetweenRaycastsDiff = Diff(AngleBetweenRaycasts, other.AngleBetweenRaycasts);
+            float movementSpeedDiff = Diff(MovementSpeed, other.MovementSpeed);
+            float sexualMaturityDiff = Diff(SexualMaturity, other.SexualMaturity);
+            float menopauseDiff = Diff(Menopause, other.Menopause);
+            float litterSizeDiff = Diff(LitterSize, other.LitterSize);
+
+            float diff = (weightsDiff + biasesDiff + lifeExpectationDiff + mutationAmountDiff + mutationChanceDiff
+                          + eatingSpeedDiff + carnivoreDiff + visualRadiusDiff + angleBetweenRaycastsDiff + movementSpeedDiff +
+                          sexualMaturityDiff + menopauseDiff + litterSizeDiff) / 13;
+            
+            Debug.LogWarning(diff);
+
+            /*Debug.LogWarning($"weightsDiff: {weightsDiff}, biasesDiff: {biasesDiff}, lifeExpectationDiff: {lifeExpectationDiff}," +
+                             $" mutationAmountDiff: {mutationAmountDiff}, mutationChanceDiff: {mutationChanceDiff}," +
+                             $" eatingSpeedDiff: {eatingSpeedDiff}, visualRadiusDiff: {visualRadiusDiff}, " +
+                             $"angleBetweenRaycastsDiff: {angleBetweenRaycastsDiff}, movementSpeedDiff: {movementSpeedDiff}," +
+                             $" sexualMaturityDiff: {sexualMaturityDiff}, menopauseDiff: {menopauseDiff}, litterSizeDiff: {litterSizeDiff},");*/
+        }
+
+        public float Diff(int[] own, int[] other)
+        {
+            float variance = own[2] - own[1];
+            if (variance == 0) variance = 1;
+            return Mathf.Abs(own[0] - other[0])/ variance;
+        }
+        public float Diff(float[] own, float[] other)
+        {
+            float variance = own[2] - own[1];
+            if (variance == 0) variance = 1;
+            return Mathf.Abs(own[0] - other[0])/ variance;
+        }
+        
+        public float ArrayDiff(float[] own, float[] other)
+        {
+            float diff = 0;
+            for (int i = 0; i < own.Length; i++)
+            {
+                diff += Mathf.Abs(own[i] - other[i]);
+            }
+
+            return diff / own.Length;
+        }
+        
         public Genome(Brain brain, DNA dna)
         {
             NetworkShape = brain.NetworkShape;
@@ -68,6 +124,7 @@ namespace Animal
             MutationAmount = dna.MutationAmount;
             MutationChance = dna.MutationChance;
             EatingSpeed = dna.EatingSpeed;
+            Carnivore = dna.Carnivore;
             VisualRadius = dna.VisualRadius;
             NumRaycasts = dna.NumRaycasts;
             AngleBetweenRaycasts = dna.AngleBetweenRaycasts;
@@ -110,6 +167,7 @@ namespace Animal
             dna.MutationAmount = MutationAmount;
             dna.MutationChance = MutationChance;
             dna.EatingSpeed = EatingSpeed;
+            dna.Carnivore = Carnivore;
             dna.VisualRadius = VisualRadius;
             dna.NumRaycasts = NumRaycasts;
             dna.AngleBetweenRaycasts = AngleBetweenRaycasts;

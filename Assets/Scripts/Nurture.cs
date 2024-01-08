@@ -10,61 +10,65 @@ namespace DefaultNamespace
 {
     public class Nurture : TimeBasedBehaviour
     {
+        public EnvironmentCreator EnvironmentCreator;
+        
+        [Header("Prefabs")]
         public GameObject Prefab;
+        public GameObject FullGrownModel;
+        public GameObject SmallModel;
+        
+        [Header("Params")]
         public float Mass;
         public int Calories;
-        public int SeedAmount;
-        public int SeedInterval;
-        public int NoMoreSeeds;
+        public int CurrentCalories;
+        public int FullGrownAge;
         public int MaxAge;
+        public int SeedAmount;
+        public bool FirstGeneration;
 
         [HideInInspector]
         public UnityEvent<Nurture,GameObject> NurtureEatenEvent;
 
         private float currentMass;
         private int age;
-        private int seedCount;
-        private EnvironmentCreator environmentCreator;
-
-        public int RandoOffset;
 
         protected override void TimedStart()
         {
             currentMass = Mass;
-            seedCount = 0;
-            age = 0;
+            age = Random.Range(-20,0);
+            
+            if (FirstGeneration)
+            {
+                CurrentCalories = Calories;
+                SmallModel.SetActive(false);
+                FullGrownModel.SetActive(true);
+            }
+            else
+            {
+                CurrentCalories = 0;
+                SmallModel.SetActive(true);
+                FullGrownModel.SetActive(false);
+            }
+            
         }
 
         protected override void TimedUpdate()
         {
             age += 1;
 
-            if (age >= MaxAge)
+            if (age == FullGrownAge)
+            {
+                CurrentCalories = Calories;
+                SmallModel.SetActive(false);
+                FullGrownModel.SetActive(true);
+                SpawnSeeds();
+            }
+            
+            else if (age >= MaxAge)
             {
                 NurtureEatenEvent.Invoke(this, Prefab);
                 Destroy(gameObject);
             }
-
-            /*if (seedCount < NoMoreSeeds && age == SeedInterval)
-            {
-                age = Random.Range(-20,0);
-                seedCount += 1;
-                for (int i = 0; i < SeedAmount; i++)
-                {
-                    try
-                    {
-                        // TODO irgendwie stürzt da ständig das game ab
-                        //environmentCreator.SpawnNurtureSeed(Prefab, gameObject.transform.position, i);
-                        //Debug.LogWarning("Spawn new tree");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
-                    
-                }
-            }*/
         }
 
         public float Eaten(float eatingSpeed)
@@ -90,9 +94,21 @@ namespace DefaultNamespace
                 Destroy(gameObject);
             }
             
-            return eatenMass * Calories;
+            return eatenMass * CurrentCalories;
         }
 
+        private void SpawnSeeds()
+        {
+            if (!EnvironmentData.ConstantTreeAmount &&
+                EnvironmentCreator.CurrentTreeCount < EnvironmentData.MaxTrees)
+            {
+                for (int i = 0; i < SeedAmount; i++)
+                {
+                    EnvironmentCreator.SpawnNurtureSeed(Prefab, gameObject.transform.position, Random.Range(0,100));
+                }
+            }
+        }
+        
         IEnumerator Recover()
         {
             gameObject.GetComponent<SphereCollider>().enabled = false;

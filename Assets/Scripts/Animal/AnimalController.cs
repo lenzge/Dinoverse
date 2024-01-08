@@ -25,6 +25,7 @@ namespace Animal
         public Eyes Eyes;
         public Weapon Weapon;
         public DNA DNA;
+        public Genome Genome;
         public GameObject Hearts;
 
         [Space]
@@ -81,6 +82,10 @@ namespace Animal
             {
                 actionSpace = 4;
             }
+
+            Genome = new Genome(Brain, DNA);
+            //Debug.LogError(Genome.Weights.Length);
+            //Debug.LogError(Genome.Biases.Length);
             TimedUpdate();
 
         }
@@ -179,7 +184,7 @@ namespace Animal
                     break;
                 case Action.Eat:
                     Hearts.SetActive(false);
-                    bool isEating = Stomach.TryToEat(characterTransform, CharacterController.radius, food);
+                    bool isEating = Stomach.TryToEatPlants(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
                     break;

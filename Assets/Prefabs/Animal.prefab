@@ -145,6 +145,29 @@ MonoBehaviour:
   Eyes: {fileID: 7978424919749795081}
   Weapon: {fileID: 1762320046558842001}
   DNA: {fileID: 9123797498400399532}
+  Genome:
+    Subspecies: 
+    NetworkShape: 
+    Weights: []
+    Biases: []
+    Inputs: 
+    Neurons: 
+    LifeExpectation: 
+    Weight: 
+    MutationAmount: []
+    MutationChance: []
+    EatingSpeed: []
+    Carnivore: []
+    VisualRadius: 
+    NumRaycasts: 
+    AngleBetweenRaycasts: 
+    HiddenLayer: 
+    MaxNeurons: 
+    MinNeurons: 
+    MovementSpeed: 
+    SexualMaturity: 
+    Menopause: 
+    LitterSize: 
   Hearts: {fileID: 6451768403980592733}
   gender: 0
   species: 7
@@ -279,6 +302,10 @@ MonoBehaviour:
   EatingSpeed:
   - 0
   - 1
+  - 1
+  Carnivore:
+  - 0
+  - 0
   - 1
   VisualRadius: 00000000640000002c010000
   NumRaycasts: 000000000500000005000000
