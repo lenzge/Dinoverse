@@ -57,8 +57,7 @@ namespace Util
                     count3 += 1;
                     break;
             }
-
-            Debug.LogError($"{x}, {z}");
+            
             return new Vector2(x, z);
         }
 

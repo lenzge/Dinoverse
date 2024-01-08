@@ -65,7 +65,16 @@ namespace DefaultNamespace.UI
             Toggle constantTreeAmount = root.Q<Toggle>("ConstantTreeAmount");
             constantTreeAmount.value = environmentData.ConstantTreeAmount;
             constantTreeAmount.RegisterValueChangedCallback(OnConstantTreeAmountChanged);
+            
+            Toggle randomSpawnPoint = root.Q<Toggle>("RandomSpawnPoint");
+            randomSpawnPoint.value = environmentData.RandomSpawnPoint;
+            randomSpawnPoint.RegisterValueChangedCallback(OnRandomSpawnPointChanged);
 
+        }
+
+        private void OnRandomSpawnPointChanged(ChangeEvent<bool> evt)
+        {
+            environmentData.RandomSpawnPoint = evt.newValue;
         }
 
         private void OnConstantTreeAmountChanged(ChangeEvent<bool> evt)

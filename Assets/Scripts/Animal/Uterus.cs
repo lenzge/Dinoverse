@@ -16,6 +16,7 @@ namespace Animal
         public int MutualChildCount {get; private set; }
         
         private Collider[] colliderBuffer;
+        private SpawnType spawnType;
 
         public override void Init(bool isChild = false)
         {
@@ -23,6 +24,16 @@ namespace Animal
             MutualChildCount = 0;
             ReproductionEnergy = 0;
             colliderBuffer = new Collider[4];
+
+            if (EnvironmentData.RandomSpawnPoint)
+            {
+                spawnType = SpawnType.Random;
+            }
+            else
+            {
+                spawnType = SpawnType.NearParent;
+            }
+            
         }
 
         public bool TryToReproduce(Layer species)
@@ -47,7 +58,7 @@ namespace Animal
                             bool prio = false;
                             for (int i = 0; i < litterSize; i++)
                             {
-                                animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,SpawnType.Random, animalController, mate);
+                                animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,spawnType, animalController, mate);
                             }
                             ReproductionEnergy = 0;
                             animalController.Genome.CompareGenomes(mate.Genome);
@@ -63,7 +74,7 @@ namespace Animal
                 Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Alone");
                 for (int i = 0; i < litterSize; i++)
                 {
-                    animalController.AnimalCreator.CreateChildObject(false,animalController.Key, animalController.Generation + 1, GenomeType.Parent,SpawnType.Random, animalController);
+                    animalController.AnimalCreator.CreateChildObject(false,animalController.Key, animalController.Generation + 1, GenomeType.Parent,spawnType, animalController);
                 }
                 ReproductionEnergy = 0;
                 return true;
@@ -129,7 +140,14 @@ namespace Animal
         
         public float ReproductionEnergyLevel()
         {
-            return (float) ReproductionEnergy / animalController.EnvironmentData.ReproductionEnergy;
+            if (animalController.EnvironmentData.ReproductionEnergy != 0)
+            {
+                return (float) ReproductionEnergy / animalController.EnvironmentData.ReproductionEnergy;
+            }
+            else
+            {
+                return 1;
+            }
         }
 
         public bool IsInMenopause()

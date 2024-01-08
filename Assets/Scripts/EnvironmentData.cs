@@ -13,6 +13,7 @@ namespace DefaultNamespace
         [Header("Animals")]
         public bool SexualReproduction;
         public bool AllowPredation;
+        public bool RandomSpawnPoint;
         public int InitialAnimalAmount;
         public int MaxAnimalAmount;
         public int ReproductionEnergy;

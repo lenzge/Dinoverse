@@ -72,7 +72,7 @@ namespace DefaultNamespace
 
         public void SpawnNurture(GameObject prefab, bool firstGeneration = false)
         {
-            while (true)
+            for (int i = 0; i < 10; i++)
             {
                 var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
                 Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 5.6f,
@@ -96,7 +96,7 @@ namespace DefaultNamespace
         
         private void SpawnNature(GameObject prefab)
         {
-            while (true)
+            for (int i = 0; i < 10; i++)
             {
                 Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 1.06f,
                     Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize));
@@ -149,8 +149,6 @@ namespace DefaultNamespace
             if (environmentData.ConstantTreeAmount && CurrentTreeCount < environmentData.MaxTrees || 
                 CurrentTreeCount < environmentData.MinTrees)
             {
-                Debug.LogError("spawn from dead");
-                RNG.DebugRNG();
                 SpawnNurture(prefab);
             }
         }

@@ -10,6 +10,7 @@
                     </ui:GroupBox>
                     <ui:GroupBox name="Other" style="width: 267px;">
                         <ui:Toggle label="Predation" name="Predation" />
+                        <ui:Toggle label="Random Spawn" name="RandomSpawnPoint" />
                         <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Reproduction Energy" value="1" name="ReproductionEnergy" style="margin-right: 2px; width: 211px;" />

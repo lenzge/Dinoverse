@@ -4,6 +4,7 @@ using System.Linq;
 using Animal;
 using Enums;
 using UnityEngine;
+using Util;
 using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
@@ -101,6 +102,7 @@ namespace DefaultNamespace
                     controller.Brain.Layers = parent.Brain.CopyLayers();
                     controller.InitOrgans(true);
                     controller.Brain.MutateNetwork();
+                    animal.transform.position = parent.transform.position;
                     break;
                 case GenomeType.Crossover:
                     if (parent == null || parent2 == null) throw new Exception("Try to create a child animal without parent");
@@ -111,6 +113,7 @@ namespace DefaultNamespace
                     controller.Brain.CrossoverNetwork(parent2.Brain);
                     controller.InitOrgans(true);
                     controller.Brain.MutateNetwork();
+                    animal.transform.position = parent.transform.position;
                     break;
                 case GenomeType.Frozen:
                     // TODO Maybe find a more balanced way later
@@ -123,20 +126,20 @@ namespace DefaultNamespace
 
             if (spawnInstant)
             {
-                SpawnAnimal(animal,spawnPositionType, parent);
+                SpawnAnimal(animal,spawnPositionType, genomeType);
             }
             return animal;
         }
 
-        private void SpawnAnimal(GameObject animal, SpawnType spawnPositionType, AnimalController parent = null)
+        private void SpawnAnimal(GameObject animal, SpawnType spawnPositionType, GenomeType genomeType)
         {
             AnimalController controller = animal.GetComponent<AnimalController>();
             activeAnimalControllers.Add(controller);
             controller.Died.AddListener(OnDead);
             var randomRotation = Quaternion.Euler( 0,Random.Range(0, 360) , 0);
-            while (true)
+            for (int i = 0; i < 10; i++)
             {
-                animal.transform.position = EvaluateSpawnPosition(spawnPositionType, parent);
+                animal.transform.position = EvaluateSpawnPosition(animal.transform.position, spawnPositionType, genomeType);
                 animal.transform.rotation = randomRotation;
                 if (Physics.OverlapSphereNonAlloc(animal.transform.position, 2, colliderBuffer,
                     1 << (int) Layer.Water) < 1)
@@ -147,13 +150,13 @@ namespace DefaultNamespace
             }
         }
 
-        private Vector3 EvaluateSpawnPosition(SpawnType spawnPositionType,AnimalController parent = null)
+        private Vector3 EvaluateSpawnPosition(Vector3 position, SpawnType spawnPositionType, GenomeType genomeType)
         {
-            if (parent != null && spawnPositionType == SpawnType.NearParent)
+            if ((genomeType == GenomeType.Crossover || genomeType == GenomeType.Parent) && spawnPositionType == SpawnType.NearParent)
             {
-                Vector3 parentPosition = parent.transform.position;
-                return new Vector3(parentPosition.x + Random.Range(10, 30), 0,
-                    parentPosition.z + Random.Range(10, 30));
+                Vector2 rando = RNG.RandomDonut(100, 35, Random.Range(0,80));
+                return new Vector3(position.x + rando.x, 0,
+                    position.z + rando.y);
             }
             else{
                 return new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 0,
@@ -218,8 +221,9 @@ namespace DefaultNamespace
                 {
                     while (activeAnimalControllers.Count < environmentData.MaxAnimalAmount && savedAnimalControllers.Count > 0)
                     {
-                        GameObject parent = savedAnimalControllers[0];
-                        SpawnAnimal(parent, SpawnType.Random);
+                        GameObject animal = savedAnimalControllers[0];
+                        if (environmentData.RandomSpawnPoint) SpawnAnimal(animal, SpawnType.Random, GenomeType.Parent);
+                        else SpawnAnimal(animal, SpawnType.NearParent, GenomeType.Parent);
                         savedAnimalControllers.RemoveAt(0);
                     }
                     

@@ -30,7 +30,7 @@ namespace Animal
                 Nurture food = colliderBuffer[0].GetComponent<Nurture>();
                 float eatenCalories = food.Eaten(animalController.DNA.EatingSpeed[0]);
                 currentCalories = AddCalories(eatenCalories, FoodSource.plant);
-                Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
+                //Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
                 if (currentCalories == 0) return false;
                 return true;
             }
