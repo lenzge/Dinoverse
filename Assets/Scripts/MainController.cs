@@ -16,6 +16,9 @@ namespace DefaultNamespace
             pastTimeSteps = 0;
             animalCreator.StartGame();
             environmentCreator.StartGame();
+
+            environment.transform.localScale = new Vector3(EnvironmentData.MapSize / 20f, EnvironmentData.MapSize / 20f,
+                EnvironmentData.MapSize / 20f);
         }
 
         protected override void TimedUpdate()

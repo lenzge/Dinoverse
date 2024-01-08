@@ -18,9 +18,7 @@ namespace DefaultNamespace
 
         [Header("Nature")]
         [SerializeField] private List<GameObject> naturePrefabs;
-        [SerializeField] private int natureAmount;
         [SerializeField] private List<GameObject> grassPrefabs;
-        [SerializeField] private int grassAmount;
         [SerializeField] private GameObject lakePrefab;
 
         public int CurrentTreeCount;
@@ -39,15 +37,17 @@ namespace DefaultNamespace
             {
                 SpawnNurture(treePrefab, true);
             }
-            
-            for (int i = 0; i < natureAmount; i++)
+
+            int natureAmount = environmentData.MapSize / 20;
+            for (int i = 0; i < natureAmount ; i++)
             {
                 foreach (var prefab in naturePrefabs)
                 {
                     SpawnNature(prefab);
                 }
             }
-            
+
+            int grassAmount = environmentData.MapSize / 3;
             for (int i = 0; i < grassAmount; i++)
             {
                 foreach (var prefab in grassPrefabs)
@@ -98,7 +98,7 @@ namespace DefaultNamespace
         {
             for (int i = 0; i < 10; i++)
             {
-                Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 1.06f,
+                Vector3 randomPosition = new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 0f,
                     Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize));
                 var randomRotation = Quaternion.Euler( -90,Random.Range(0, 360) , 0);
                 GameObject nature = Instantiate(prefab, randomPosition, randomRotation);

@@ -11,6 +11,7 @@ namespace DefaultNamespace.UI
         [SerializeField] private MainController mainController;
 
         private VisualElement root;
+        private IntegerField lakeCount;
         
         private void OnEnable()
         {
@@ -54,7 +55,7 @@ namespace DefaultNamespace.UI
             minTrees.value = environmentData.MinTrees;
             minTrees.RegisterValueChangedCallback(OnMinTreesChanged);
             
-            IntegerField lakeCount = root.Q<IntegerField>("LakeCount");
+            lakeCount = root.Q<IntegerField>("LakeCount");
             lakeCount.value = environmentData.LakeCount;
             lakeCount.RegisterValueChangedCallback(OnLakeCountChanged);
             
@@ -69,7 +70,21 @@ namespace DefaultNamespace.UI
             Toggle randomSpawnPoint = root.Q<Toggle>("RandomSpawnPoint");
             randomSpawnPoint.value = environmentData.RandomSpawnPoint;
             randomSpawnPoint.RegisterValueChangedCallback(OnRandomSpawnPointChanged);
+            
+            Toggle endlessWorld = root.Q<Toggle>("EndlessWorld");
+            endlessWorld.value = environmentData.EndlessWorld;
+            endlessWorld.RegisterValueChangedCallback(OnEndlessWorldChanged);
 
+        }
+
+        private void OnEndlessWorldChanged(ChangeEvent<bool> evt)
+        {
+            environmentData.EndlessWorld = evt.newValue;
+            if (environmentData.EndlessWorld)
+            {
+                environmentData.LakeCount = 0;
+                lakeCount.value = environmentData.LakeCount;
+            }
         }
 
         private void OnRandomSpawnPointChanged(ChangeEvent<bool> evt)
@@ -89,7 +104,14 @@ namespace DefaultNamespace.UI
 
         private void OnLakeCountChanged(ChangeEvent<int> evt)
         {
-            environmentData.LakeCount = evt.newValue;
+            if (environmentData.EndlessWorld)
+            {
+                lakeCount.value = 0;
+            }
+            else
+            {
+                environmentData.LakeCount = evt.newValue;
+            }
         }
 
         private void OnMinTreesChanged(ChangeEvent<int> evt)

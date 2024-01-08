@@ -25,6 +25,7 @@ namespace DefaultNamespace
         public int LakeCount;
         public int MapSize;
         public bool ConstantTreeAmount;
+        public bool EndlessWorld;
         
         [HideInInspector]
         public UnityEvent<int> TimeSpeedChangedEvent;

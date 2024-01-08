@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Util;
 using Action = Enums.Action;
+using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Animal
@@ -54,6 +55,7 @@ namespace Animal
         private bool isInDrownAni;
         private Vector2 lastDirection;
         private int actionSpace;
+        private Collider[] colliderBuffer;
 
         private Transform characterTransform;
         
@@ -76,6 +78,7 @@ namespace Animal
             isInDrownAni = false;
             NewLevel = 0;
             drowningPunishment = 1;
+            colliderBuffer = new Collider[1];
             
             actionSpace = 3;
             if (EnvironmentData.AllowPredation)
@@ -364,8 +367,34 @@ namespace Animal
         {
             if (other.gameObject.layer == (int) Layer.Water)
             {
-                IsDrown = true;
-                Legs.Animator.SetTrigger("isDrown");
+                if (!EnvironmentData.EndlessWorld)
+                {
+                    IsDrown = true;
+                }
+
+                else
+                {
+                    characterTransform.SetPositionAndRotation(characterTransform.position -
+                                                                              characterTransform.forward * EnvironmentData.MapSize * 10, characterTransform.rotation);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (Physics.OverlapSphereNonAlloc(characterTransform.position, 40, colliderBuffer,
+                            1 << (int) Layer.Water) >= 1)
+                        {
+                            characterTransform.SetPositionAndRotation(characterTransform.position +
+                                                                      characterTransform.forward *
+                                                                      (EnvironmentData.MapSize / 2f),
+                                characterTransform.rotation);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    
+                    Physics.SyncTransforms();
+                }
+                
             }
             
         }
