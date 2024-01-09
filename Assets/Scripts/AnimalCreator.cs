@@ -145,9 +145,10 @@ namespace DefaultNamespace
                     1 << (int) Layer.Water) < 1)
                 {
                     animal.SetActive(true);
-                    break;
+                    return;
                 }
             }
+            //Debug.LogWarning("animal cant find a spot. mapsize: "+ environmentData.MapSize);
         }
 
         private Vector3 EvaluateSpawnPosition(Vector3 position, SpawnType spawnPositionType, GenomeType genomeType)

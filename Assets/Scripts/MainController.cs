@@ -13,12 +13,13 @@ namespace DefaultNamespace
 
         public void StartGame()
         {
-            pastTimeSteps = 0;
-            animalCreator.StartGame();
-            environmentCreator.StartGame();
-
             environment.transform.localScale = new Vector3(EnvironmentData.MapSize / 20f, EnvironmentData.MapSize / 20f,
                 EnvironmentData.MapSize / 20f);
+            Physics.SyncTransforms();
+            
+            pastTimeSteps = 0;
+            environmentCreator.StartGame();
+            animalCreator.StartGame();
         }
 
         protected override void TimedUpdate()
