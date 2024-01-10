@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace DefaultNamespace.UI
@@ -20,8 +21,17 @@ namespace DefaultNamespace.UI
             timeSpeed.highValue = environmentData.MaxTimeSpeed;
             environmentData.SetTimeSpeed(timeSpeed.value);
             
+            Button restart = root.Q<Button>("Restart");
+            restart.clicked += OnRestartButton;
+            
             timeSpeed.RegisterValueChangedCallback(OnTimeSpeedChanged);
 
+        }
+
+        private void OnRestartButton()
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(currentSceneName);
         }
 
         private void OnTimeSpeedChanged(ChangeEvent<int> evt)

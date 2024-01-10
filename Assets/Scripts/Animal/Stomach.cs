@@ -66,14 +66,18 @@ namespace Animal
         /// <returns></returns>
         public float AddCalories(float eatenCalories, FoodSource food)
         {
-            if (food == FoodSource.meat)
+            if (EnvironmentData.AllowPredation)
             {
-                eatenCalories *= animalController.DNA.Carnivore[0];
+                if (food == FoodSource.meat)
+                {
+                    eatenCalories *= animalController.DNA.Carnivore[0];
+                }
+                else if (food == FoodSource.plant)
+                {
+                    eatenCalories *= 1 - animalController.DNA.Carnivore[0];
+                }
             }
-            else if (food == FoodSource.plant)
-            {
-                eatenCalories *= 1 - animalController.DNA.Carnivore[0];
-            }
+            
             float newCalories = currentCalories + eatenCalories;
             if (newCalories <= maxCalories)
             {

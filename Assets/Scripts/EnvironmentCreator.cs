@@ -89,9 +89,10 @@ namespace DefaultNamespace
                     nurture.GetComponent<Nurture>().NurtureEatenEvent.AddListener(SpawnNewNurture);
                     if (firstGeneration) nurture.GetComponent<Nurture>().FirstGeneration = true;
                     else nurture.GetComponent<Nurture>().FirstGeneration = false;
-                    break;
+                    return;
                 }
             }
+            //Debug.LogWarning("tree cant find a spot. mapsize: "+ environmentData.MapSize);
         }
         
         private void SpawnNature(GameObject prefab)

@@ -1083,6 +1083,7 @@ MonoBehaviour:
   animalCreator: {fileID: 11400000, guid: 21fcf64e610ca044282c471b8a42349e, type: 2}
   environmentCreator: {fileID: 11400000, guid: 5651b921e82a9fa409c91ef12117ff05, type: 2}
   environment: {fileID: 228911074}
+  plot: {fileID: 1451864748}
 --- !u!1 &980321001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,7 +1378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be295deefba047ee9af3ac12a06a5d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FileName: placeholder.csv
 --- !u!4 &1451864749
 Transform:
   m_ObjectHideFlags: 0

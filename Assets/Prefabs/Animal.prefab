@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   AnimalCreator: {fileID: 11400000, guid: 21fcf64e610ca044282c471b8a42349e, type: 2}
+  Material: {fileID: 2100000, guid: 6cf7475cefe28364fa13a02bf4ec0389, type: 2}
   CharacterController: {fileID: 4408169497568838984}
   Legs: {fileID: 7449578703545013821}
   Stomach: {fileID: 2830572847685276631}

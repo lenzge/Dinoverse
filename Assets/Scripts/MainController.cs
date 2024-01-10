@@ -10,21 +10,36 @@ namespace DefaultNamespace
         [SerializeField] private AnimalCreator animalCreator;
         [SerializeField] private EnvironmentCreator environmentCreator;
         [SerializeField] private GameObject environment;
+        [SerializeField] private Plot plot;
+
+        private bool isStarted;
 
         public void StartGame()
         {
+            isStarted = false;
             environment.transform.localScale = new Vector3(EnvironmentData.MapSize / 20f, EnvironmentData.MapSize / 20f,
                 EnvironmentData.MapSize / 20f);
             Physics.SyncTransforms();
             
             pastTimeSteps = 0;
+            plot.StartGame();
             environmentCreator.StartGame();
             animalCreator.StartGame();
+            isStarted = true;
         }
 
         protected override void TimedUpdate()
         {
             pastTimeSteps += 1;
+        }
+
+        protected override void TimedSlowUpdate()
+        {
+            if (isStarted)
+            {
+                animalCreator.Classify();
+            }
+            
         }
     }
 }

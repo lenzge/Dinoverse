@@ -9,7 +9,7 @@ namespace DefaultNamespace
 {
     public class Plot : MonoBehaviour
     {
-        public string FileName = "test.csv";
+        private string FileName;
         public List<Statistic> statistics = new List<Statistic>();
 
         private string filePath = "";
@@ -27,10 +27,15 @@ namespace DefaultNamespace
 
         }
 
-        public void Awake()
+        public void StartGame()
         {
             statistics.Clear();
+            FileName = DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".csv";
+#if UNITY_EDITOR
             filePath = Path.Combine(Application.dataPath,"Plots", FileName);
+#else
+            filePath = Path.Combine(Application.persistentDataPath, FileName);
+#endif
 
             try
             {

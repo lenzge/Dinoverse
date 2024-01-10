@@ -5,6 +5,7 @@
             <ui:SliderInt picking-mode="Ignore" label="Time speed" value="1" high-value="10" low-value="1" name="TimeSpeed" style="flex-direction: row; align-items: stretch; font-size: 20px; width: 485px; -unity-font-style: bold; -unity-text-align: middle-left;">
                 <ui:Label tabindex="-1" text="1x" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VisualizeSpeed" style="width: 41px; -unity-text-align: middle-right; font-size: 15px;" />
             </ui:SliderInt>
+            <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Restart" style="height: 19px; width: 67px; margin-top: 11px;" />
         </ui:GroupBox>
     </ui:VisualElement>
 </ui:UXML>

@@ -19,6 +19,9 @@ namespace DefaultNamespace.UI
             
             Button startButton = root.Q<Button>("Start");
             startButton.clicked += OnStartButton;
+            
+            Button quitButton = root.Q<Button>("Quit");
+            quitButton.clicked += OnQuitButton;
 
             RadioButton asexual = root.Q<RadioButton>("Asexual");
             asexual.value = !environmentData.SexualReproduction;
@@ -75,6 +78,11 @@ namespace DefaultNamespace.UI
             endlessWorld.value = environmentData.EndlessWorld;
             endlessWorld.RegisterValueChangedCallback(OnEndlessWorldChanged);
 
+        }
+
+        private void OnQuitButton()
+        {
+            Application.Quit();
         }
 
         private void OnEndlessWorldChanged(ChangeEvent<bool> evt)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Animal;
+using Classification;
 using Enums;
 using UnityEngine;
 using Util;
@@ -33,6 +34,8 @@ namespace DefaultNamespace
         private int animalsScoredFitness;
 
         private Collider[] colliderBuffer = new Collider[1];
+        private List<Point> points = new List<Point> {};
+        private float[] featureWeights;
 
         public void StartGame()
         {
@@ -46,9 +49,36 @@ namespace DefaultNamespace
             animalsScoredFitness = 0;
 
             newGenomesAmount = 0.5f;
-            frozenGenomes = genomeParser.LoadAllGenomes();
+            //frozenGenomes = genomeParser.LoadAllGenomes();
             CreateNewGeneration();
+
+            featureWeights = activeAnimalControllers[0].Genome.CreateFeatureWeights();
         }
+
+        public void Classify()
+        {
+            points.Clear();
+
+            foreach (var animal in activeAnimalControllers)
+            {
+                points.Add(animal.Genome.CreatePoint(animal.name));
+            }
+                    
+            DBSCAN dbscan = new DBSCAN(points);
+            List<List<Point>> clusters = dbscan.Cluster(.1f, 2, featureWeights);
+                    
+            Debug.LogError($"{clusters.Count} Clusters");
+            foreach (List<Point> cluster in clusters)
+            {
+                //Debug.LogError($"Cluster: {cluster.Count} points");
+            }
+
+            for (int i = 0; i < activeAnimalControllers.Count; i++)
+            {
+                activeAnimalControllers[i]?.UpdateColor(points[i].ClusterHue);
+            }
+        }
+
 
         private void CreateNewGeneration()
         {
@@ -156,11 +186,11 @@ namespace DefaultNamespace
             if ((genomeType == GenomeType.Crossover || genomeType == GenomeType.Parent) && spawnPositionType == SpawnType.NearParent)
             {
                 Vector2 rando = RNG.RandomDonut(100, 35, Random.Range(0,80));
-                return new Vector3(position.x + rando.x, 0,
+                return new Vector3(position.x + rando.x, 1,
                     position.z + rando.y);
             }
             else{
-                return new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 0,
+                return new Vector3(Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize), 1,
                         Random.Range(-5 * environmentData.MapSize, 5 * environmentData.MapSize));
             }
         }
@@ -178,8 +208,8 @@ namespace DefaultNamespace
                 
                 if (animalController.Fitness >= bestFitness)
                 {
-                    if (animalController.Fitness > bestFitness)
-                        genomeParser.SaveToJson(animalController.Brain, animalController.DNA);
+                    //if (animalController.Fitness > bestFitness)
+                        //genomeParser.SaveToJson(animalController.Brain, animalController.DNA);
                     bestFitness = animalController.Fitness;
                     Debug.LogWarning("Best fitness: " + bestFitness);
                 }
@@ -195,7 +225,7 @@ namespace DefaultNamespace
                     }
                 }*/
 
-                if (animalsScoredFitness >= 50)
+                if (animalsScoredFitness >= 1)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}]50 Animals Scored " + FitnessToScore);
                     animalController.NewLevel = 1;

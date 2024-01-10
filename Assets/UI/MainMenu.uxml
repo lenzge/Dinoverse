@@ -29,6 +29,7 @@
                 </ui:GroupBox>
             </ui:GroupBox>
             <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Start" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; width: 79px; height: 24px; align-self: center;" />
+            <ui:Button text="Quit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Quit" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; width: 79px; height: 24px; align-self: center;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

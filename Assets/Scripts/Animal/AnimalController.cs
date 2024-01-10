@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using Util;
 using Action = Enums.Action;
 using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Animal
@@ -16,6 +17,7 @@ namespace Animal
     public class AnimalController: TimeBasedBehaviour
     {
         public AnimalCreator AnimalCreator;
+        public Material Material;
 
         [Header("Organs n stuff")]
         public CharacterController CharacterController;
@@ -56,18 +58,19 @@ namespace Animal
         private Vector2 lastDirection;
         private int actionSpace;
         private Collider[] colliderBuffer;
+        private Material[] materials;
 
         private Transform characterTransform;
         
         [HideInInspector] public UnityEvent<AnimalController> Died;
-
-        [HideInInspector] public int drowningPunishment;
+        
         
         protected override void TimedStart()
         {
-            // TODO make Plot Static
             characterTransform = transform;
             Plot = GameObject.Find("Plot").GetComponent<Plot>();
+            materials = gameObject.GetComponentInChildren<Renderer>().materials;
+            UpdateColor(0.266f);
 
             // Reset Variables
             Age = 0;
@@ -77,7 +80,6 @@ namespace Animal
             IsKilled = false;
             isInDrownAni = false;
             NewLevel = 0;
-            drowningPunishment = 1;
             colliderBuffer = new Collider[1];
             
             actionSpace = 3;
@@ -85,20 +87,19 @@ namespace Animal
             {
                 actionSpace = 4;
             }
-
-            Genome = new Genome(Brain, DNA);
+            
             //Debug.LogError(Genome.Weights.Length);
             //Debug.LogError(Genome.Biases.Length);
             TimedUpdate();
 
         }
 
-        public void UpdateInfo(int key, int population, int generation)
+        public void UpdateInfo(int key, int population, int generation, int hue = 266)
         {
             Key = key;
             Population = population;
             Generation = generation;
-            gameObject.name = $"animal {Key}.{Population}.{Generation}";
+            gameObject.name = $"animal {Key}.{Population}.{Generation} | {hue}";
         }
         
         // TODO implement subspecies
@@ -218,6 +219,8 @@ namespace Animal
             Stomach.Init();
             Uterus.Init();
             Weapon.Init();
+            
+            Genome = new Genome(Brain, DNA);
         }
 
         public float AgeLevel()
@@ -398,14 +401,21 @@ namespace Animal
             }
             
         }
-        
+
         public static string ArrayToString(float[] array)
         {
             // Convert the array elements to strings and join them with commas
             return "[" + string.Join(" , ", array) + "]";
         }
-        
-        
 
+
+        public void UpdateColor(float hue)
+        {
+            if (materials == null) materials = gameObject.GetComponentInChildren<Renderer>().materials;
+            materials[2].color = Color.HSVToRGB(hue, 0.5f, 0.35f);
+            materials[3].color = Color.HSVToRGB(hue, 0.4f, 0.55f);
+            int intHue = (int) (hue * 1000);
+            UpdateInfo(Key, Population, Generation, intHue);
+        }
     }
 }

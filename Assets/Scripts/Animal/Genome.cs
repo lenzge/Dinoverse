@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Classification;
 using UnityEngine;
 
 namespace Animal
@@ -35,6 +36,22 @@ namespace Animal
         public int[] Menopause;
         public int[] LitterSize;
 
+
+        public Point CreatePoint(string name)
+        {
+            return new Point(new []
+            {
+                LifeExpectation[0], Weight[0], MutationAmount[0], MutationChance[0], EatingSpeed[0], Carnivore[0],
+                VisualRadius[0], AngleBetweenRaycasts[0], MovementSpeed[0], SexualMaturity[0], Menopause[0], LitterSize[0]
+            }, name);
+        }
+
+        public float[] CreateFeatureWeights()
+        {
+            return new [] { Var(LifeExpectation), Var(Weight), Var(MutationAmount), Var(MutationChance), 
+                Var(EatingSpeed), Var(Carnivore), Var(VisualRadius), Var(AngleBetweenRaycasts), Var(MovementSpeed), 
+                Var(SexualMaturity), Var(Menopause), Var(LitterSize) };
+        }
 
         public void CompareGenomes(Genome other)
         {
@@ -77,6 +94,20 @@ namespace Animal
             float variance = own[2] - own[1];
             if (variance == 0) variance = 1;
             return Mathf.Abs(own[0] - other[0])/ variance;
+        }
+        
+        public float Var(int[] own)
+        {
+            float variance = own[2] - own[1];
+            if (variance == 0) variance = 1;
+            return variance;
+        }
+        
+        public float Var(float[] own)
+        {
+            float variance = own[2] - own[1];
+            if (variance == 0) variance = 1;
+            return variance;
         }
         
         public float ArrayDiff(float[] own, float[] other)

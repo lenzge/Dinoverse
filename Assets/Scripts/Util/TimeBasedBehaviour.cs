@@ -9,7 +9,6 @@ namespace Util
     {
         public EnvironmentData EnvironmentData;
         private float timeInterval;
-        private float slowTimeIntervalValue = 5;
         private float slowTimeInterval;
 
         private void Start()
@@ -39,7 +38,7 @@ namespace Util
         {
             while (true)
             {
-                slowTimeInterval = slowTimeIntervalValue / EnvironmentData.TimeSpeed;
+                slowTimeInterval = 10f;
                 yield return new WaitForSeconds(slowTimeInterval);
                 TimedSlowUpdate();
             }
