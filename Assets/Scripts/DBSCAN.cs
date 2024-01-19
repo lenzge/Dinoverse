@@ -37,6 +37,7 @@ namespace Classification
                 if (neighbors.Count >= minPoints)
                 {
                     float clusterHue =  Random.Range(0f, 1f);
+                    if (Math.Abs(point.ClusterHue - 0.266f) > 0.01) clusterHue = point.ClusterHue;
                     //Debug.LogError($"Create Cluster");
                     List<Point> cluster = ExpandCluster(point, neighbors, epsilon, minPoints, visited, featureWeights, clusterHue);
                     clusters.Add(cluster);
@@ -115,20 +116,21 @@ namespace Classification
         public float ClusterHue;
         public string Name;
 
-        public Point(float[] coordinates, string name)
+        public Point(float[] coordinates, string name, float color)
         {
             Coordinates = coordinates;
-            ClusterHue = 0.267f;
+            ClusterHue = color;
             Name = name;
         }
 
         public float WeightedDistanceTo(Point other, float[] featureWeights)
         {
             float sum = 0;
-
+            
             for (int i = 0; i < Coordinates.Length; i++)
             {
                 float difference = Mathf.Abs(Coordinates[i] - other.Coordinates[i]);
+                //Debug.LogError($"{Coordinates[i]} vs. {other.Coordinates[i]} --> {difference / featureWeights[i]}");
                 sum += difference / featureWeights[i];
             }
             sum /= featureWeights.Length;

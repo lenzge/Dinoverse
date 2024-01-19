@@ -184,11 +184,11 @@ MonoBehaviour:
   NewLevel: 0
   IsDrown: 0
   IsKilled: 0
+  Color: 0
   CurrentAction: 0
   Died:
     m_PersistentCalls:
       m_Calls: []
-  drowningPunishment: 0
 --- !u!114 &7449578703545013821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,34 +290,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d868b030b69740a593eb39b1f7f319a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeExpectation: 0000000020030000e8030000
-  Weight: 00000000640000002c010000
+  LifeExpectation: 0000000020030000e80300000a00000010270000
+  Weight: 00000000640000002c0100000a000000b80b0000
   MutationAmount:
   - 0
   - 0.2
   - 0.8
+  - 0.01
+  - 8
   MutationChance:
   - 0
   - 0.05
   - 0.2
+  - 0.01
+  - 1
   EatingSpeed:
   - 0
+  - 1
+  - 1
   - 1
   - 1
   Carnivore:
   - 0
   - 0
   - 1
-  VisualRadius: 00000000640000002c010000
-  NumRaycasts: 000000000500000005000000
-  AngleBetweenRaycasts: 00000000050000001e000000
+  - 0
+  - 1
+  VisualRadius: 00000000640000002c0100000a000000b80b0000
+  NumRaycasts: 0000000005000000050000000500000005000000
+  AngleBetweenRaycasts: 00000000050000001e0000000100000046000000
   HiddenLayer: 000000000200000002000000
   MaxNeurons: 000000002800000028000000
   MinNeurons: 000000000c0000000c000000
-  MovementSpeed: 00000000050000000c000000
-  SexualMaturity: 000000001e0000001e000000
-  Menopause: 000000000500000008000000
-  LitterSize: 000000000200000005000000
+  MovementSpeed: 00000000050000000c0000000100000078000000
+  SexualMaturity: 000000001e0000001e0000001e0000001e000000
+  Menopause: 0000000005000000080000000100000050000000
+  LitterSize: 00000000020000000a000000010000001e000000
 --- !u!1 &4541974121232668428
 GameObject:
   m_ObjectHideFlags: 0

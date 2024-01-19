@@ -37,13 +37,13 @@ namespace Animal
         public int[] LitterSize;
 
 
-        public Point CreatePoint(string name)
+        public Point CreatePoint(string name, float color)
         {
             return new Point(new []
             {
                 LifeExpectation[0], Weight[0], MutationAmount[0], MutationChance[0], EatingSpeed[0], Carnivore[0],
                 VisualRadius[0], AngleBetweenRaycasts[0], MovementSpeed[0], SexualMaturity[0], Menopause[0], LitterSize[0]
-            }, name);
+            }, name, color);
         }
 
         public float[] CreateFeatureWeights()

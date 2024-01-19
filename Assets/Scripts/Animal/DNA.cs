@@ -58,7 +58,7 @@ namespace Animal
             
             MutateIntParam(LifeExpectation);
             MutateIntParam(Weight);
-            MutateFloatParam(EatingSpeed);
+            //MutateFloatParam(EatingSpeed);
             MutateFloatParam(Carnivore);
             MutateIntParam(VisualRadius);
             //MutateIntParam(NumRaycasts); Will stay constant
@@ -168,13 +168,13 @@ namespace Animal
                 int change = (int) (param[0] * MutationAmount[0] * Random.Range(-1, 1));
                 //Debug.Log($"Old Value: {param[0]}. Change of {change}");
                 param[0] += change;
-                if (param[0] < param[1])
+                if (param[0] < param[3])
                 {
-                    param[0] = param[1];
+                    param[0] = param[3];
                 }
-                else if (param[0] > param[2])
+                else if (param[0] > param[4])
                 {
-                    param[0] = param[2];
+                    param[0] = param[4];
                 }
             }
         }

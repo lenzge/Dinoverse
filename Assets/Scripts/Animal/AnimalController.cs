@@ -50,6 +50,7 @@ namespace Animal
         public int NewLevel;
         public bool IsDrown;
         public bool IsKilled;
+        public float Color;
 
         [Space]
         public Action CurrentAction;
@@ -71,6 +72,7 @@ namespace Animal
             Plot = GameObject.Find("Plot").GetComponent<Plot>();
             materials = gameObject.GetComponentInChildren<Renderer>().materials;
             UpdateColor(0.266f);
+            UpdateScale();
 
             // Reset Variables
             Age = 0;
@@ -412,10 +414,19 @@ namespace Animal
         public void UpdateColor(float hue)
         {
             if (materials == null) materials = gameObject.GetComponentInChildren<Renderer>().materials;
-            materials[2].color = Color.HSVToRGB(hue, 0.5f, 0.35f);
-            materials[3].color = Color.HSVToRGB(hue, 0.4f, 0.55f);
+            materials[2].color = UnityEngine.Color.HSVToRGB(hue, 0.45f, 0.3f);
+            materials[3].color = UnityEngine.Color.HSVToRGB(hue, 0.35f, 0.45f);
             int intHue = (int) (hue * 1000);
             UpdateInfo(Key, Population, Generation, intHue);
+            Color = hue;
+        }
+
+        private void UpdateScale()
+        {
+            float scale = 1f;
+            float variance = DNA.Weight[2] - DNA.Weight[1];
+            scale += (DNA.Weight[0] - DNA.Weight[1]) / variance;
+            characterTransform.localScale = new UnityEngine.Vector3(scale, scale, scale);
         }
     }
 }

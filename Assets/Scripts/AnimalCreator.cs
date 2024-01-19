@@ -61,17 +61,18 @@ namespace DefaultNamespace
 
             foreach (var animal in activeAnimalControllers)
             {
-                points.Add(animal.Genome.CreatePoint(animal.name));
+                points.Add(animal.Genome.CreatePoint(animal.name, animal.Color));
             }
                     
             DBSCAN dbscan = new DBSCAN(points);
             List<List<Point>> clusters = dbscan.Cluster(.1f, 2, featureWeights);
-                    
-            Debug.LogError($"{clusters.Count} Clusters");
+
+            string logstring = $"{clusters.Count} Clusters";
             foreach (List<Point> cluster in clusters)
             {
-                //Debug.LogError($"Cluster: {cluster.Count} points");
+               logstring += ($"\nCluster: {cluster.Count} points");
             }
+            Debug.LogWarning(logstring);
 
             for (int i = 0; i < activeAnimalControllers.Count; i++)
             {
