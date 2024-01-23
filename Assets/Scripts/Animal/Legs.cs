@@ -12,6 +12,7 @@ namespace Animal
         public override void Init(bool isChild = false)
         {
             EnvironmentData.TimeSpeedChangedEvent.AddListener(OnTimeScaleChanged);
+            OnTimeScaleChanged(EnvironmentData.TimeSpeed);
         }
 
         public void Move(Transform characterTransform)
@@ -26,7 +27,7 @@ namespace Animal
             // Move 
             animalController.CharacterController.SimpleMove(movementDirection.normalized * (currentMovementSpeed * animalController.EnvironmentData.TimeSpeed));
         }
-
+        
         private void OnTimeScaleChanged(int speed)
         {
             switch (speed)

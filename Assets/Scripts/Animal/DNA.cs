@@ -22,20 +22,20 @@ namespace Animal
 
         [Space] 
         [Header("Food")]
-        public float[] EatingSpeed;
+        public float[] EatingSpeed; // Not used atm
         public float[] Carnivore;
         
         [Space] 
         [Header("Eyes")] 
         public int[] VisualRadius;
-        public int[] NumRaycasts;
+        public int[] NumRaycasts; // constant atm
         public int[] AngleBetweenRaycasts;
         
         [Space] 
         [Header("Brain")] 
-        public int[] HiddenLayer;
-        public int[] MaxNeurons;
-        public int[] MinNeurons;
+        public int[] HiddenLayer; // constant atm
+        public int[] MaxNeurons; // constant atm
+        public int[] MinNeurons; // constant atm
 
         [Space] 
         [Header("Movement")] 
@@ -44,7 +44,7 @@ namespace Animal
         [Space] 
         [Header("Reproduction")] 
         public int[] SexualMaturity;
-        public int[] Menopause;
+        public int[] Menopause; // Not used atm
         public int[] LitterSize;
         
 
@@ -55,18 +55,17 @@ namespace Animal
             
             MutateFloatParam(MutationChance);
             MutateFloatParam(MutationAmount);
-            
             MutateIntParam(LifeExpectation);
             MutateIntParam(Weight);
             //MutateFloatParam(EatingSpeed);
             MutateFloatParam(Carnivore);
             MutateIntParam(VisualRadius);
-            //MutateIntParam(NumRaycasts); Will stay constant
+            //MutateIntParam(NumRaycasts);
             MutateIntParam(AngleBetweenRaycasts);
             MutateIntParam(MovementSpeed);
             //MutateIntParam(SexualMaturity);
             if (SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1; //Random.value < 0.5 && 
-            MutateIntParam(Menopause);
+            //MutateIntParam(Menopause);
             MutateIntParam(LitterSize);
         }
 

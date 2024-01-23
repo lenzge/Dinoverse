@@ -16,6 +16,7 @@ namespace DefaultNamespace
         public GameObject Prefab;
         public GameObject FullGrownModel;
         public GameObject SmallModel;
+        public SphereCollider Collider;
         
         [Header("Params")]
         public float Mass;
@@ -90,8 +91,7 @@ namespace DefaultNamespace
             if (currentMass == 0)
             {
                 //StartCoroutine(Recover());
-                NurtureEatenEvent.Invoke(this, Prefab);
-                Destroy(gameObject);
+                StartCoroutine(DestroyAfterDelay());
             }
             
             return eatenMass * CurrentCalories;
@@ -118,6 +118,15 @@ namespace DefaultNamespace
             gameObject.GetComponent<SphereCollider>().enabled = true;
             gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
             currentMass = Mass;
+        }
+
+        IEnumerator DestroyAfterDelay()
+        {
+            Collider.enabled = false;
+            float timeInterval = 10f / EnvironmentData.TimeSpeed;
+            yield return new WaitForSeconds(timeInterval);
+            NurtureEatenEvent.Invoke(this, Prefab);
+            Destroy(gameObject);
         }
 
     }

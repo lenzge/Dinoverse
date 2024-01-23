@@ -15,7 +15,7 @@ namespace Animal
 
         public override void Init(bool isChild = false)
         {
-            distances = new float[animalController.DNA.NumRaycasts[0] * 6];
+            distances = new float[animalController.DNA.NumRaycasts[0] * 7];
             colliderBuffer = new Collider[40];
         }
 
@@ -92,6 +92,8 @@ namespace Animal
                     distances[animalController.DNA.NumRaycasts[0] * 3 + j++] = GetActionValue(hit.collider.GetComponentInParent<AnimalController>().CurrentAction);
                     distances[animalController.DNA.NumRaycasts[0] * 3 + j++] =
                         GetStrengthValue(hit.collider.GetComponentInParent<AnimalController>().GetStrength());
+                    distances[animalController.DNA.NumRaycasts[0] * 3 + j++] =
+                        GetSpeciesValue(hit.collider.GetComponentInParent<AnimalController>().Color);
                 }
                 else
                 {
@@ -101,10 +103,16 @@ namespace Animal
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 1;
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 0;
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 0;
+                    distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 0;
                 }
             }
             
             return distances;
+        }
+
+        private float GetSpeciesValue(float color)
+        {
+            return animalController.Color - color;
         }
 
         public float FoodDensity(Layer food)

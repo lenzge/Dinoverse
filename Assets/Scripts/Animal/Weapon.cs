@@ -36,7 +36,11 @@ namespace Animal
 
         public void Attack(AnimalController prey)
         {
-            if (prey.CurrentAction != Action.Fight) StartCoroutine(prey.FightFreeze());
+            if (prey.CurrentAction != Action.Fight && !prey.IsKilled)
+            {
+                prey.CurrentAction = Action.Fight;
+                prey.StartCoroutine(prey.AnimationFreeze((int) Action.Fight));
+            }
             if (animalController.GetStrength() >= prey.GetStrength())
             {
                 prey.IsKilled = true;

@@ -87,7 +87,7 @@ namespace Animal
 
         private int[] CreateNetworkShape()
         {
-            return new []{animalController.DNA.NumRaycasts[0]*6 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
+            return new []{animalController.DNA.NumRaycasts[0]*7 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
             
             /*switch (DNA.HiddenLayer[0])
             {

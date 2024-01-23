@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Animal;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -17,11 +18,11 @@ namespace DefaultNamespace
         private object lockObject = new object();
         private bool isWriting = false;
 
-        public void SaveData(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-            int reproduced, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel)
+        public void SaveData(int key, int generation, int grandChild, float color, int survivedTime, int eatenTrees, int eatenAnimals,
+            int reproducedSolo, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel, DNA dna)
         {
-            Statistic statistic = new Statistic(key, generation, grandChild, survivedTime, eatenTrees, reproduced, 
-                reproducedMutual,timeOfDeath, causeOfDeath, fitness, newLevel);
+            Statistic statistic = new Statistic(key, generation, grandChild, color, survivedTime, eatenTrees, eatenAnimals, reproducedSolo, 
+                reproducedMutual,timeOfDeath, causeOfDeath, fitness, newLevel, dna);
             statistics.Add(statistic);
             WriteToCSV(statistic);
 
@@ -41,8 +42,9 @@ namespace DefaultNamespace
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("key,generation,grandChild,survivedTime,eatenTrees,reproduced,reproducedMutual," +
-                                     "timeOfDeath,causeOfDeath,fitness,newLevel");
+                    writer.WriteLine("key,generation,grandChild,color,survivedTime,eatenTrees,eatenAnimals,reproducedSolo,reproducedMutual," +
+                                     "timeOfDeath,causeOfDeath,fitness,newLevel,lifeExpectation,weight,mutationAmount,mutationChance," +
+                                     "carnivore,visualRadius,angleBetweenRaycasts,movementSpeed,sexualMaturity,litterSize");
                 }
 
             }
@@ -127,9 +129,12 @@ namespace DefaultNamespace
                 {
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
-                        writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.SurvivedTime}, " +
-                                         $"{data.EatenTrees}, {data.Reproduced}, {data.ReproducedMutual}, {data.TimeOfDeath}, " +
-                                         $"{data.CauseOfDeath}, {data.Fitness}, {data.NewLevel}");
+                        writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.Color}, {data.SurvivedTime}, " +
+                                         $"{data.EatenTrees}, {data.EatenAnimals}, {data.ReproducedSolo}, " +
+                                         $"{data.ReproducedMutual}, {data.TimeOfDeath}, {data.CauseOfDeath}, {data.Fitness}, " +
+                                         $"{data.NewLevel}, {data.LifeExpectation}, {data.Weight}, {data.MutationAmount}, " +
+                                         $"{data.MutationChance}, {data.Carnivore}, {data.VisualRadius}, {data.AngleBetweenRaycasts}, " +
+                                         $"{data.MovementSpeed}, {data.SexualMaturity}, {data.LitterSize}");
                     }
                 }
                 catch (Exception e)
@@ -144,29 +149,54 @@ namespace DefaultNamespace
             public int Key;
             public int Generation;
             public int GrandChild;
+            public float Color;
             public int SurvivedTime;
             public int EatenTrees;
-            public int Reproduced;
+            public int EatenAnimals;
+            public int ReproducedSolo;
             public int ReproducedMutual;
             public int TimeOfDeath;
             public int CauseOfDeath;
             public int Fitness;
             public int NewLevel;
+            public int LifeExpectation;
+            public int Weight;
+            public float MutationAmount;
+            public float MutationChance;
+            public float Carnivore;
+            public int VisualRadius;
+            public int AngleBetweenRaycasts;
+            public int MovementSpeed;
+            public int SexualMaturity;
+            public int LitterSize;
 
-            public Statistic(int key, int generation, int grandChild, int survivedTime, int eatenTrees,
-                int reproduced, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel)
+            public Statistic(int key, int generation, int grandChild, float color, int survivedTime, int eatenTrees,
+                int eatenAnimals, int reproducedSolo, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, 
+                int newLevel, DNA dna)
             {
                 Key = key;
                 Generation = generation;
                 GrandChild = grandChild;
+                Color = color;
                 SurvivedTime = survivedTime;
                 EatenTrees = eatenTrees;
-                Reproduced = reproduced;
+                EatenAnimals = eatenAnimals;
+                ReproducedSolo = reproducedSolo;
                 ReproducedMutual = reproducedMutual;
                 TimeOfDeath = timeOfDeath;
                 CauseOfDeath = causeOfDeath;
                 Fitness = fitness;
                 NewLevel = newLevel;
+                LifeExpectation = dna.LifeExpectation[0]; 
+                Weight = dna.Weight[0];
+                MutationAmount = dna.MutationAmount[0]; 
+                MutationChance = dna.MutationChance[0];
+                Carnivore = dna.Carnivore[0];
+                VisualRadius = dna.VisualRadius[0]; 
+                AngleBetweenRaycasts = dna.AngleBetweenRaycasts[0];
+                MovementSpeed = dna.MovementSpeed[0];
+                SexualMaturity = dna.SexualMaturity[0];
+                LitterSize = dna.LitterSize[0];
             }
 
         }

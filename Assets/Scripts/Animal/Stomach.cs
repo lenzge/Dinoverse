@@ -17,9 +17,17 @@ namespace Animal
             currentCalories = maxCalories / 2;
         }
         
-        public void BurnCalories(Action action, float movementSpeed)
+        public void BurnCalories(Action action, float movementSpeed, bool inAction)
         {
-            currentCalories -= animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed);
+            currentCalories -= animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed, inAction) + animalController.DNA.VisualRadius[0] /50f;
+            Debug.Log($"{name} burned {animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed, inAction)+ animalController.DNA.VisualRadius[0] /50f} " +
+                      $"calories. Action: {action}, active: {inAction}, speed: {movementSpeed} ");
+        }
+
+        public void BurnCaloriesOnBirthGiving()
+        {
+            currentCalories -= 10;
+            Debug.Log($"{name} burned 10 calories on birth giving");
         }
         
         public bool TryToEatPlants(Transform animalTransform, float characterRadius, Layer foodType)
@@ -79,6 +87,7 @@ namespace Animal
             }
             
             float newCalories = currentCalories + eatenCalories;
+            Debug.LogWarning($"{name} ate {eatenCalories} of {food}");
             if (newCalories <= maxCalories)
             {
                 return newCalories;
@@ -86,18 +95,21 @@ namespace Animal
             return maxCalories;
         }
 
-        private float EvalPAL(Action action, float movementSpeed)
+        private float EvalPAL(Action action, float movementSpeed, bool inAction)
         {
+            if (!inAction)
+            {
+                return 1 + movementSpeed * 0.04f;
+            }
+            
             switch (action)
             {
-                case Action.Chill:
-                    return 1 + movementSpeed * 0.02f;
                 case Action.Eat:
-                    return 1 + 0.2f + movementSpeed * 0.02f;
+                    return 1 + 0.2f;
                 case Action.Reproduce:
-                    return 1 + 0.3f + movementSpeed * 0.02f;
+                    return 1 + 0.3f;
                 case Action.Fight:
-                    return 1 + 0.8f + movementSpeed * 0.02f;
+                    return 1 + 1f;
                 default:
                     return 1;
             }

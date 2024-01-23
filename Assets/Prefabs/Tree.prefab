@@ -52,6 +52,7 @@ MonoBehaviour:
   Prefab: {fileID: 1141243578218203949}
   FullGrownModel: {fileID: 232153542447876674}
   SmallModel: {fileID: 8981193559325280505}
+  Collider: {fileID: 5333984604632564154}
   Mass: 1
   Calories: 1000
   CurrentCalories: 0

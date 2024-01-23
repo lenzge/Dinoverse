@@ -52,16 +52,22 @@ namespace Animal
                         {
                             mate.EvaluateFitness();
                             animalController.EvaluateFitness();
-                            int litterSize = LitterSize(animalController.Fitness, mate.Fitness) * 5;
+                            int litterSize = animalController.DNA.LitterSize[0];
                             Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
                             MutualChildCount += 1;
+                            mate.Uterus.MutualChildCount += 1;
                             bool prio = false;
                             for (int i = 0; i < litterSize; i++)
                             {
                                 animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,spawnType, animalController, mate);
+                                animalController.Stomach.BurnCaloriesOnBirthGiving();
+                                mate.Stomach.BurnCaloriesOnBirthGiving();
                             }
                             ReproductionEnergy = 0;
-                            animalController.Genome.CompareGenomes(mate.Genome);
+                            mate.Uterus.ReproductionEnergy = 0;
+                            
+                            mate.StartCoroutine(mate.AnimationFreeze((int) Action.Reproduce));
+
                             return true;
                         }
                     }
@@ -70,11 +76,12 @@ namespace Animal
             else if (!EnvironmentData.SexualReproduction)
             {
                 SoloChildCount += 1; 
-                int litterSize = 3;
+                int litterSize =  animalController.DNA.LitterSize[0];
                 Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Alone");
                 for (int i = 0; i < litterSize; i++)
                 {
                     animalController.AnimalCreator.CreateChildObject(false,animalController.Key, animalController.Generation + 1, GenomeType.Parent,spawnType, animalController);
+                    animalController.Stomach.BurnCaloriesOnBirthGiving();
                 }
                 ReproductionEnergy = 0;
                 return true;
@@ -172,7 +179,6 @@ namespace Animal
         public bool CanReproduce()
         {
             if (animalController.Age >= animalController.DNA.SexualMaturity[0]
-                && SoloChildCount <= animalController.DNA.Menopause[0]
                 && ReproductionEnergy >= animalController.EnvironmentData.ReproductionEnergy)
             {
                 return true;
