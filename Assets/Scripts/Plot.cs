@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -17,11 +18,12 @@ namespace DefaultNamespace
         private Queue<Statistic> writeQueue = new Queue<Statistic>();
         private object lockObject = new object();
         private bool isWriting = false;
+        private NumberFormatInfo formatInfo;
 
-        public void SaveData(int key, int generation, int grandChild, float color, int survivedTime, int eatenTrees, int eatenAnimals,
+        public void SaveData(int key,int population, int generation, float color, int survivedTime, int eatenTrees, int eatenAnimals,
             int reproducedSolo, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, int newLevel, DNA dna)
         {
-            Statistic statistic = new Statistic(key, generation, grandChild, color, survivedTime, eatenTrees, eatenAnimals, reproducedSolo, 
+            Statistic statistic = new Statistic(key,population, generation, color, survivedTime, eatenTrees, eatenAnimals, reproducedSolo, 
                 reproducedMutual,timeOfDeath, causeOfDeath, fitness, newLevel, dna);
             statistics.Add(statistic);
             WriteToCSV(statistic);
@@ -31,6 +33,8 @@ namespace DefaultNamespace
         public void StartGame()
         {
             statistics.Clear();
+            formatInfo = new NumberFormatInfo();
+            formatInfo.NumberDecimalSeparator = ".";
             FileName = DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".csv";
 #if UNITY_EDITOR
             filePath = Path.Combine(Application.dataPath,"Plots", FileName);
@@ -42,7 +46,7 @@ namespace DefaultNamespace
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("key,generation,grandChild,color,survivedTime,eatenTrees,eatenAnimals,reproducedSolo,reproducedMutual," +
+                    writer.WriteLine("key,population,generation,color,survivedTime,eatenTrees,eatenAnimals,reproducedSolo,reproducedMutual," +
                                      "timeOfDeath,causeOfDeath,fitness,newLevel,lifeExpectation,weight,mutationAmount,mutationChance," +
                                      "carnivore,visualRadius,angleBetweenRaycasts,movementSpeed,sexualMaturity,litterSize");
                 }
@@ -53,42 +57,6 @@ namespace DefaultNamespace
                 Debug.LogError("Can't write into CSV file because of " + e);
             }
 
-        }
-
-        public List<float> LifeSpan()
-        {
-            int timeOfDeath = 1;
-            List<int> buffer = new List<int>();
-            List<float> lifeSpanList = new List<float>();
-            //Debug.Log(statistics.Count);
-
-            for (int i = 0; i < statistics.Count; i++)
-            {
-                if (statistics[i].TimeOfDeath == timeOfDeath)
-                {
-                    //Debug.Log("survivedTime: " + statistics[i].SurvivedTime);
-                    buffer.Add(statistics[i].SurvivedTime);
-
-                }
-                else
-                {
-                    float average = 0;
-                    if (buffer.Count != 0)
-                    {
-                        float sum = buffer.Sum();
-                        //Debug.Log("sum: " + sum);
-                        //Debug.Log("count: " + buffer.Count);
-                        average = sum / buffer.Count;
-                    }
-
-                    lifeSpanList.Add(average);
-                    Debug.LogWarning($"Average Fitness in Generation {timeOfDeath}: " + average);
-                    buffer.Clear();
-                    timeOfDeath++;
-                }
-            }
-
-            return lifeSpanList;
         }
 
 
@@ -129,11 +97,11 @@ namespace DefaultNamespace
                 {
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
-                        writer.WriteLine($"{data.Key}, {data.Generation}, {data.GrandChild}, {data.Color}, {data.SurvivedTime}, " +
+                        writer.WriteLine($"{data.Key}, {data.Population}, {data.Generation}, {data.Color.ToString("0.000", formatInfo)}, {data.SurvivedTime}, " +
                                          $"{data.EatenTrees}, {data.EatenAnimals}, {data.ReproducedSolo}, " +
                                          $"{data.ReproducedMutual}, {data.TimeOfDeath}, {data.CauseOfDeath}, {data.Fitness}, " +
-                                         $"{data.NewLevel}, {data.LifeExpectation}, {data.Weight}, {data.MutationAmount}, " +
-                                         $"{data.MutationChance}, {data.Carnivore}, {data.VisualRadius}, {data.AngleBetweenRaycasts}, " +
+                                         $"{data.NewLevel}, {data.LifeExpectation}, {data.Weight.ToString("0.000", formatInfo)}, {data.MutationAmount.ToString("0.000", formatInfo)}, " +
+                                         $"{data.MutationChance.ToString("0.000", formatInfo)}, {data.Carnivore.ToString("0.000", formatInfo)}, {data.VisualRadius}, {data.AngleBetweenRaycasts}, " +
                                          $"{data.MovementSpeed}, {data.SexualMaturity}, {data.LitterSize}");
                     }
                 }
@@ -147,8 +115,8 @@ namespace DefaultNamespace
         public struct Statistic
         {
             public int Key;
+            public int Population;
             public int Generation;
-            public int GrandChild;
             public float Color;
             public int SurvivedTime;
             public int EatenTrees;
@@ -170,13 +138,13 @@ namespace DefaultNamespace
             public int SexualMaturity;
             public int LitterSize;
 
-            public Statistic(int key, int generation, int grandChild, float color, int survivedTime, int eatenTrees,
+            public Statistic(int key, int population, int generation, float color, int survivedTime, int eatenTrees,
                 int eatenAnimals, int reproducedSolo, int reproducedMutual, int timeOfDeath, int causeOfDeath, int fitness, 
                 int newLevel, DNA dna)
             {
                 Key = key;
+                Population = population;
                 Generation = generation;
-                GrandChild = grandChild;
                 Color = color;
                 SurvivedTime = survivedTime;
                 EatenTrees = eatenTrees;

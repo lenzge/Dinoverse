@@ -23,7 +23,7 @@ namespace Animal
                     if (collider.gameObject != animalController.gameObject && !collider.isTrigger)
                     {
                         AnimalController prey = collider.gameObject.GetComponentInParent<AnimalController>();
-                        if (prey.IsKilled) return false; // No double attack
+                        if (!prey.CanBeAttacked()) return false; // No double attack
                         Attack(prey);
                         return true;
                     }
@@ -36,22 +36,23 @@ namespace Animal
 
         public void Attack(AnimalController prey)
         {
-            if (prey.CurrentAction != Action.Fight && !prey.IsKilled)
-            {
-                prey.CurrentAction = Action.Fight;
-                prey.StartCoroutine(prey.AnimationFreeze((int) Action.Fight));
-            }
             if (animalController.GetStrength() >= prey.GetStrength())
             {
                 prey.IsKilled = true;
                 animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories(), FoodSource.meat);
-                Debug.LogWarning($"Attacker [{name}] got {prey.Stomach.GetCurrentCalories()} calories from prey {prey.name}.");
+                Debug.LogWarning($"Attacker [{name}] got {prey.Stomach.GetCurrentCalories()} calories from prey {prey.name}. killed? {prey.IsKilled}");
             }
-            else if (prey.CurrentAction != Action.Fight)
+            else
             {
                 animalController.IsKilled = true;
                 prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories(), FoodSource.meat);
                 Debug.LogWarning($"Prey [{prey.name}] got {animalController.Stomach.GetCurrentCalories()} calories from predator {name}.");
+            }
+            
+            if (prey.CurrentAction != Action.Fight)
+            {
+                prey.CurrentAction = Action.Fight;
+                prey.StartCoroutine(prey.AnimationFreeze((int) Action.Fight));
             }
 
         }

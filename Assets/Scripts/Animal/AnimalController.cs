@@ -52,6 +52,7 @@ namespace Animal
 
         [Space]
         public Action CurrentAction;
+
         private bool isInAnimationFreeze;
         private bool isInDrownAni;
         private Vector2 lastDirection;
@@ -203,6 +204,7 @@ namespace Animal
                     Hearts.SetActive(false);
                     bool fight = Weapon.TryToFight(species);
                     if (fight && !IsKilled) EatenAnimals += 1;
+                    if (fight && !IsKilled) Debug.LogError($"{name} killed another animal. Eaten animals: {EatenAnimals}. Animation Freeze? {isInAnimationFreeze}");
                     if (fight && !IsKilled) Uterus.ReproductionEnergy += 1;
                     if (fight) StartCoroutine(AnimationFreeze((int) Action.Fight));
                     break;
@@ -290,7 +292,7 @@ namespace Animal
             if (causeOfDeath != (int) Enums.CauseOfDeath.other)
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
-                Debug.Log($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
+                Debug.LogWarning($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
                                  $"Fitness {Fitness}, " +
                                  $"Reproduced {Uterus.GetChildCountSolo()} times solo, " +
                                  $"Reproduced {Uterus.GetChildCountMutual()} times mutual, " +
@@ -323,13 +325,16 @@ namespace Animal
         public IEnumerator AnimationFreeze(int action)
         {
             isInAnimationFreeze = true;
+            Debug.LogError($"{name} animation freeze {action} set to true {isInAnimationFreeze}. is killed? {IsKilled}");
             Legs.SetMoveDirection(Vector2.zero, 0);
             Legs.Animator?.SetInteger("Action", action);
             if (action != (int) Action.Reproduce) Hearts.SetActive(false);
             else Hearts.SetActive(true);
             float timeInterval = 10f / EnvironmentData.TimeSpeed;
             yield return new WaitForSeconds(timeInterval);
+            KillIfDead();
             isInAnimationFreeze = false;
+            Debug.LogError($"{name} animation freeze {action} set to false {isInAnimationFreeze}");
             Legs.Animator?.SetInteger("Action", (int) Action.Chill);
         }
 
@@ -418,6 +423,12 @@ namespace Animal
             float variance = DNA.Weight[2] - DNA.Weight[1];
             scale += (DNA.Weight[0] - DNA.Weight[1]) / variance;
             characterTransform.localScale = new UnityEngine.Vector3(scale, scale, scale);
+        }
+
+        public bool CanBeAttacked()
+        {
+            if (IsKilled || CurrentAction == Action.Fight && isInAnimationFreeze) return false;
+            else return true;
         }
     }
 }

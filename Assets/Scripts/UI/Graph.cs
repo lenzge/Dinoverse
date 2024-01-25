@@ -30,7 +30,7 @@ namespace DefaultNamespace.UI
             return circleObject;
         }
 
-        public void ShowGraph()
+        /*public void ShowGraph()
         {
             ClearGraph();
             List<float> valueList = plotData.LifeSpan();
@@ -53,7 +53,7 @@ namespace DefaultNamespace.UI
                 lastCircle = circleObject;
             }
 
-        }
+        }*/
 
         private void CreateConnection(Vector2 dotPositionA, Vector2 dotPositionB)
         {
