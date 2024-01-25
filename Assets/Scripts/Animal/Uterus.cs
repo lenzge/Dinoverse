@@ -52,21 +52,25 @@ namespace Animal
                         {
                             mate.EvaluateFitness();
                             animalController.EvaluateFitness();
-                            int litterSize = animalController.DNA.LitterSize[0];
-                            Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
+                            Debug.LogWarning($"[{animalController.name}] Reproduced {animalController.DNA.LitterSize[0]} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
+                            Debug.LogWarning($"[{mate.name}] Reproduced {mate.DNA.LitterSize[0]} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
                             MutualChildCount += 1;
                             mate.Uterus.MutualChildCount += 1;
                             bool prio = false;
-                            for (int i = 0; i < litterSize; i++)
+                            for (int i = 0; i < animalController.DNA.LitterSize[0]; i++)
                             {
                                 animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,spawnType, animalController, mate);
-                                animalController.Stomach.BurnCaloriesOnBirthGiving();
+                                mate.Stomach.BurnCaloriesOnBirthGiving();
+                            }
+                            for (int i = 0; i < mate.DNA.LitterSize[0]; i++)
+                            {
+                                animalController.AnimalCreator.CreateChildObject(prio,mate.Key, mate.Generation + 1, GenomeType.Crossover,spawnType, mate, animalController);
                                 mate.Stomach.BurnCaloriesOnBirthGiving();
                             }
                             ReproductionEnergy = 0;
                             mate.Uterus.ReproductionEnergy = 0;
                             
-                            mate.StartCoroutine(mate.AnimationFreeze((int) Action.Reproduce));
+                            mate.StartCoroutine(mate.AnimationFreeze(Action.Reproduce));
 
                             return true;
                         }

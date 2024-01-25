@@ -30,9 +30,7 @@ namespace Animal
 
         [Space]
         [Header("Info")]
-        [SerializeField] private Gender gender;
         [SerializeField] private Layer species;
-        [SerializeField] private Layer enemySpecies;
         [SerializeField] private Layer food;
         
         [Space]
@@ -53,7 +51,7 @@ namespace Animal
         [Space]
         public Action CurrentAction;
 
-        private bool isInAnimationFreeze;
+        private bool isInAction;
         private bool isInDrownAni;
         private Vector2 lastDirection;
         private int actionSpace;
@@ -83,7 +81,7 @@ namespace Animal
             isInDrownAni = false;
             NewLevel = 0;
             colliderBuffer = new Collider[1];
-            isInAnimationFreeze = false;
+            isInAction = false;
             CurrentAction = Action.Chill;
             
             actionSpace = 3;
@@ -131,9 +129,9 @@ namespace Animal
             return fitness;
         }
 
-        public int GetStrength()
+        public float GetStrength()
         {
-            return DNA.Weight[0] * 10 + (int) Stomach.GetCurrentCalories();
+            return DNA.Weight[0] * Stomach.HungerLevel();
         }
 
         private Vector2 SetMovementDirection(float x, float y)
@@ -159,14 +157,14 @@ namespace Animal
         {
             if (isInDrownAni) return;
 
+            KillIfDead();
+            
             Age += 1;
-            if (isInAnimationFreeze)
+            if (isInAction)
             {
-                Stomach.BurnCalories(CurrentAction, 0, isInAnimationFreeze);
+                Stomach.BurnCalories(CurrentAction, 0, isInAction);
                 return;
             }
-            
-            KillIfDead();
 
             //Debug.Log("last direction " + lastDirection);
             float[] inputs = PerceiveInputs();
@@ -193,27 +191,23 @@ namespace Animal
                     bool isEating = Stomach.TryToEatPlants(characterTransform, CharacterController.radius, food);
                     if (isEating) EatenTrees += 1;
                     if (isEating) Uterus.ReproductionEnergy += 1;
-                    if (isEating) StartCoroutine(AnimationFreeze((int) Action.Eat));
+                    if (isEating) StartCoroutine(AnimationFreeze(Action.Eat));
                     break;
                 case Action.Reproduce:
                     Hearts.SetActive(true);
                     bool reproduced = Uterus.TryToReproduce(species);
-                    if (reproduced) StartCoroutine(AnimationFreeze((int) Action.Reproduce));
+                    if (reproduced) StartCoroutine(AnimationFreeze(Action.Reproduce));
                     break;
                 case Action.Fight:
                     Hearts.SetActive(false);
                     bool fight = Weapon.TryToFight(species);
-                    if (fight && !IsKilled) EatenAnimals += 1;
-                    if (fight && !IsKilled) Debug.LogError($"{name} killed another animal. Eaten animals: {EatenAnimals}. Animation Freeze? {isInAnimationFreeze}");
-                    if (fight && !IsKilled) Uterus.ReproductionEnergy += 1;
-                    if (fight) StartCoroutine(AnimationFreeze((int) Action.Fight));
                     break;
                 default:
                     Hearts.SetActive(false);
                     break;
             }
             
-            Stomach.BurnCalories(CurrentAction, movementSpeed, isInAnimationFreeze);
+            Stomach.BurnCalories(CurrentAction, movementSpeed, isInAction);
         }
 
         public void InitOrgans(bool isChild)
@@ -247,7 +241,7 @@ namespace Animal
             inputs[DNA.NumRaycasts[0]*7 + 1] = Eyes.AnimalDensity(species);
 
             // Current calories relative to max calories
-            inputs[DNA.NumRaycasts[0]*7 + 2] = Stomach.HungerInput();
+            inputs[DNA.NumRaycasts[0]*7 + 2] = Stomach.HungerLevel();
             
             // Current age relative to SexualMaturity
             inputs[DNA.NumRaycasts[0]*7 + 3] = Uterus.SexualMaturityLevel();
@@ -285,14 +279,14 @@ namespace Animal
         }
         
 
-        private void KillIfDead()
+        public void KillIfDead()
         {
             EvaluateFitness();
             int causeOfDeath = CauseOfDeath();
             if (causeOfDeath != (int) Enums.CauseOfDeath.other)
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
-                Debug.LogWarning($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
+                Debug.Log($"[{gameObject.name}] {timeOfDeath} R.I.P: Died the age of {Age}, " +
                                  $"Fitness {Fitness}, " +
                                  $"Reproduced {Uterus.GetChildCountSolo()} times solo, " +
                                  $"Reproduced {Uterus.GetChildCountMutual()} times mutual, " +
@@ -322,19 +316,20 @@ namespace Animal
             
         }
         
-        public IEnumerator AnimationFreeze(int action)
+        public IEnumerator AnimationFreeze(Action action, AnimalController prey = null)
         {
-            isInAnimationFreeze = true;
-            Debug.LogError($"{name} animation freeze {action} set to true {isInAnimationFreeze}. is killed? {IsKilled}");
+            isInAction = true;
             Legs.SetMoveDirection(Vector2.zero, 0);
-            Legs.Animator?.SetInteger("Action", action);
-            if (action != (int) Action.Reproduce) Hearts.SetActive(false);
+            Legs.Animator.SetInteger("Action", (int) action);
+            if (action != Action.Reproduce) Hearts.SetActive(false);
             else Hearts.SetActive(true);
+            
             float timeInterval = 10f / EnvironmentData.TimeSpeed;
             yield return new WaitForSeconds(timeInterval);
-            KillIfDead();
-            isInAnimationFreeze = false;
-            Debug.LogError($"{name} animation freeze {action} set to false {isInAnimationFreeze}");
+            
+            if (action == Action.Fight && prey != null) Weapon.TryToKill(prey);
+            
+            isInAction = false;
             Legs.Animator?.SetInteger("Action", (int) Action.Chill);
         }
 
@@ -427,7 +422,7 @@ namespace Animal
 
         public bool CanBeAttacked()
         {
-            if (IsKilled || CurrentAction == Action.Fight && isInAnimationFreeze) return false;
+            if (IsKilled || CurrentAction == Action.Fight && isInAction) return false;
             else return true;
         }
     }

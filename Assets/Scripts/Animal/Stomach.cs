@@ -20,14 +20,14 @@ namespace Animal
         public void BurnCalories(Action action, float movementSpeed, bool inAction)
         {
             currentCalories -= animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed, inAction) + animalController.DNA.VisualRadius[0] /50f;
-            Debug.Log($"{name} burned {animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed, inAction)+ animalController.DNA.VisualRadius[0] /50f} " +
-                      $"calories. Action: {action}, active: {inAction}, speed: {movementSpeed} ");
+            //Debug.Log($"{name} burned {animalController.DNA.Weight[0]/15f * EvalPAL(action, movementSpeed, inAction)+ animalController.DNA.VisualRadius[0] /50f} " +
+                      //$"calories. Action: {action}, active: {inAction}, speed: {movementSpeed} ");
         }
 
         public void BurnCaloriesOnBirthGiving()
         {
             currentCalories -= 10;
-            Debug.Log($"{name} burned 10 calories on birth giving");
+            //Debug.Log($"{name} burned 10 calories on birth giving");
         }
         
         public bool TryToEatPlants(Transform animalTransform, float characterRadius, Layer foodType)
@@ -57,7 +57,7 @@ namespace Animal
             return false;
         }
 
-        public float HungerInput()
+        public float HungerLevel()
         {
             return currentCalories / maxCalories;
         }
@@ -87,7 +87,7 @@ namespace Animal
             }
             
             float newCalories = currentCalories + eatenCalories;
-            Debug.LogWarning($"{name} ate {eatenCalories} of {food}");
+            //Debug.LogWarning($"{name} ate {eatenCalories} of {food}");
             if (newCalories <= maxCalories)
             {
                 return newCalories;

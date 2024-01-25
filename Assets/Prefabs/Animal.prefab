@@ -170,9 +170,7 @@ MonoBehaviour:
     Menopause: 
     LitterSize: 
   Hearts: {fileID: 6451768403980592733}
-  gender: 0
   species: 7
-  enemySpecies: 9
   food: 6
   Plot: {fileID: 0}
   Age: 0
@@ -296,7 +294,7 @@ MonoBehaviour:
   MutationAmount:
   - 0
   - 0.2
-  - 0.8
+  - 0.5
   - 0.01
   - 8
   MutationChance:

@@ -260,7 +260,7 @@ namespace DefaultNamespace
                     }
                     
                 }
-                else if (MainController.pastTimeSteps < stopRespawnTime)
+                else if (MainController.pastTimeSteps < stopRespawnTime && activeAnimalControllers.Count < environmentData.InitialAnimalAmount)
                 {
                     CreateAnimalObject(nextKey, 0, true, GenomeType.Random, SpawnType.Random);
                     //CreateAnimalObject(nextKey, 0, true, GenomeType.Frozen, SpawnType.Random);

@@ -157,7 +157,7 @@ namespace Animal
             }
         }
         
-        private float GetStrengthValue(int otherStrength)
+        private float GetStrengthValue(float otherStrength)
         {
             float strengthValue = otherStrength / (float) animalController.GetStrength();
             strengthValue /= 2;

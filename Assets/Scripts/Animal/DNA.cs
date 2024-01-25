@@ -164,8 +164,8 @@ namespace Animal
             //Debug.Log($"Random value: {rando}");
             if (rando < MutationChance[0])
             {
-                int change = (int) (param[0] * MutationAmount[0] * Random.Range(-1, 1));
-                //Debug.Log($"Old Value: {param[0]}. Change of {change}");
+                float rando2 = Random.Range(-1f, 1f);
+                int change = (int) ((param[2] + param[1])/2f * MutationAmount[0] * rando2);
                 param[0] += change;
                 if (param[0] < param[3])
                 {
@@ -182,14 +182,16 @@ namespace Animal
         {
             if (Random.value < MutationChance[0])
             {
-                param[0] += param[2] * MutationAmount[0] * Random.Range(-1, 1);
-                if (param[0] < param[1])
+                float rando2 = Random.Range(-1f, 1f);
+                float change = (param[2] + param[1])/2f * MutationAmount[0] * rando2;
+                param[0] += change;
+                if (param[0] < param[3])
                 {
-                    param[0] = param[1];
+                    param[0] = param[3];
                 }
-                else if (param[0] > param[2])
+                else if (param[0] > param[4])
                 {
-                    param[0] = param[2];
+                    param[0] = param[4];
                 }
             }
         }

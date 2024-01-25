@@ -37,6 +37,7 @@ namespace DefaultNamespace
         {
             currentMass = Mass;
             age = Random.Range(-20,0);
+            Collider.enabled = true;
             
             if (FirstGeneration)
             {

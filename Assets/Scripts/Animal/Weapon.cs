@@ -15,7 +15,7 @@ namespace Animal
         public bool TryToFight(Layer species)
         {
             if (animalController.IsKilled) return false;
-            if (Physics.OverlapSphereNonAlloc(animalController.transform.position, 30, colliderBuffer,
+            if (Physics.OverlapSphereNonAlloc(animalController.transform.position, 20, colliderBuffer,
                 1 << (int) species) >= 4) // min 2, because of self interaction
             {
                 foreach (var collider in colliderBuffer)
@@ -34,27 +34,37 @@ namespace Animal
             return false;
         }
 
-        public void Attack(AnimalController prey)
+        public void TryToKill(AnimalController prey)
         {
             if (animalController.GetStrength() >= prey.GetStrength())
             {
-                prey.IsKilled = true;
+                //Debug.LogWarning($"Attacker [{name}] killed prey {prey.name}");
                 animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories(), FoodSource.meat);
-                Debug.LogWarning($"Attacker [{name}] got {prey.Stomach.GetCurrentCalories()} calories from prey {prey.name}. killed? {prey.IsKilled}");
+                animalController.Uterus.ReproductionEnergy += 1;
+                animalController.EatenAnimals += 1;
+                prey.IsKilled = true;
+                prey.KillIfDead();
             }
             else
             {
-                animalController.IsKilled = true;
+                //Debug.LogWarning($"Prey [{prey.name}] killed predator {name}.");
                 prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories(), FoodSource.meat);
-                Debug.LogWarning($"Prey [{prey.name}] got {animalController.Stomach.GetCurrentCalories()} calories from predator {name}.");
+                prey.Uterus.ReproductionEnergy += 1;
+                prey.EatenAnimals += 1;
+                animalController.IsKilled = true;
+                animalController.KillIfDead();
             }
-            
+        }
+
+        private void Attack(AnimalController prey)
+        {
             if (prey.CurrentAction != Action.Fight)
             {
                 prey.CurrentAction = Action.Fight;
-                prey.StartCoroutine(prey.AnimationFreeze((int) Action.Fight));
+                prey.StartCoroutine(prey.AnimationFreeze(Action.Fight));
             }
-
+            
+            animalController.StartCoroutine(animalController.AnimationFreeze(Action.Fight, prey));
         }
     }
 }
