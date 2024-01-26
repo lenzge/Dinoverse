@@ -15,6 +15,9 @@ MonoBehaviour:
   environmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalPrefab: {fileID: 3005528575296122092, guid: 6b0e78ff4102be64ba443ece71bd1741, type: 3}
   genomeParser: {fileID: 11400000, guid: 77f457a6d61173d40ac2249b6fdfd2a7, type: 2}
-  stopRespawnTime: 2000
-  brainBuffer: 100
-  FitnessToScore: 5
+  stopRespawnTime: 3000
+  brainBuffer: 150
+  FitnessToScore: 32
+  SpawnLakeEvent:
+    m_PersistentCalls:
+      m_Calls: []

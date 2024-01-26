@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enums;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Util;
 
@@ -29,10 +30,29 @@ namespace DefaultNamespace.UI
             RadioButton sexual = root.Q<RadioButton>("Sexual");
             sexual.value = environmentData.SexualReproduction;
             sexual.RegisterValueChangedCallback(OnSexualChanged);
+            
+            RadioButton noneChange = root.Q<RadioButton>("NoneChange");
+            if (environmentData.RateOfChange == Change.none) noneChange.value = true;
+            else noneChange.value = false;
+            noneChange.RegisterValueChangedCallback(OnNoneChangeChanged);
+            
+            RadioButton slowChange = root.Q<RadioButton>("SlowChange");
+            if (environmentData.RateOfChange == Change.slow) slowChange.value = true;
+            else slowChange.value = false;
+            slowChange.RegisterValueChangedCallback(OnSlowChangeChanged);
+            
+            RadioButton rapidChange = root.Q<RadioButton>("RapidChange");
+            if (environmentData.RateOfChange == Change.rapid) rapidChange.value = true;
+            else rapidChange.value = false;
+            rapidChange.RegisterValueChangedCallback(OnRapidChangeChanged);
 
             Toggle predation = root.Q<Toggle>("Predation");
             predation.value = environmentData.AllowPredation;
             predation.RegisterValueChangedCallback(OnPredationChanged);
+            
+            Toggle classify = root.Q<Toggle>("Classify");
+            classify.value = environmentData.Classify;
+            classify.RegisterValueChangedCallback(OnPClassifyChanged);
             
             IntegerField initialAnimals = root.Q<IntegerField>("InitialAnimals");
             initialAnimals.value = environmentData.InitialAnimalAmount;
@@ -78,6 +98,26 @@ namespace DefaultNamespace.UI
             endlessWorld.value = environmentData.EndlessWorld;
             endlessWorld.RegisterValueChangedCallback(OnEndlessWorldChanged);
 
+        }
+
+        private void OnPClassifyChanged(ChangeEvent<bool> evt)
+        {
+            environmentData.Classify = evt.newValue;
+        }
+
+        private void OnRapidChangeChanged(ChangeEvent<bool> evt)
+        {
+            if (evt.newValue) environmentData.RateOfChange = Change.rapid;
+        }
+
+        private void OnSlowChangeChanged(ChangeEvent<bool> evt)
+        {
+            if (evt.newValue) environmentData.RateOfChange = Change.slow;
+        }
+
+        private void OnNoneChangeChanged(ChangeEvent<bool> evt)
+        {
+            if (evt.newValue) environmentData.RateOfChange = Change.none;
         }
 
         private void OnQuitButton()

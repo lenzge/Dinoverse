@@ -5,6 +5,7 @@ using Animal;
 using Classification;
 using Enums;
 using UnityEngine;
+using UnityEngine.Events;
 using Util;
 using Random = UnityEngine.Random;
 
@@ -18,7 +19,7 @@ namespace DefaultNamespace
         [SerializeField] private GameObject animalPrefab;
         [SerializeField] private GenomeParser genomeParser;
         
-        [SerializeField] private int stopRespawnTime;
+        [SerializeField] public int stopRespawnTime;
         [SerializeField] private int brainBuffer;
         
         private int currentPopulation;
@@ -36,6 +37,8 @@ namespace DefaultNamespace
         private Collider[] colliderBuffer = new Collider[1];
         private List<Point> points = new List<Point> {};
         private float[] featureWeights;
+
+        public UnityEvent SpawnLakeEvent;
 
         public void StartGame()
         {
@@ -57,6 +60,8 @@ namespace DefaultNamespace
 
         public void Classify()
         {
+            if (!environmentData.Classify) return;
+            
             points.Clear();
 
             foreach (var animal in activeAnimalControllers)
@@ -179,7 +184,18 @@ namespace DefaultNamespace
                     return;
                 }
             }
-            //Debug.LogWarning("animal cant find a spot. mapsize: "+ environmentData.MapSize);
+            for (int i = 0; i < 10; i++)
+            {
+                animal.transform.position = EvaluateSpawnPosition(animal.transform.position, SpawnType.Random, genomeType);
+                animal.transform.rotation = randomRotation;
+                if (Physics.OverlapSphereNonAlloc(animal.transform.position, 2, colliderBuffer,
+                    1 << (int) Layer.Water) < 1)
+                {
+                    animal.SetActive(true);
+                    return;
+                }
+            }
+            Debug.LogWarning("animal cant find a spot. mapsize: "+ environmentData.MapSize);
         }
 
         private Vector3 EvaluateSpawnPosition(Vector3 position, SpawnType spawnPositionType, GenomeType genomeType)
@@ -226,12 +242,34 @@ namespace DefaultNamespace
                     }
                 }*/
 
-                if (animalsScoredFitness >= 1)
+                if (environmentData.RateOfChange != Change.none && animalsScoredFitness >= 50 / (int) environmentData.RateOfChange)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}]50 Animals Scored " + FitnessToScore);
                     animalController.NewLevel = 1;
-                    FitnessToScore += 5;
                     animalsScoredFitness = 0;
+                    
+                    if (FitnessToScore < 15) FitnessToScore += 5;
+                    else if (FitnessToScore == 15)
+                    {
+                        environmentData.ReproductionEnergy += 1;
+                        FitnessToScore += 5;
+                    }
+                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore > 30)
+                    {
+                        if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 20;
+                        if (environmentData.LakeCount < 20)
+                        {
+                            environmentData.LakeCount += 1;
+                            SpawnLakeEvent.Invoke();
+                        }
+                        
+                        FitnessToScore += 3;
+                    }
+                    else if (FitnessToScore == 23 || FitnessToScore == 29)
+                    {
+                        environmentData.ReproductionEnergy += 1;
+                        FitnessToScore += 3;
+                    }
                 }
 
                 // Delete some saved brains, if there are to many
@@ -272,6 +310,24 @@ namespace DefaultNamespace
         private void EvaluateFitness(AnimalController animal)
         {
             animal.EvaluateFitness();
+        }
+
+        public int BonusKids()
+        {
+            if (MainController.pastTimeSteps < stopRespawnTime)
+                return 2;
+            
+            if (MainController.pastTimeSteps < stopRespawnTime * 2 || activeAnimalControllers.Count < environmentData.MaxAnimalAmount/4)
+                return 4;
+            
+            if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount/2)
+                return 3;
+            
+            if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount - 1)
+                return 2;
+            
+            else
+                return 1;
         }
     }
 }

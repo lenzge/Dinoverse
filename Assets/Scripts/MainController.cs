@@ -31,6 +31,16 @@ namespace DefaultNamespace
         protected override void TimedUpdate()
         {
             pastTimeSteps += 1;
+
+            if (pastTimeSteps == animalCreator.stopRespawnTime)
+            {
+                Debug.LogError($"{animalCreator.stopRespawnTime} Timesteps.No new animals");
+            }
+            
+            if (pastTimeSteps == animalCreator.stopRespawnTime * 2)
+            {
+                Debug.LogError($"{animalCreator.stopRespawnTime*2} no extra kids");
+            }
         }
 
         protected override void TimedSlowUpdate()

@@ -32,12 +32,15 @@ namespace DefaultNamespace
 
         private float currentMass;
         private int age;
+        
+        public bool isFullAge { private set; get; }
 
         protected override void TimedStart()
         {
             currentMass = Mass;
             age = Random.Range(-20,0);
             Collider.enabled = true;
+            isFullAge = false;
             
             if (FirstGeneration)
             {
@@ -66,8 +69,14 @@ namespace DefaultNamespace
                 SpawnSeeds();
             }
             
+            if (age == FullGrownAge*3)
+            {
+                SpawnSeeds();
+            }
+            
             else if (age >= MaxAge)
             {
+                isFullAge = true;
                 NurtureEatenEvent.Invoke(this, Prefab);
                 Destroy(gameObject);
             }

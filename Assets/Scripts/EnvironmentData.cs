@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enums;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace DefaultNamespace
@@ -17,6 +18,7 @@ namespace DefaultNamespace
         public int InitialAnimalAmount;
         public int MaxAnimalAmount;
         public int ReproductionEnergy;
+        public bool Classify;
 
         [Header("Environment")] 
         public int InitialTreeAmount;
@@ -26,6 +28,7 @@ namespace DefaultNamespace
         public int MapSize;
         public bool ConstantTreeAmount;
         public bool EndlessWorld;
+        public Change RateOfChange;
         
         [HideInInspector]
         public UnityEvent<int> TimeSpeedChangedEvent;

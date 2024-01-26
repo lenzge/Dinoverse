@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DefaultNamespace;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Animal
@@ -11,6 +12,8 @@ namespace Animal
     /// </summary>
     public class DNA : MonoBehaviour
     {
+        public EnvironmentData EnvironmentData;
+        
         [Header("General")] 
         public int[] LifeExpectation;
         public int[] Weight;
@@ -46,7 +49,8 @@ namespace Animal
         public int[] SexualMaturity;
         public int[] Menopause; // Not used atm
         public int[] LitterSize;
-        
+
+        private float changeValue;
 
         public void Mutate()
         {
@@ -64,7 +68,7 @@ namespace Animal
             MutateIntParam(AngleBetweenRaycasts);
             MutateIntParam(MovementSpeed);
             //MutateIntParam(SexualMaturity);
-            if (SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1; //Random.value < 0.5 && 
+            if (Random.value < (int) EnvironmentData.RateOfChange/2f && SexualMaturity[0] < SexualMaturity[2]) SexualMaturity[0] += 1;
             //MutateIntParam(Menopause);
             MutateIntParam(LitterSize);
         }

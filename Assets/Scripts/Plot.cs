@@ -100,7 +100,7 @@ namespace DefaultNamespace
                         writer.WriteLine($"{data.Key}, {data.Population}, {data.Generation}, {data.Color.ToString("0.000", formatInfo)}, {data.SurvivedTime}, " +
                                          $"{data.EatenTrees}, {data.EatenAnimals}, {data.ReproducedSolo}, " +
                                          $"{data.ReproducedMutual}, {data.TimeOfDeath}, {data.CauseOfDeath}, {data.Fitness}, " +
-                                         $"{data.NewLevel}, {data.LifeExpectation}, {data.Weight.ToString("0.000", formatInfo)}, {data.MutationAmount.ToString("0.000", formatInfo)}, " +
+                                         $"{data.NewLevel}, {data.LifeExpectation}, {data.Weight}, {data.MutationAmount.ToString("0.000", formatInfo)}, " +
                                          $"{data.MutationChance.ToString("0.000", formatInfo)}, {data.Carnivore.ToString("0.000", formatInfo)}, {data.VisualRadius}, {data.AngleBetweenRaycasts}, " +
                                          $"{data.MovementSpeed}, {data.SexualMaturity}, {data.LitterSize}");
                     }

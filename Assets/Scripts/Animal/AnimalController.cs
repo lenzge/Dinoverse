@@ -120,9 +120,10 @@ namespace Animal
         {
             int fitness = 0;
             fitness += Age / 50; //25
-            fitness += EatenTrees * 1; //2
-            fitness += Uterus.GetChildCountSolo() * 3;
-            fitness += Uterus.GetChildCountMutual() * 3; // 6
+            fitness += EatenTrees * 1;
+            fitness += EatenAnimals * 1;
+            fitness += Uterus.SoloChildCount * 3;
+            fitness += Uterus.MutualChildCount * 3; // 6
             //if (IsDrown) fitness -= 10;
             //fitness += (int) Eyes.NavigationFitness;
             Fitness = fitness;

@@ -56,13 +56,14 @@ namespace Animal
                             Debug.LogWarning($"[{mate.name}] Reproduced {mate.DNA.LitterSize[0]} times. Parents: {mate.name} with Fitness {mate.Fitness} and {animalController.name} with Fitness {animalController.Fitness}");
                             MutualChildCount += 1;
                             mate.Uterus.MutualChildCount += 1;
+                            int bonuskids = animalController.AnimalCreator.BonusKids();
                             bool prio = false;
-                            for (int i = 0; i < animalController.DNA.LitterSize[0]; i++)
+                            for (int i = 0; i < animalController.DNA.LitterSize[0]* bonuskids; i++)
                             {
                                 animalController.AnimalCreator.CreateChildObject(prio,animalController.Key, animalController.Generation + 1, GenomeType.Crossover,spawnType, animalController, mate);
                                 mate.Stomach.BurnCaloriesOnBirthGiving();
                             }
-                            for (int i = 0; i < mate.DNA.LitterSize[0]; i++)
+                            for (int i = 0; i < mate.DNA.LitterSize[0]* bonuskids; i++)
                             {
                                 animalController.AnimalCreator.CreateChildObject(prio,mate.Key, mate.Generation + 1, GenomeType.Crossover,spawnType, mate, animalController);
                                 mate.Stomach.BurnCaloriesOnBirthGiving();

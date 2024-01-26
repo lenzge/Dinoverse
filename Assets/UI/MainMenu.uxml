@@ -14,6 +14,7 @@
                         <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Reproduction Energy" value="1" name="ReproductionEnergy" style="margin-right: 2px; width: 211px;" />
+                        <ui:Toggle label="Classify" name="Classify" />
                     </ui:GroupBox>
                 </ui:GroupBox>
                 <ui:GroupBox name="Environment" style="width: 276px; flex-direction: column;">
@@ -25,6 +26,12 @@
                         <ui:IntegerField label="MapSize" value="150" name="MapSize" style="margin-right: 2px; width: 211px;" />
                         <ui:Toggle label="Const Tree Amount" name="ConstantTreeAmount" />
                         <ui:Toggle label="Endless World" name="EndlessWorld" style="justify-content: space-between; align-items: center; flex-direction: row; width: 246px;" />
+                        <ui:GroupBox name="Reproduction" style="height: 110px; width: 211px;">
+                            <ui:Label tabindex="-1" text="Environment Changes" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
+                            <ui:RadioButton label="None" name="NoneChange" value="true" />
+                            <ui:RadioButton label="Slow" name="SlowChange" />
+                            <ui:RadioButton label="Rapid" name="RapidChange" />
+                        </ui:GroupBox>
                     </ui:GroupBox>
                 </ui:GroupBox>
             </ui:GroupBox>

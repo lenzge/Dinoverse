@@ -12,6 +12,7 @@ namespace DefaultNamespace
     {
         [Header("References")]
         [SerializeField] private EnvironmentData environmentData;
+        [SerializeField] private AnimalCreator animalCreator;
         
         [Header("Nurture")]
         [SerializeField] private GameObject treePrefab;
@@ -22,15 +23,19 @@ namespace DefaultNamespace
         [SerializeField] private GameObject lakePrefab;
 
         public int CurrentTreeCount;
+        private int CurrentLakeCount;
         private Collider[] colliderBuffer = new Collider[1];
 
         public void StartGame()
         {
             CurrentTreeCount = 0;
+            CurrentLakeCount = 0;
+            animalCreator.SpawnLakeEvent.AddListener(OnSpawnLake);
             
             for (int i = 0; i < environmentData.LakeCount; i++)
             {
                 SpawnNature(lakePrefab);
+                CurrentLakeCount++;
             }
             
             for (int i = 0; i < environmentData.InitialTreeAmount; i++)
@@ -57,18 +62,12 @@ namespace DefaultNamespace
             }
         }
 
-        /*protected override void TimedSlowUpdate()
+        private void OnSpawnLake()
         {
-            if (AnimalCreator.LakeCount > lakeAmount)
-            {
-                SpawnNature(lakePrefab);
-                lakeAmount += 1;
-            }
-            for (int i = 0; i < offspringAmount; i++)
-            {
-                //SpawnNurture(treePrefab);
-            }
-        }*/
+            if (environmentData.EndlessWorld) return;
+            SpawnNature(lakePrefab);
+            CurrentLakeCount++;
+        }
 
         public void SpawnNurture(GameObject prefab, bool firstGeneration = false)
         {
@@ -148,7 +147,8 @@ namespace DefaultNamespace
             CurrentTreeCount -= 1;
             oldNurture.NurtureEatenEvent.RemoveListener(SpawnNewNurture);
             if (environmentData.ConstantTreeAmount && CurrentTreeCount < environmentData.MaxTrees || 
-                CurrentTreeCount < environmentData.MinTrees)
+                CurrentTreeCount < environmentData.MinTrees ||
+                oldNurture.isFullAge && CurrentTreeCount < environmentData.MaxTrees)
             {
                 SpawnNurture(prefab);
             }
