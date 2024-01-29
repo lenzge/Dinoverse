@@ -38,7 +38,7 @@ namespace Animal
         {
             if (animalController.GetStrength() >= prey.GetStrength())
             {
-                //Debug.LogWarning($"Attacker [{name}] killed prey {prey.name}");
+                Debug.LogWarning($"Attacker [{name}] killed prey {prey.name}");
                 animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories(), FoodSource.meat);
                 animalController.Uterus.ReproductionEnergy += 1;
                 animalController.EatenAnimals += 1;
@@ -47,7 +47,7 @@ namespace Animal
             }
             else
             {
-                //Debug.LogWarning($"Prey [{prey.name}] killed predator {name}.");
+                Debug.LogWarning($"Prey [{prey.name}] killed predator {name}.");
                 prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories(), FoodSource.meat);
                 prey.Uterus.ReproductionEnergy += 1;
                 prey.EatenAnimals += 1;

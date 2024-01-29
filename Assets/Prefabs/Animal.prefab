@@ -312,8 +312,8 @@ MonoBehaviour:
   - 1
   Carnivore:
   - 0
-  - 0
-  - 1
+  - 0.1
+  - 0.9
   - 0
   - 1
   VisualRadius: 00000000640000002c0100000a000000e8030000

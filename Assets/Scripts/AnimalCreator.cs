@@ -202,7 +202,7 @@ namespace DefaultNamespace
         {
             if ((genomeType == GenomeType.Crossover || genomeType == GenomeType.Parent) && spawnPositionType == SpawnType.NearParent)
             {
-                Vector2 rando = RNG.RandomDonut(100, 35, Random.Range(0,80));
+                Vector2 rando = RNG.RandomDonut(200, 60, Random.Range(0,80));
                 return new Vector3(position.x + rando.x, 1,
                     position.z + rando.y);
             }
