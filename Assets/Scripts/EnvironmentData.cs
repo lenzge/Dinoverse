@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using System;
+using Enums;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,9 @@ namespace DefaultNamespace
         [Header("Time")]
         public int MaxTimeSpeed = 40;
         public int TimeSpeed;
+        
+        [HideInInspector]
+        public UnityEvent<int> TimeSpeedChangedEvent;
         
         [Header("Animals")]
         public bool SexualReproduction;
@@ -29,9 +33,6 @@ namespace DefaultNamespace
         public bool ConstantTreeAmount;
         public bool EndlessWorld;
         public Change RateOfChange;
-        
-        [HideInInspector]
-        public UnityEvent<int> TimeSpeedChangedEvent;
 
         public void SetTimeSpeed(int timeSpeed)
         {

@@ -11,10 +11,14 @@ namespace DefaultNamespace
 {
     public class Plot : MonoBehaviour
     {
-        private string FileName;
+        public EnvironmentData EnvironmentData;
+        public AnimalController animal;
         public List<Statistic> statistics = new List<Statistic>();
 
-        private string filePath = "";
+        private string plotFilePath = "";
+        private string envFilePath = "";
+        private string aniFilePath = "";
+        private string buildNumber = "v11-";
         private Queue<Statistic> writeQueue = new Queue<Statistic>();
         private object lockObject = new object();
         private bool isWriting = false;
@@ -35,20 +39,38 @@ namespace DefaultNamespace
             statistics.Clear();
             formatInfo = new NumberFormatInfo();
             formatInfo.NumberDecimalSeparator = ".";
-            FileName = DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + ".csv";
+            string dateTime = DateTime.Now.ToString("dd-MM-yy-HH-mm-ss");
+            string plotFileName = "PLT"+ buildNumber + dateTime + ".csv";
+            string envFileName = "ENV"+ buildNumber + dateTime + ".json";
+            string aniFileName = "ANI"+ buildNumber + dateTime + ".json";
+            string envJson = CreateEnvJson();
+            string aniJson = CreateAniJson();
+            
 #if UNITY_EDITOR
-            filePath = Path.Combine(Application.dataPath,"Plots", FileName);
+            plotFilePath = Path.Combine(Application.dataPath,"Plots", plotFileName);
+            envFilePath = Path.Combine(Application.dataPath,"Plots", envFileName);
+            aniFilePath = Path.Combine(Application.dataPath,"Plots", aniFileName);
 #else
-            filePath = Path.Combine(Application.persistentDataPath, FileName);
+            plotFilePath = Path.Combine(Application.persistentDataPath, plotFileName);
+            envFilePath = Path.Combine(Application.persistentDataPath, envFileName);
+            aniFilePath = Path.Combine(Application.persistentDataPath, aniFileName);
 #endif
 
             try
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
+                using (StreamWriter writer = new StreamWriter(plotFilePath))
                 {
                     writer.WriteLine("key,population,generation,color,survivedTime,eatenTrees,eatenAnimals,reproducedSolo,reproducedMutual," +
                                      "timeOfDeath,causeOfDeath,fitness,newLevel,lifeExpectation,weight,mutationAmount,mutationChance," +
                                      "carnivore,visualRadius,angleBetweenRaycasts,movementSpeed,sexualMaturity,litterSize");
+                }
+                using (StreamWriter writer = new StreamWriter(envFilePath))
+                {
+                    writer.Write(envJson);
+                }
+                using (StreamWriter writer = new StreamWriter(aniFilePath))
+                {
+                    writer.Write(aniJson);
                 }
 
             }
@@ -57,6 +79,22 @@ namespace DefaultNamespace
                 Debug.LogError("Can't write into CSV file because of " + e);
             }
 
+        }
+
+        private string CreateEnvJson()
+        {
+            string json = JsonUtility.ToJson(EnvironmentData, true);
+            string[] lines = json.Split('\n');
+            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(8)));
+            return json;
+        }
+        
+        private string CreateAniJson()
+        {
+            string json = JsonUtility.ToJson(animal.DNA, true);
+            string[] lines = json.Split('\n');
+            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(4)));
+            return json;
         }
 
 
@@ -95,7 +133,7 @@ namespace DefaultNamespace
 
                 try
                 {
-                    using (StreamWriter writer = new StreamWriter(filePath, true))
+                    using (StreamWriter writer = new StreamWriter(plotFilePath, true))
                     {
                         writer.WriteLine($"{data.Key}, {data.Population}, {data.Generation}, {data.Color.ToString("0.000", formatInfo)}, {data.SurvivedTime}, " +
                                          $"{data.EatenTrees}, {data.EatenAnimals}, {data.ReproducedSolo}, " +

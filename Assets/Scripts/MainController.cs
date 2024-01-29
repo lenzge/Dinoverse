@@ -22,9 +22,9 @@ namespace DefaultNamespace
             Physics.SyncTransforms();
             
             pastTimeSteps = 0;
-            plot.StartGame();
             environmentCreator.StartGame();
             animalCreator.StartGame();
+            plot.StartGame();
             isStarted = true;
         }
 
