@@ -6,6 +6,7 @@
         drown = 2,
         decrepitude = 3,
         killed = 4,
-        other = 5,
+        naturalDisaster = 5,
+        other = 6,
     }
 }

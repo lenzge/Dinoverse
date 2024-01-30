@@ -13,7 +13,6 @@
                         <ui:Toggle label="Random Spawn" name="RandomSpawnPoint" />
                         <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Reproduction Energy" value="1" name="ReproductionEnergy" style="margin-right: 2px; width: 211px;" />
                         <ui:Toggle label="Classify" name="Classify" />
                     </ui:GroupBox>
                 </ui:GroupBox>
@@ -22,7 +21,8 @@
                         <ui:IntegerField label="Initial Trees" value="150" name="InitialTrees" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Max Trees" value="150" name="MaxTrees" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="MinTrees" value="1" name="MinTrees" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="LakeCount" value="1" name="LakeCount" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Initial  Lake Count" value="1" name="LakeCount" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Max  Lake Count" value="1" name="MaxLakeCount" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="MapSize" value="150" name="MapSize" style="margin-right: 2px; width: 211px;" />
                         <ui:Toggle label="Const Tree Amount" name="ConstantTreeAmount" />
                         <ui:Toggle label="Endless World" name="EndlessWorld" style="justify-content: space-between; align-items: center; flex-direction: row; width: 246px;" />

@@ -46,6 +46,7 @@ namespace Animal
         public int NewLevel;
         public bool IsDrown;
         public bool IsKilled;
+        public bool NaturalDisaster;
         public float Color;
 
         [Space]
@@ -79,6 +80,7 @@ namespace Animal
             IsDrown = false;
             IsKilled = false;
             isInDrownAni = false;
+            NaturalDisaster = false;
             NewLevel = 0;
             colliderBuffer = new Collider[1];
             isInAction = false;
@@ -119,7 +121,7 @@ namespace Animal
         public int EvaluateFitness()
         {
             int fitness = 0;
-            fitness += Age / 50; //25
+            fitness += Age / 25;
             fitness += EatenTrees * 1;
             fitness += EatenAnimals * 1;
             fitness += Uterus.SoloChildCount * 3;
@@ -254,6 +256,12 @@ namespace Animal
             inputs[DNA.NumRaycasts[0] * 7 + 5] = lastDirection.x;
             inputs[DNA.NumRaycasts[0] * 7 + 6] = lastDirection.y;
             
+            /*Debug.LogWarning($"{name}: {inputs[15]}, {inputs[16]}, {inputs[17]}, {inputs[18]} \n" +
+                             $"{inputs[19]}, {inputs[20]}, {inputs[21]}, {inputs[22]} \n" +
+                             $"{inputs[23]}, {inputs[24]}, {inputs[25]}, {inputs[26]}, \n" +
+                             $"{inputs[27]}, {inputs[28]}, {inputs[29]}, {inputs[30]},  \n" +
+                             $"{inputs[31]}, {inputs[32]}, {inputs[33]}, {inputs[34]}");*/
+            
             return inputs;
         }
 
@@ -284,6 +292,11 @@ namespace Animal
         {
             EvaluateFitness();
             int causeOfDeath = CauseOfDeath();
+            if (EnvironmentData.NaturalDisaster)
+            {
+                NewLevel = 2;
+                NaturalDisaster = false;
+            }
             if (causeOfDeath != (int) Enums.CauseOfDeath.other)
             {
                 int timeOfDeath = Mathf.FloorToInt(Time.time * EnvironmentData.TimeSpeed / 60f);
@@ -354,6 +367,11 @@ namespace Animal
             if (IsKilled)
             {
                 return (int) Enums.CauseOfDeath.killed;
+            }
+            
+            if (NaturalDisaster)
+            {
+                return (int) Enums.CauseOfDeath.naturalDisaster;
             }
             
             return (int) Enums.CauseOfDeath.other;

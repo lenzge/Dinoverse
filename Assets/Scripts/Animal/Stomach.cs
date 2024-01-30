@@ -74,6 +74,7 @@ namespace Animal
         /// <returns></returns>
         public float AddCalories(float eatenCalories, FoodSource food)
         {
+            if (eatenCalories < 0) return currentCalories;
             if (EnvironmentData.AllowPredation)
             {
                 if (food == FoodSource.meat)
@@ -86,8 +87,8 @@ namespace Animal
                 }
             }
             
-            float newCalories = currentCalories + eatenCalories;
-            //Debug.LogWarning($"{name} ate {eatenCalories} of {food}");
+            float newCalories = currentCalories + eatenCalories * 1.8f;
+            //Debug.LogWarning($"{name} ate {eatenCalories} of {food}, carnivore: {animalController.DNA.Carnivore[0]}");
             if (newCalories <= maxCalories)
             {
                 return newCalories;
@@ -99,6 +100,7 @@ namespace Animal
         {
             if (!inAction)
             {
+                if (action == Action.Fight) return 1 + movementSpeed * 0.04f + 0.3f;
                 return 1 + movementSpeed * 0.04f;
             }
             
@@ -109,7 +111,7 @@ namespace Animal
                 case Action.Reproduce:
                     return 1 + 0.3f;
                 case Action.Fight:
-                    return 1 + 1f;
+                    return 1 + 1.5f;
                 default:
                     return 1;
             }

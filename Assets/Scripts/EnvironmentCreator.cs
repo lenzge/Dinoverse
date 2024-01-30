@@ -21,16 +21,24 @@ namespace DefaultNamespace
         [SerializeField] private List<GameObject> naturePrefabs;
         [SerializeField] private List<GameObject> grassPrefabs;
         [SerializeField] private GameObject lakePrefab;
+        [SerializeField] private GameObject riverPrefab;
 
         public int CurrentTreeCount;
         private int CurrentLakeCount;
         private Collider[] colliderBuffer = new Collider[1];
 
+        private bool isRiver;
+        private GameObject river;
+
         public void StartGame()
         {
             CurrentTreeCount = 0;
             CurrentLakeCount = 0;
+            isRiver = false;
+            river = null;
             animalCreator.SpawnLakeEvent.AddListener(OnSpawnLake);
+            environmentData.KillTreesEvent.AddListener(OnKillTrees);
+            environmentData.SeparationEvent.AddListener(OnSeparate);
             
             for (int i = 0; i < environmentData.LakeCount; i++)
             {
@@ -59,6 +67,36 @@ namespace DefaultNamespace
                 {
                     SpawnNature(prefab);
                 }
+            }
+        }
+
+        private void OnSeparate()
+        {
+            environmentData.NaturalDisaster = true;
+            if (!isRiver)
+            {
+                river = Instantiate(riverPrefab, Vector3.zero, Quaternion.identity);
+                river.transform.localScale = new Vector3(50, 10, 10 * environmentData.MapSize);
+                isRiver = true;
+            }
+            else
+            {
+                Destroy(river);
+                isRiver = false;
+            }
+            
+        }
+
+        private void OnKillTrees()
+        {
+            environmentData.NaturalDisaster = true;
+            environmentData.MaxTrees /= 2;
+            var trees = FindObjectsOfType<Nurture>();
+            for (int i = 0; i < environmentData.MaxTrees; i++)
+            {
+                CurrentTreeCount -= 1;
+                trees[i].NurtureEatenEvent.RemoveListener(SpawnNewNurture);
+                Destroy(trees[i].gameObject);
             }
         }
 

@@ -24,8 +24,32 @@ namespace DefaultNamespace.UI
             Button restart = root.Q<Button>("Restart");
             restart.clicked += OnRestartButton;
             
+            Button killAnimals = root.Q<Button>("KillAnimals");
+            killAnimals.clicked += OnKillAnimalsButton;
+            
+            Button killTrees = root.Q<Button>("KillTrees");
+            killTrees.clicked += OnKillTreesButton;
+            
+            Button separation = root.Q<Button>("Separation");
+            separation.clicked += OnSeparationButton;
+            
             timeSpeed.RegisterValueChangedCallback(OnTimeSpeedChanged);
 
+        }
+
+        private void OnSeparationButton()
+        {
+           environmentData.SeparationEvent.Invoke();
+        }
+
+        private void OnKillTreesButton()
+        {
+            environmentData.KillTreesEvent.Invoke();
+        }
+
+        private void OnKillAnimalsButton()
+        {
+            environmentData.KillAnimalsEvent.Invoke();
         }
 
         private void OnRestartButton()

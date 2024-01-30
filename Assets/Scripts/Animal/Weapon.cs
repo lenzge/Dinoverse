@@ -24,6 +24,7 @@ namespace Animal
                     {
                         AnimalController prey = collider.gameObject.GetComponentInParent<AnimalController>();
                         if (!prey.CanBeAttacked()) return false; // No double attack
+                        //Debug.LogError($"{name} calories before fighting: {animalController.Stomach.GetCurrentCalories()}");
                         Attack(prey);
                         return true;
                     }
@@ -36,9 +37,11 @@ namespace Animal
 
         public void TryToKill(AnimalController prey)
         {
+            //Debug.LogError($"{name} calories after fighting: {animalController.Stomach.GetCurrentCalories()}");
+            //Debug.LogError($"{prey.name} calories after fighting: {prey.Stomach.GetCurrentCalories()}");
             if (animalController.GetStrength() >= prey.GetStrength())
             {
-                Debug.LogWarning($"Attacker [{name}] killed prey {prey.name}");
+                //Debug.LogWarning($"Attacker [{name}] killed prey {prey.name}, {prey.Stomach.GetCurrentCalories()}");
                 animalController.Stomach.AddCalories(prey.Stomach.GetCurrentCalories(), FoodSource.meat);
                 animalController.Uterus.ReproductionEnergy += 1;
                 animalController.EatenAnimals += 1;
@@ -47,7 +50,7 @@ namespace Animal
             }
             else
             {
-                Debug.LogWarning($"Prey [{prey.name}] killed predator {name}.");
+                //Debug.LogWarning($"Prey [{prey.name}] killed predator {name}. , {animalController.Stomach.GetCurrentCalories()}");
                 prey.Stomach.AddCalories(animalController.Stomach.GetCurrentCalories(), FoodSource.meat);
                 prey.Uterus.ReproductionEnergy += 1;
                 prey.EatenAnimals += 1;
@@ -62,6 +65,7 @@ namespace Animal
             {
                 prey.CurrentAction = Action.Fight;
                 prey.StartCoroutine(prey.AnimationFreeze(Action.Fight));
+                //Debug.LogError($"{prey.name} calories before fighting: {prey.Stomach.GetCurrentCalories()}");
             }
             
             animalController.StartCoroutine(animalController.AnimationFreeze(Action.Fight, prey));

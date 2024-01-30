@@ -37,6 +37,7 @@ namespace DefaultNamespace
         private Collider[] colliderBuffer = new Collider[1];
         private List<Point> points = new List<Point> {};
         private float[] featureWeights;
+        private int tolerantZone;
 
         public UnityEvent SpawnLakeEvent;
 
@@ -50,12 +51,30 @@ namespace DefaultNamespace
             bestFitness = 0;
             FitnessToScore = 5;
             animalsScoredFitness = 0;
+            environmentData.ReproductionEnergy = 1;
+            tolerantZone = 0;
 
             newGenomesAmount = 0.5f;
             //frozenGenomes = genomeParser.LoadAllGenomes();
             CreateNewGeneration();
 
             featureWeights = activeAnimalControllers[0].Genome.CreateFeatureWeights();
+            
+            environmentData.KillAnimalsEvent.AddListener(OnKillAnimals);
+        }
+
+        private void OnKillAnimals()
+        {
+            environmentData.NaturalDisaster = true;
+            savedAnimalControllers.Clear();
+            
+            for (int i = activeAnimalControllers.Count - 1; i > 0; i -= 2)
+            {
+                activeAnimalControllers[i].NaturalDisaster = true;
+                activeAnimalControllers[i].KillIfDead();
+            }
+
+            
         }
 
         public void Classify()
@@ -245,30 +264,35 @@ namespace DefaultNamespace
                 if (environmentData.RateOfChange != Change.none && animalsScoredFitness >= 50 / (int) environmentData.RateOfChange)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}]50 Animals Scored " + FitnessToScore);
-                    animalController.NewLevel = 1;
                     animalsScoredFitness = 0;
                     
-                    if (FitnessToScore < 15) FitnessToScore += 5;
-                    else if (FitnessToScore == 15)
+                    if (FitnessToScore < 17) FitnessToScore += 3;
+                    else if (FitnessToScore == 17)
                     {
                         environmentData.ReproductionEnergy += 1;
-                        FitnessToScore += 5;
+                        tolerantZone = MainController.pastTimeSteps + 500;
+                        FitnessToScore += 3;
+                        animalController.NewLevel = 1;
                     }
-                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore > 30)
+                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore > 29)
                     {
                         if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 20;
-                        if (environmentData.LakeCount < 20)
+                        if (environmentData.MaxAnimalAmount > 100) environmentData.MaxAnimalAmount -= 20;
+                        if (environmentData.LakeCount < environmentData.MaxLakeCount)
                         {
-                            environmentData.LakeCount += 1;
+                            environmentData.LakeCount += 2;
                             SpawnLakeEvent.Invoke();
                         }
                         
                         FitnessToScore += 3;
+                        animalController.NewLevel = 1;
                     }
                     else if (FitnessToScore == 23 || FitnessToScore == 29)
                     {
                         environmentData.ReproductionEnergy += 1;
+                        tolerantZone = MainController.pastTimeSteps + 500;
                         FitnessToScore += 3;
+                        animalController.NewLevel = 1;
                     }
                 }
 
@@ -316,13 +340,21 @@ namespace DefaultNamespace
         {
             if (MainController.pastTimeSteps < stopRespawnTime)
                 return 2;
+
+            if (MainController.pastTimeSteps < tolerantZone &&
+                activeAnimalControllers.Count < environmentData.MaxAnimalAmount / 2)
+            {
+                return 6;
+            }
+
+            if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount / 4)
+            {
+                return 5;
+            }
             
-            if (MainController.pastTimeSteps < stopRespawnTime * 2 || activeAnimalControllers.Count < environmentData.MaxAnimalAmount/4)
+            if (MainController.pastTimeSteps < stopRespawnTime * 2 || activeAnimalControllers.Count < environmentData.MaxAnimalAmount/2)
                 return 4;
-            
-            if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount/2)
-                return 3;
-            
+
             if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount - 1)
                 return 2;
             

@@ -61,11 +61,7 @@ namespace DefaultNamespace.UI
             IntegerField maxAnimals = root.Q<IntegerField>("MaxAnimals");
             maxAnimals.value = environmentData.MaxAnimalAmount;
             maxAnimals.RegisterValueChangedCallback(OnMaxAnimalsChanged);
-            
-            IntegerField reproductionEnergy = root.Q<IntegerField>("ReproductionEnergy");
-            reproductionEnergy.value = environmentData.ReproductionEnergy;
-            reproductionEnergy.RegisterValueChangedCallback(OnReproductionEnergyChanged);
-            
+
             IntegerField initialTrees = root.Q<IntegerField>("InitialTrees");
             initialTrees.value = environmentData.InitialTreeAmount;
             initialTrees.RegisterValueChangedCallback(OnInitialTreesChanged);
@@ -81,6 +77,10 @@ namespace DefaultNamespace.UI
             lakeCount = root.Q<IntegerField>("LakeCount");
             lakeCount.value = environmentData.LakeCount;
             lakeCount.RegisterValueChangedCallback(OnLakeCountChanged);
+            
+            IntegerField maxLakeCount = root.Q<IntegerField>("MaxLakeCount");
+            maxLakeCount.value = environmentData.MaxLakeCount;
+            maxLakeCount.RegisterValueChangedCallback(OnMaxLakeCountChanged);
             
             IntegerField mapSize = root.Q<IntegerField>("MapSize");
             mapSize.value = environmentData.MapSize;
@@ -98,6 +98,11 @@ namespace DefaultNamespace.UI
             endlessWorld.value = environmentData.EndlessWorld;
             endlessWorld.RegisterValueChangedCallback(OnEndlessWorldChanged);
 
+        }
+
+        private void OnMaxLakeCountChanged(ChangeEvent<int> evt)
+        {
+            environmentData.MaxLakeCount = evt.newValue;
         }
 
         private void OnPClassifyChanged(ChangeEvent<bool> evt)
@@ -175,11 +180,6 @@ namespace DefaultNamespace.UI
         private void OnInitialTreesChanged(ChangeEvent<int> evt)
         {
             environmentData.InitialTreeAmount = evt.newValue;
-        }
-
-        private void OnReproductionEnergyChanged(ChangeEvent<int> evt)
-        {
-            environmentData.ReproductionEnergy = evt.newValue;
         }
 
         private void OnMaxAnimalsChanged(ChangeEvent<int> evt)

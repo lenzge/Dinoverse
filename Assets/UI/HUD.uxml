@@ -1,11 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/graph.uss?fileID=7433441132597879392&amp;guid=deea6c5511c402c4095671cf8d0662f8&amp;type=3#graph" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; -unity-slice-left: 0; -unity-slice-top: 0; -unity-slice-right: 0; -unity-slice-bottom: 0; height: 92px;">
-        <ui:GroupBox style="width: 672px; margin-top: 20px; margin-left: 20px;">
-            <ui:SliderInt picking-mode="Ignore" label="Time speed" value="1" high-value="10" low-value="1" name="TimeSpeed" style="flex-direction: row; align-items: stretch; font-size: 20px; width: 485px; -unity-font-style: bold; -unity-text-align: middle-left;">
-                <ui:Label tabindex="-1" text="1x" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VisualizeSpeed" style="width: 41px; -unity-text-align: middle-right; font-size: 15px;" />
-            </ui:SliderInt>
-            <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Restart" style="height: 19px; width: 67px; margin-top: 11px;" />
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; -unity-slice-left: 0; -unity-slice-top: 0; -unity-slice-right: 0; -unity-slice-bottom: 0; height: 100%; justify-content: space-between; flex-direction: column; align-items: stretch; align-self: flex-start; transform-origin: center; width: 100%;">
+        <ui:GroupBox style="height: 100%; justify-content: space-between;">
+            <ui:GroupBox style="width: 672px; margin-top: 20px; margin-left: 20px;">
+                <ui:SliderInt picking-mode="Ignore" label="Time speed" value="1" high-value="10" low-value="1" name="TimeSpeed" style="flex-direction: row; align-items: stretch; font-size: 20px; width: 485px; -unity-font-style: bold; -unity-text-align: middle-left;">
+                    <ui:Label tabindex="-1" text="1x" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VisualizeSpeed" style="width: 41px; -unity-text-align: middle-right; font-size: 15px;" />
+                </ui:SliderInt>
+                <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Restart" style="height: 19px; width: 67px; margin-top: 11px;" />
+            </ui:GroupBox>
+            <ui:GroupBox style="width: 198px; margin-top: 20px; margin-left: 20px; margin-bottom: 20px;">
+                <ui:Button text="Kill 50% of animals" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KillAnimals" style="height: 19px; width: auto; margin-top: 11px; align-items: stretch; align-self: stretch;" />
+                <ui:Button text="Kill 50% of trees" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KillTrees" style="height: 19px; width: auto; margin-top: 11px;" />
+                <ui:Button text="Add/Remove River" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Separation" style="height: 19px; width: auto; margin-top: 11px;" />
+            </ui:GroupBox>
         </ui:GroupBox>
     </ui:VisualElement>
 </ui:UXML>

@@ -18,7 +18,7 @@ namespace DefaultNamespace
         private string plotFilePath = "";
         private string envFilePath = "";
         private string aniFilePath = "";
-        private string buildNumber = "v11-";
+        private string buildNumber = "v13-";
         private Queue<Statistic> writeQueue = new Queue<Statistic>();
         private object lockObject = new object();
         private bool isWriting = false;
@@ -85,7 +85,7 @@ namespace DefaultNamespace
         {
             string json = JsonUtility.ToJson(EnvironmentData, true);
             string[] lines = json.Split('\n');
-            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(8)));
+            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(24)));
             return json;
         }
         

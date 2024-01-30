@@ -14,6 +14,14 @@ namespace DefaultNamespace
         
         [HideInInspector]
         public UnityEvent<int> TimeSpeedChangedEvent;
+        [HideInInspector]
+        public UnityEvent KillAnimalsEvent;
+        [HideInInspector]
+        public UnityEvent KillTreesEvent;
+        [HideInInspector]
+        public UnityEvent SeparationEvent;
+
+        public bool NaturalDisaster;
         
         [Header("Animals")]
         public bool SexualReproduction;
@@ -29,6 +37,7 @@ namespace DefaultNamespace
         public int MaxTrees;
         public int MinTrees;
         public int LakeCount;
+        public int MaxLakeCount;
         public int MapSize;
         public bool ConstantTreeAmount;
         public bool EndlessWorld;
