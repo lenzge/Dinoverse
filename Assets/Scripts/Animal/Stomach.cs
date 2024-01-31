@@ -39,7 +39,7 @@ namespace Animal
                 float eatenCalories = food.Eaten(animalController.DNA.EatingSpeed[0]);
                 currentCalories = AddCalories(eatenCalories, FoodSource.plant);
                 //Debug.LogWarning($"{currentCalories} after eating {eatenCalories} calories");
-                if (currentCalories == 0) return false;
+                if (eatenCalories == 0) return false;
                 return true;
             }
 
