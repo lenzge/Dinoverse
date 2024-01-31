@@ -35,7 +35,6 @@ namespace DefaultNamespace
             CurrentTreeCount = 0;
             CurrentLakeCount = 0;
             isRiver = false;
-            river = null;
             animalCreator.SpawnLakeEvent.AddListener(OnSpawnLake);
             environmentData.KillTreesEvent.AddListener(OnKillTrees);
             environmentData.SeparationEvent.AddListener(OnSeparate);

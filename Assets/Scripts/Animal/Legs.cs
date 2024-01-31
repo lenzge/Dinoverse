@@ -6,8 +6,8 @@ namespace Animal
     {
         public Animator Animator;
 
-        private Vector3 movementDirection = Vector3.zero;
-        private int currentMovementSpeed;
+        public Vector3 movementDirection = Vector3.zero;
+        public int currentMovementSpeed;
 
         public override void Init(bool isChild = false)
         {

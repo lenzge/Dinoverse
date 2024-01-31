@@ -85,7 +85,7 @@ namespace DefaultNamespace
         {
             string json = JsonUtility.ToJson(EnvironmentData, true);
             string[] lines = json.Split('\n');
-            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(24)));
+            json = string.Join("\n", lines.Take(1).Concat(lines.Skip(29)));
             return json;
         }
         

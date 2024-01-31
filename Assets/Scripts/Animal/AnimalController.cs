@@ -71,6 +71,7 @@ namespace Animal
             materials = gameObject.GetComponentInChildren<Renderer>().materials;
             UpdateColor(0.266f);
             UpdateScale();
+            EnvironmentData.AllowPredationEvent.AddListener(OnAllowPredation);
 
             // Reset Variables
             Age = 0;
@@ -86,16 +87,24 @@ namespace Animal
             isInAction = false;
             CurrentAction = Action.Chill;
             
-            actionSpace = 3;
-            if (EnvironmentData.AllowPredation)
-            {
-                actionSpace = 4;
-            }
+            OnAllowPredation();
             
             //Debug.LogError(Genome.Weights.Length);
             //Debug.LogError(Genome.Biases.Length);
             TimedUpdate();
 
+        }
+
+        private void OnAllowPredation()
+        {
+            if (EnvironmentData.AllowPredation)
+            {
+                actionSpace = 4;
+            }
+            else
+            {
+                actionSpace = 3;
+            }
         }
 
         public void UpdateInfo(int key, int population, int generation, int hue = 266)
@@ -182,7 +191,7 @@ namespace Animal
             lastDirection = movementDirection;
 
             //Debug.Log($"[{name}] Direction {new Vector2(output[0], output[1])}, speed: {output[2]} \n" +
-                      //$"corrected: {movementDirection}, {movementSpeed}, {Legs.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")}");
+                      //$"corrected: {movementDirection}, {movementSpeed}");
 
             switch (CurrentAction)
             {
@@ -295,7 +304,7 @@ namespace Animal
             if (EnvironmentData.NaturalDisaster)
             {
                 NewLevel = 2;
-                NaturalDisaster = false;
+                EnvironmentData.NaturalDisaster = false;
             }
             if (causeOfDeath != (int) Enums.CauseOfDeath.other)
             {

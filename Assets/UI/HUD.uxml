@@ -12,6 +12,7 @@
                 <ui:Button text="Kill 50% of animals" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KillAnimals" style="height: 19px; width: auto; margin-top: 11px; align-items: stretch; align-self: stretch;" />
                 <ui:Button text="Kill 50% of trees" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KillTrees" style="height: 19px; width: auto; margin-top: 11px;" />
                 <ui:Button text="Add/Remove River" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Separation" style="height: 19px; width: auto; margin-top: 11px;" />
+                <ui:Button text="Predation on/off" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AllowPredation" style="height: 19px; width: auto; margin-top: 11px;" />
             </ui:GroupBox>
         </ui:GroupBox>
     </ui:VisualElement>

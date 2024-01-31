@@ -183,6 +183,7 @@ MonoBehaviour:
   NewLevel: 0
   IsDrown: 0
   IsKilled: 0
+  NaturalDisaster: 0
   Color: 0
   CurrentAction: 0
   Died:
@@ -203,6 +204,8 @@ MonoBehaviour:
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   animalController: {fileID: 7300952516653624235}
   Animator: {fileID: 8911642007023974860}
+  movementDirection: {x: 0, y: 0, z: 0}
+  currentMovementSpeed: 0
 --- !u!114 &2830572847685276631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,8 +322,8 @@ MonoBehaviour:
   VisualRadius: 00000000640000002c0100000a000000e8030000
   NumRaycasts: 0000000005000000050000000500000005000000
   AngleBetweenRaycasts: 00000000050000001e0000000100000046000000
-  HiddenLayer: 000000000200000002000000
-  MaxNeurons: 000000002300000023000000
+  HiddenLayer: 000000000300000003000000
+  MaxNeurons: 000000003f0000003f000000
   MinNeurons: 000000002300000023000000
   MovementSpeed: 00000000050000000c0000000100000064000000
   SexualMaturity: 000000001e0000003c0000001e0000003c000000

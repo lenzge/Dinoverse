@@ -87,17 +87,13 @@ namespace Animal
 
         private int[] CreateNetworkShape()
         {
-            return new []{animalController.DNA.NumRaycasts[0]*7 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
-            
-            /*switch (DNA.HiddenLayer[0])
+            switch (animalController.DNA.HiddenLayer[0])
             {
-                case 1:
-                    return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], outputNeurons};
                 case 2:
-                    return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
+                    return new []{animalController.DNA.NumRaycasts[0]*7 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
                 case 3:
-                    return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
-                case 4:
+                    return new []{animalController.DNA.NumRaycasts[0]*7 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
+                /*case 4:
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
                 case 5:
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
@@ -111,9 +107,10 @@ namespace Animal
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MinNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MinNeurons[0], outputNeurons};
                 case 10:
                     return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], DNA.MaxNeurons[0], outputNeurons};
+                */
                 default:
-                    return new []{DNA.NumRaycasts[0]*2 +stdInputNeurons, DNA.MaxNeurons[0], outputNeurons};
-            }*/
+                    return new []{animalController.DNA.NumRaycasts[0]*7 + stdInputNeurons, animalController.DNA.MaxNeurons[0], animalController.DNA.MinNeurons[0], outputNeurons};
+            }
         }
 
         public class Layer

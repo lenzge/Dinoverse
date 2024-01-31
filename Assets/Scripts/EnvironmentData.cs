@@ -20,6 +20,8 @@ namespace DefaultNamespace
         public UnityEvent KillTreesEvent;
         [HideInInspector]
         public UnityEvent SeparationEvent;
+        [HideInInspector]
+        public UnityEvent AllowPredationEvent;
 
         public bool NaturalDisaster;
         
@@ -47,6 +49,12 @@ namespace DefaultNamespace
         {
             TimeSpeed = timeSpeed;
             TimeSpeedChangedEvent.Invoke(TimeSpeed);
+        }
+
+        public void ChangePredation()
+        {
+            AllowPredation = !AllowPredation;
+            AllowPredationEvent.Invoke();
         }
     }
 }

@@ -23,4 +23,5 @@ MonoBehaviour:
   - {fileID: 2609836572451821920, guid: 6d7a8f827be0ec34eb8cf73780b85a1d, type: 3}
   - {fileID: 2247226870530488208, guid: 362b677245cc78643a8e9ebc48462671, type: 3}
   lakePrefab: {fileID: 794029667189866463, guid: fa4ef4d16094ffc4c8d4ae749d9a3a6e, type: 3}
-  CurrentTreeCount: 0
+  riverPrefab: {fileID: 4874994008788373191, guid: 1d281b13f542b274cafe18c4e0669975, type: 3}
+  CurrentTreeCount: 34

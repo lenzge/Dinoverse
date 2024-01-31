@@ -81,9 +81,10 @@ namespace Animal
             else if (!EnvironmentData.SexualReproduction)
             {
                 SoloChildCount += 1; 
+                int bonuskids = animalController.AnimalCreator.BonusKidsSolo();
                 int litterSize =  animalController.DNA.LitterSize[0];
                 Debug.LogWarning($"[{animalController.name}] Reproduced {litterSize} times. Alone");
-                for (int i = 0; i < litterSize; i++)
+                for (int i = 0; i < litterSize* bonuskids; i++)
                 {
                     animalController.AnimalCreator.CreateChildObject(false,animalController.Key, animalController.Generation + 1, GenomeType.Parent,spawnType, animalController);
                     animalController.Stomach.BurnCaloriesOnBirthGiving();

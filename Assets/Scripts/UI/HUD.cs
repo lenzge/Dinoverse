@@ -33,8 +33,16 @@ namespace DefaultNamespace.UI
             Button separation = root.Q<Button>("Separation");
             separation.clicked += OnSeparationButton;
             
+            Button allowPredation = root.Q<Button>("AllowPredation");
+            allowPredation.clicked += OnAllowPredationButton;
+            
             timeSpeed.RegisterValueChangedCallback(OnTimeSpeedChanged);
 
+        }
+
+        private void OnAllowPredationButton()
+        {
+            environmentData.ChangePredation();
         }
 
         private void OnSeparationButton()
@@ -54,6 +62,7 @@ namespace DefaultNamespace.UI
 
         private void OnRestartButton()
         {
+            environmentData.SeparationEvent.Invoke();
             string currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentSceneName);
         }

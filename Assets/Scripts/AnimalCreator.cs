@@ -274,7 +274,7 @@ namespace DefaultNamespace
                         FitnessToScore += 3;
                         animalController.NewLevel = 1;
                     }
-                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore > 29)
+                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore == 29 || FitnessToScore > 32)
                     {
                         if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 20;
                         if (environmentData.MaxAnimalAmount > 100) environmentData.MaxAnimalAmount -= 20;
@@ -287,7 +287,7 @@ namespace DefaultNamespace
                         FitnessToScore += 3;
                         animalController.NewLevel = 1;
                     }
-                    else if (FitnessToScore == 23 || FitnessToScore == 29)
+                    else if (FitnessToScore == 23 || FitnessToScore == 32)
                     {
                         environmentData.ReproductionEnergy += 1;
                         tolerantZone = MainController.pastTimeSteps + 500;
@@ -360,6 +360,28 @@ namespace DefaultNamespace
             
             else
                 return 1;
+        }
+
+        public int BonusKidsSolo()
+        {
+            if (MainController.pastTimeSteps < tolerantZone &&
+                activeAnimalControllers.Count < environmentData.MaxAnimalAmount / 2)
+            {
+                return 3;
+            }
+            if (MainController.pastTimeSteps < tolerantZone &&
+                activeAnimalControllers.Count < environmentData.MaxAnimalAmount / 4)
+            {
+                return 4;
+            }
+            if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount / 2)
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }
