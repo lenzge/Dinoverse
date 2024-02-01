@@ -162,7 +162,8 @@ namespace Animal
                 return 0;
             }
 
-            return DNA.MovementSpeed[1] + (int) (speedValue * (DNA.MovementSpeed[0] - DNA.MovementSpeed[1]));
+            //return DNA.MovementSpeed[1] + (int) (speedValue * (DNA.MovementSpeed[0] - DNA.MovementSpeed[1])); They start moving backwards, because speed can be smaller than 5
+            return (int) (speedValue * DNA.MovementSpeed[0] + 1);
         }
 
         protected override void TimedUpdate()

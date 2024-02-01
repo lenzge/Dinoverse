@@ -53,6 +53,7 @@ namespace DefaultNamespace
 
         public void ChangePredation()
         {
+            NaturalDisaster = true;
             AllowPredation = !AllowPredation;
             AllowPredationEvent.Invoke();
         }

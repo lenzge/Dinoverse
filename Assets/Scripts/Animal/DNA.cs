@@ -169,7 +169,7 @@ namespace Animal
             if (rando < MutationChance[0])
             {
                 float rando2 = Random.Range(-1f, 1f);
-                int change = (int) ((param[2] - param[1]) * MutationAmount[0] * rando2);
+                int change = Mathf.RoundToInt((param[2] - param[1]) * MutationAmount[0] * rando2);
                 param[0] += change;
                 if (param[0] < param[3])
                 {

@@ -35,6 +35,7 @@ namespace Animal
             if (Physics.OverlapSphereNonAlloc(animalTransform.position, characterRadius, colliderBuffer,
                 1 << (int) foodType) >= 1)
             {
+                //Debug.LogWarning($"{currentCalories} before eating");
                 Nurture food = colliderBuffer[0].GetComponent<Nurture>();
                 float eatenCalories = food.Eaten(animalController.DNA.EatingSpeed[0]);
                 currentCalories = AddCalories(eatenCalories, FoodSource.plant);
@@ -75,8 +76,8 @@ namespace Animal
         public float AddCalories(float eatenCalories, FoodSource food)
         {
             if (eatenCalories < 0) return currentCalories;
-            if (EnvironmentData.AllowPredation)
-            {
+            //if (EnvironmentData.AllowPredation)
+            //{
                 if (food == FoodSource.meat)
                 {
                     eatenCalories *= animalController.DNA.Carnivore[0];
@@ -85,7 +86,7 @@ namespace Animal
                 {
                     eatenCalories *= 1 - animalController.DNA.Carnivore[0];
                 }
-            }
+            //}
             
             float newCalories = currentCalories + eatenCalories * 1.8f;
             //Debug.LogWarning($"{name} ate {eatenCalories} of {food}, carnivore: {animalController.DNA.Carnivore[0]}");
