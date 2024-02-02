@@ -31,6 +31,7 @@ namespace DefaultNamespace
         public bool RandomSpawnPoint;
         public int InitialAnimalAmount;
         public int MaxAnimalAmount;
+        public int MinAnimalAmount;
         public int ReproductionEnergy;
         public bool Classify;
 

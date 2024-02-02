@@ -13,6 +13,7 @@
                         <ui:Toggle label="Random Spawn" name="RandomSpawnPoint" />
                         <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
+                        <ui:IntegerField label="Min Animals" value="150" name="MinAnimals" style="margin-right: 2px; width: 211px;" />
                         <ui:Toggle label="Classify" name="Classify" />
                     </ui:GroupBox>
                 </ui:GroupBox>

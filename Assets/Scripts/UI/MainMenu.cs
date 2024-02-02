@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using System.Diagnostics;
+using Enums;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Util;
@@ -61,6 +62,10 @@ namespace DefaultNamespace.UI
             IntegerField maxAnimals = root.Q<IntegerField>("MaxAnimals");
             maxAnimals.value = environmentData.MaxAnimalAmount;
             maxAnimals.RegisterValueChangedCallback(OnMaxAnimalsChanged);
+            
+            IntegerField minAnimals = root.Q<IntegerField>("MinAnimals");
+            minAnimals.value = environmentData.MinAnimalAmount;
+            minAnimals.RegisterValueChangedCallback(OnMinAnimalsChanged);
 
             IntegerField initialTrees = root.Q<IntegerField>("InitialTrees");
             initialTrees.value = environmentData.InitialTreeAmount;
@@ -98,6 +103,11 @@ namespace DefaultNamespace.UI
             endlessWorld.value = environmentData.EndlessWorld;
             endlessWorld.RegisterValueChangedCallback(OnEndlessWorldChanged);
 
+        }
+
+        private void OnMinAnimalsChanged(ChangeEvent<int> evt)
+        {
+            environmentData.MinAnimalAmount = evt.newValue;
         }
 
         private void OnMaxLakeCountChanged(ChangeEvent<int> evt)
