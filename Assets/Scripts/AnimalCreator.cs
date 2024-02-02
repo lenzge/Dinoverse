@@ -261,7 +261,7 @@ namespace DefaultNamespace
                     }
                 }*/
 
-                if (environmentData.RateOfChange != Change.none && animalsScoredFitness >= 50 / (int) environmentData.RateOfChange)
+                if (environmentData.RateOfChange != Change.none && animalsScoredFitness >= 80 / (int) environmentData.RateOfChange)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}]50 Animals Scored " + FitnessToScore);
                     animalsScoredFitness = 0;
