@@ -87,7 +87,7 @@ namespace Animal
                     //&& hit.collider.GetComponentInParent<AnimalController>().Uterus.CanReproduce())
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
-                    Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue,1);
+                    //Debug.DrawRay(rayStart, rayDirection * hit.distance, Color.blue,1);
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = hit.distance / animalController.DNA.VisualRadius[0];
                     distances[animalController.DNA.NumRaycasts[0] * 3 + j++] = GetActionValue(hit.collider.GetComponentInParent<AnimalController>().CurrentAction);
                     distances[animalController.DNA.NumRaycasts[0] * 3 + j++] =
@@ -98,7 +98,7 @@ namespace Animal
                 else
                 {
                     // Draw a line representing the raycast in the scene view for debugging purposes
-                    Debug.DrawRay(rayStart, rayDirection * animalController.DNA.VisualRadius[0], Color.yellow,1);
+                    //Debug.DrawRay(rayStart, rayDirection * animalController.DNA.VisualRadius[0], Color.yellow,1);
                     // If no food object is detected, set the distance to the maximum length of the raycast
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 1;
                     distances[animalController.DNA.NumRaycasts[0]*3 + j++] = 0;

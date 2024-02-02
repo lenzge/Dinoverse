@@ -157,13 +157,22 @@ namespace Animal
 
         private int SetMovementSpeed(float speedValue, Vector2 direction)
         {
-            if (speedValue < 0.01 || direction == Vector2.zero)
+            //if (speedValue < 0.01 || direction == Vector2.zero)
+            //{
+                //return 0;
+            //}
+
+            //return DNA.MovementSpeed[1] + (int) (speedValue * (DNA.MovementSpeed[0] - DNA.MovementSpeed[1])); They start moving backwards, because speed can be smaller than 5
+            //return (int) (DNA.MovementSpeed[3] + speedValue * (DNA.MovementSpeed[0] - DNA.MovementSpeed[3]) + 1);
+            
+            if (speedValue < 0 || direction == Vector2.zero)
             {
                 return 0;
             }
-
-            //return DNA.MovementSpeed[1] + (int) (speedValue * (DNA.MovementSpeed[0] - DNA.MovementSpeed[1])); They start moving backwards, because speed can be smaller than 5
-            return (int) (speedValue * DNA.MovementSpeed[0] + 1);
+            else
+            {
+                return Mathf.RoundToInt(3 + speedValue * 2 * DNA.MovementSpeed[0]);
+            }
         }
 
         protected override void TimedUpdate()
@@ -188,6 +197,7 @@ namespace Animal
 
             Vector2 movementDirection = SetMovementDirection(output[0], output[1]);
             int movementSpeed = SetMovementSpeed(output[2], movementDirection);
+            //Debug.LogWarning($"[{name}] speed: {output[2]} * {DNA.MovementSpeed[0]} = {movementSpeed} ");
             Legs.SetMoveDirection(movementDirection, movementSpeed);
             lastDirection = movementDirection;
 
