@@ -169,9 +169,13 @@ namespace Animal
             {
                 return 0;
             }
-            else
+            else if (speedValue < 0.5)
             {
                 return Mathf.RoundToInt(3 + speedValue * 2 * DNA.MovementSpeed[0]);
+            }
+            else // max speed reached
+            {
+                return Mathf.RoundToInt(3 +  DNA.MovementSpeed[0]);
             }
         }
 
