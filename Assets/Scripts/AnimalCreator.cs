@@ -276,8 +276,8 @@ namespace DefaultNamespace
                     }
                     else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore == 29 || FitnessToScore > 32)
                     {
-                        if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 20;
-                        if (environmentData.MaxAnimalAmount > environmentData.MinAnimalAmount) environmentData.MaxAnimalAmount -= 20;
+                        if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 14;
+                        if (environmentData.MaxAnimalAmount > environmentData.MinAnimalAmount) environmentData.MaxAnimalAmount -= 7;
                         if (environmentData.LakeCount < environmentData.MaxLakeCount)
                         {
                             environmentData.LakeCount += 2;

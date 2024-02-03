@@ -294,7 +294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnvironmentData: {fileID: 11400000, guid: 1f69da7c2ba09574e9c0d8a7467d92f2, type: 2}
   LifeExpectation: 0000000020030000200300002003000020030000
-  Weight: 00000000640000002c0100001e000000e8030000
+  Weight: 00000000640000002c0100001e00000058020000
   MutationAmount:
   - 0
   - 0.1
