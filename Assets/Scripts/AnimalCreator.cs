@@ -241,30 +241,7 @@ namespace DefaultNamespace
             AllAnimalCount += 1;
 
             EvaluateFitness(animalController);
-
-            if (animalController.Fitness >= FitnessToScore)
-            {
-                animalsScoredFitness += 1;
-                
-                if (animalController.Fitness >= bestFitness)
-                {
-                    //if (animalController.Fitness > bestFitness)
-                        //genomeParser.SaveToJson(animalController.Brain, animalController.DNA);
-                    bestFitness = animalController.Fitness;
-                    Debug.LogWarning("Best fitness: " + bestFitness);
-                }
-
-                // Spawn animals from parents without reproduction action
-                /*if (FitnessToScore <= 30)
-                {
-                    for (int i = 0; i < 7; i++)
-                    {
-                        savedAnimalControllers.Add(CreateAnimalObject(animalController.Key,
-                                            animalController.Generation + 1, false, GenomeType.Parent,
-                                            SpawnType.Random, animalController));
-                    }
-                }*/
-
+            
                 if (environmentData.RateOfChange != Change.none && AllAnimalCount%12000 == 0)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}] Level Up");
@@ -295,7 +272,7 @@ namespace DefaultNamespace
                     Debug.LogWarning($"{savedAnimalControllers.Count - brainBuffer} animals removed from buffer");
                     savedAnimalControllers.RemoveRange(brainBuffer, savedAnimalControllers.Count - brainBuffer);
                 }
-            }
+            
             
             // Spawn saved or new animal, when there aren't enough on the map
             if (activeAnimalControllers.Count < environmentData.MaxAnimalAmount)
