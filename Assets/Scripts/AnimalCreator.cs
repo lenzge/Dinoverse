@@ -33,6 +33,7 @@ namespace DefaultNamespace
         public int FitnessToScore;
         private int bestFitness;
         private int animalsScoredFitness;
+        public int AllAnimalCount;
 
         private Collider[] colliderBuffer = new Collider[1];
         private List<Point> points = new List<Point> {};
@@ -40,6 +41,7 @@ namespace DefaultNamespace
         private int tolerantZone;
 
         public UnityEvent SpawnLakeEvent;
+        public UnityEvent ChangeMapSizeEvent;
 
         public void StartGame()
         {
@@ -53,6 +55,7 @@ namespace DefaultNamespace
             animalsScoredFitness = 0;
             environmentData.ReproductionEnergy = 1;
             tolerantZone = 0;
+            AllAnimalCount = 0;
 
             newGenomesAmount = 0.5f;
             //frozenGenomes = genomeParser.LoadAllGenomes();
@@ -235,6 +238,7 @@ namespace DefaultNamespace
         {
             animalController.Died.RemoveListener(OnDead);
             activeAnimalControllers.Remove(animalController);
+            AllAnimalCount += 1;
 
             EvaluateFitness(animalController);
 
@@ -261,38 +265,23 @@ namespace DefaultNamespace
                     }
                 }*/
 
-                if (environmentData.RateOfChange != Change.none && animalsScoredFitness >= 100 / (int) environmentData.RateOfChange)
+                if (environmentData.RateOfChange != Change.none && AllAnimalCount%12000 == 0)
                 {
-                    Debug.LogWarning($"[{MainController.pastTimeSteps}]50 Animals Scored " + FitnessToScore);
-                    animalsScoredFitness = 0;
+                    Debug.LogWarning($"[{MainController.pastTimeSteps}] Level Up");
+                    animalController.NewLevel = 1;
                     
-                    if (FitnessToScore < 17) FitnessToScore += 3;
-                    else if (FitnessToScore == 17)
-                    {
+                    if (environmentData.ReproductionEnergy < 3) {
                         environmentData.ReproductionEnergy += 1;
                         tolerantZone = MainController.pastTimeSteps + 500;
-                        FitnessToScore += 3;
-                        animalController.NewLevel = 1;
                     }
-                    else if (FitnessToScore == 20 || FitnessToScore == 26 || FitnessToScore == 29 || FitnessToScore > 32)
+
+                    environmentData.MapSize += 10;
+                    ChangeMapSizeEvent.Invoke();
+                    
+                    if (environmentData.LakeCount < environmentData.MaxLakeCount)
                     {
-                        if (environmentData.MaxTrees > environmentData.MinTrees) environmentData.MaxTrees -= 14;
-                        if (environmentData.MaxAnimalAmount > environmentData.MinAnimalAmount) environmentData.MaxAnimalAmount -= 7;
-                        if (environmentData.LakeCount < environmentData.MaxLakeCount)
-                        {
-                            environmentData.LakeCount += 2;
-                            SpawnLakeEvent.Invoke();
-                        }
-                        
-                        FitnessToScore += 3;
-                        animalController.NewLevel = 1;
-                    }
-                    else if (FitnessToScore == 23 || FitnessToScore == 32)
-                    {
-                        environmentData.ReproductionEnergy += 1;
-                        tolerantZone = MainController.pastTimeSteps + 500;
-                        FitnessToScore += 3;
-                        animalController.NewLevel = 1;
+                        environmentData.LakeCount += 1;
+                        SpawnLakeEvent.Invoke();
                     }
                 }
 

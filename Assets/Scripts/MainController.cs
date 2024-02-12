@@ -25,6 +25,7 @@ namespace DefaultNamespace
             environmentCreator.StartGame();
             animalCreator.StartGame();
             plot.StartGame();
+            animalCreator.ChangeMapSizeEvent.AddListener(OnChangeMapSize);
             isStarted = true;
         }
 
@@ -51,5 +52,12 @@ namespace DefaultNamespace
             }
             
         }
+        private void OnChangeMapSize()
+        {
+            environment.transform.localScale = new Vector3(EnvironmentData.MapSize / 20f, EnvironmentData.MapSize / 20f,
+                EnvironmentData.MapSize / 20f);
+            Physics.SyncTransforms();
+        }
+        
     }
 }
