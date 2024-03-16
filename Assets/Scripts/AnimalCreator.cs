@@ -242,7 +242,7 @@ namespace DefaultNamespace
 
             EvaluateFitness(animalController);
             
-                if (environmentData.RateOfChange != Change.none && AllAnimalCount%12000 == 0)
+                if (environmentData.RateOfChange != Change.none && AllAnimalCount%15000 == 0)
                 {
                     Debug.LogWarning($"[{MainController.pastTimeSteps}] Level Up");
                     animalController.NewLevel = 1;
