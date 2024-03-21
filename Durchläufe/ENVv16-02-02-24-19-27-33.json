@@ -1,0 +1,18 @@
+{
+    "SexualReproduction": true,
+    "AllowPredation": false,
+    "RandomSpawnPoint": true,
+    "InitialAnimalAmount": 150,
+    "MaxAnimalAmount": 150,
+    "ReproductionEnergy": 1,
+    "Classify": false,
+    "InitialTreeAmount": 150,
+    "MaxTrees": 150,
+    "MinTrees": 150,
+    "LakeCount": 7,
+    "MaxLakeCount": 7,
+    "MapSize": 75,
+    "ConstantTreeAmount": true,
+    "EndlessWorld": false,
+    "RateOfChange": 0
+}
