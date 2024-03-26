@@ -1,43 +1,47 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/mainmenu.uss?fileID=7433441132597879392&amp;guid=643084042a0a06b4b930b934e0fe2659&amp;type=3#mainmenu" />
     <ui:VisualElement style="flex-grow: 1; width: 100%; height: 100%;">
-        <ui:VisualElement style="flex-grow: 1; align-self: center; justify-content: center; width: 80%; height: 80%; align-items: stretch; margin-top: 6%; margin-bottom: 5%; background-color: rgba(60, 55, 55, 0.55);">
-            <ui:GroupBox style="flex-direction: row; justify-content: space-around; align-self: auto;">
-                <ui:GroupBox name="Animals" style="width: 276px;">
-                    <ui:GroupBox name="Reproduction" style="height: 110px; width: 211px;">
-                        <ui:Label tabindex="-1" text="Reproduction" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
-                        <ui:RadioButton label="Sexual" name="Sexual" value="true" />
-                        <ui:RadioButton label="Asexual" name="Asexual" />
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; align-self: center; justify-content: space-between; width: 45%; height: 90%; align-items: stretch; margin-top: 3%; margin-bottom: 3%; background-color: rgba(60, 55, 55, 0.4); margin-right: 0; margin-left: 50%; padding-top: 3%; padding-bottom: 3%; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; color: rgb(5, 5, 5);">
+            <ui:Label tabindex="-1" text="Environmental Conditions" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="align-items: stretch; -unity-text-align: upper-center; font-size: 26px; -unity-font-style: bold; -unity-text-outline-color: rgba(255, 255, 255, 0); -unity-text-outline-width: 0;" />
+            <ui:GroupBox name="GroupBox" style="flex-direction: row; justify-content: space-around; align-self: auto; padding-top: 3%; padding-right: 10%; padding-bottom: 3%; padding-left: 10%; align-items: flex-start;">
+                <ui:GroupBox name="Animals" style="width: 238px;">
+                    <ui:GroupBox name="Reproduction" style="height: 110px; width: 218px; align-items: flex-start; align-self: flex-start; justify-content: space-between; padding-bottom: 5px;">
+                        <ui:Label tabindex="-1" text="Reproduction" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" class="block" style="-unity-font-style: bold; margin-left: 3px; width: 217px; margin-right: 3px; align-items: auto; align-self: stretch; height: 30px; padding-right: 1px; padding-left: 3px; justify-content: flex-start; -unity-text-align: middle-left; text-overflow: clip; white-space: nowrap;" />
+                        <ui:RadioButton label="Sexual" name="Sexual" value="true" focusable="false" class="radio" style="width: 213px; justify-content: flex-start; align-items: flex-start; align-self: flex-start; background-color: rgba(0, 0, 0, 0);" />
+                        <ui:RadioButton label="Asexual" name="Asexual" focusable="false" class="radio" />
                     </ui:GroupBox>
                     <ui:GroupBox name="Other" style="width: 267px;">
-                        <ui:Toggle label="Predation" name="Predation" />
-                        <ui:Toggle label="Random Spawn" name="RandomSpawnPoint" />
-                        <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Min Animals" value="150" name="MinAnimals" style="margin-right: 2px; width: 211px;" />
-                        <ui:Toggle label="Classify" name="Classify" />
+                        <ui:Toggle label="Predation" name="Predation" focusable="false" class="check block" style="justify-content: space-between;" />
+                        <ui:Toggle label="Random Spawn" name="RandomSpawnPoint" focusable="false" class="check block" />
+                        <ui:Toggle label="Classify" name="Classify" value="true" focusable="false" class="check block" />
+                        <ui:IntegerField label="Initial Animals" value="150" name="InitialAnimals" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Max Animals" value="150" name="MaxAnimals" focusable="true" class="text block" style="margin-right: 2px; width: 215px; align-items: center; justify-content: space-between;" />
+                        <ui:IntegerField label="Min Animals" value="150" name="MinAnimals" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
                     </ui:GroupBox>
                 </ui:GroupBox>
                 <ui:GroupBox name="Environment" style="width: 276px; flex-direction: column;">
                     <ui:GroupBox name="Other" style="width: 267px;">
-                        <ui:IntegerField label="Initial Trees" value="150" name="InitialTrees" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Max Trees" value="150" name="MaxTrees" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="MinTrees" value="1" name="MinTrees" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Initial  Lake Count" value="1" name="LakeCount" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="Max  Lake Count" value="1" name="MaxLakeCount" style="margin-right: 2px; width: 211px;" />
-                        <ui:IntegerField label="MapSize" value="150" name="MapSize" style="margin-right: 2px; width: 211px;" />
-                        <ui:Toggle label="Const Tree Amount" name="ConstantTreeAmount" />
-                        <ui:Toggle label="Endless World" name="EndlessWorld" style="justify-content: space-between; align-items: center; flex-direction: row; width: 246px;" />
-                        <ui:GroupBox name="Reproduction" style="height: 110px; width: 211px;">
-                            <ui:Label tabindex="-1" text="Environment Changes" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
-                            <ui:RadioButton label="None" name="NoneChange" value="true" />
-                            <ui:RadioButton label="Slow" name="SlowChange" />
-                            <ui:RadioButton label="Rapid" name="RapidChange" />
-                        </ui:GroupBox>
+                        <ui:IntegerField label="Initial Trees" value="150" name="InitialTrees" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Max Trees" value="150" name="MaxTrees" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Min Trees" value="150" name="MinTrees" readonly="true" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Initial Lake Count" value="7" name="LakeCount" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Max Lake Count" value="7" name="MaxLakeCount" readonly="true" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:IntegerField label="Map Size" value="75" name="MapSize" focusable="true" class="text block" style="margin-right: 2px; width: 215px;" />
+                        <ui:Toggle label="Const Tree Amount" name="ConstantTreeAmount" value="true" focusable="false" class="check block" />
+                        <ui:Toggle label="Endless World" name="EndlessWorld" focusable="false" class="check block" style="justify-content: center; align-items: auto; flex-direction: row; width: 215px;" />
+                    </ui:GroupBox>
+                    <ui:GroupBox name="Reproduction" class="radio" style="height: 149px; width: 211px; justify-content: space-between; align-self: flex-start; align-items: stretch;">
+                        <ui:Label tabindex="-1" text="Environment Change" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" class="block" style="-unity-font-style: bold; margin-left: 3px; width: 217px; margin-right: 3px; align-items: auto; align-self: stretch; height: 30px; padding-right: 1px; padding-left: 3px; justify-content: flex-start; -unity-text-align: middle-left; text-overflow: clip; white-space: nowrap;" />
+                        <ui:RadioButton label="None" name="NoneChange" value="true" focusable="false" style="width: 214px;" />
+                        <ui:RadioButton label="Slow" name="SlowChange" focusable="false" style="width: 218px; height: 24px;" />
+                        <ui:RadioButton label="Rapid" name="RapidChange" focusable="false" style="width: 222px;" />
                     </ui:GroupBox>
                 </ui:GroupBox>
             </ui:GroupBox>
-            <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Start" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; width: 79px; height: 24px; align-self: center;" />
-            <ui:Button text="Quit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Quit" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; width: 79px; height: 24px; align-self: center;" />
+            <ui:GroupBox name="GroupBox" style="justify-content: center;">
+                <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Start" class="button" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; align-self: center; -unity-text-outline-width: 0; -unity-text-align: middle-center;" />
+                <ui:Button text="Quit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Quit" class="button" style="margin-right: 30%; margin-left: 30%; margin-top: 10px; margin-bottom: 10px; align-items: stretch; align-self: center;" />
+            </ui:GroupBox>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

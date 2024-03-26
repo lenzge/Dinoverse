@@ -10,6 +10,7 @@ namespace DefaultNamespace
         [SerializeField] private AnimalCreator animalCreator;
         [SerializeField] private EnvironmentCreator environmentCreator;
         [SerializeField] private GameObject environment;
+        [SerializeField] private GameObject menuScene;
         [SerializeField] private Plot plot;
 
         private bool isStarted;
@@ -17,6 +18,8 @@ namespace DefaultNamespace
         public void StartGame()
         {
             isStarted = false;
+            menuScene.SetActive(false);
+            environment.SetActive(true);
             environment.transform.localScale = new Vector3(EnvironmentData.MapSize / 20f, EnvironmentData.MapSize / 20f,
                 EnvironmentData.MapSize / 20f);
             Physics.SyncTransforms();

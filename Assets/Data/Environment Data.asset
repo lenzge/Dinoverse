@@ -13,17 +13,37 @@ MonoBehaviour:
   m_Name: Environment Data
   m_EditorClassIdentifier: 
   MaxTimeSpeed: 40
-  TimeSpeed: 27
-  SexualReproduction: 0
-  AllowPredation: 0
-  InitialAnimalAmount: 100
-  MaxAnimalAmount: 150
-  ReproductionEnergy: 1
-  InitialTreeAmount: 150
-  MaxTrees: 150
-  MinTrees: 0
-  LakeCount: 2
-  MapSize: 150
+  TimeSpeed: 1
   TimeSpeedChangedEvent:
     m_PersistentCalls:
       m_Calls: []
+  KillAnimalsEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  KillTreesEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  SeparationEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AllowPredationEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  NaturalDisaster: 0
+  SexualReproduction: 1
+  AllowPredation: 0
+  RandomSpawnPoint: 1
+  InitialAnimalAmount: 150
+  MaxAnimalAmount: 150
+  MinAnimalAmount: 150
+  ReproductionEnergy: 1
+  Classify: 1
+  InitialTreeAmount: 150
+  MaxTrees: 150
+  MinTrees: 150
+  LakeCount: 7
+  MaxLakeCount: 7
+  MapSize: 75
+  ConstantTreeAmount: 1
+  EndlessWorld: 0
+  RateOfChange: 0

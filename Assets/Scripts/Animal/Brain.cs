@@ -2,6 +2,7 @@
 
 namespace Animal
 {
+    // This script was strong inspired by: https://www.youtube.com/watch?v=JXGogdI7RIE&list=PLaFSGYC2_1P4951n9bWMlwE7kECqJgXXS&index=4&t=1s&ab_channel=JohnSorrentino
     public class Brain : Organ
     {
         public int[] NetworkShape;
@@ -153,36 +154,11 @@ namespace Animal
             //This function is the activation function for the neural network uncomment the one you want to use.
             public void Activation()
             {
-                // //leaky relu function
-                // for(int i = 0; i < nodeArray.Length; i++)
-                // {
-                //     if(nodeArray[i] < 0)
-                //     {
-                //         nodeArray[i] = nodeArray[i]/10;
-                //     }
-                // }
-
-
-                // //sigmoid function
-                // for(int i = 0; i < nodeArray.Length; i++)
-                // {
-                //     nodeArray[i] = 1/(1 + Mathf.Exp(-nodeArray[i]));
-                // }
-
                 //tanh function
                 for(int i = 0; i < Nodes.Length; i++)
                 {
                     Nodes[i] = (float)System.Math.Tanh(Nodes[i]);
                 }
-
-                // //relu function
-                // for(int i = 0; i < nodeArray.Length; i++)
-                // {
-                //     if(nodeArray[i] < 0)
-                //     {
-                //         nodeArray[i] = 0;
-                //     }
-                // }
             }
 
             //This is used to randomly modify the weights and biases for the Evolution Sim and Genetic Algorithm.
